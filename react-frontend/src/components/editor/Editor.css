@@ -1,0 +1,25 @@
+.editor-layout-container {
+  margin: 100px 50px;
+}
+
+.editor-layout-col {
+  margin: 15px;
+  height: 500px;
+}
+
+.editor-view-container {
+background-color: lightgray;
+}
+
+.editor-options-container {
+  background-color: white;
+}
+
+.image-options-row {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.image-options-row:hover {
+  background-color: lightgrey;
+}
