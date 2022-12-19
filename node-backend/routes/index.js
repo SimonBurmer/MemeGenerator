@@ -1,9 +1,21 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
+const { ensureAuth, ensureGuest } = require('../middlewares/verifyAuth')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// @desc    Login/Landing page
+// @route   GET /
+router.get('/', ensureGuest, (req, res) => {
+  res.send('login')
+})
 
-module.exports = router;
+
+router.get('/editor', ensureAuth, async (req, res) => {
+  try {
+    res.send(req.user.firstName)
+  } catch (err) {
+    console.error(err)
+    res.render('error/500')
+  }
+})
+
+module.exports = router

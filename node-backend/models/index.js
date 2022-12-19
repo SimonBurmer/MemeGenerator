@@ -6,8 +6,7 @@ const db = {};
 db.mongoose = mongoose;
 
 db.user = require("./user.model");
-db.role = require("./role.model");
-
-db.ROLES = ["user", "admin", "moderator"];
+db.meme = require("./meme.model");
+db.template = require("./template.model");
 
 module.exports = db;
