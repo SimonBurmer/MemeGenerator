@@ -51,10 +51,10 @@ function TopNavigationBar() {
             <Nav.Item>
             <Nav.Link
                 as={Link}
-                to="/overview"
+                to="/profile"
               >
               <AiOutlineUser style={{ marginBottom: "2px" }} /> 
-                Profil
+                Profile
               </Nav.Link>
             </Nav.Item>
           </Nav>

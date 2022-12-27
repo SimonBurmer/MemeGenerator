@@ -30,7 +30,7 @@ function Editor() {
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-md-center">
-      <Col xs={10} md={7} className="editor-layout-col editor-view-container border border-secondary">
+        <Col xs={10} md={7} className="editor-layout-col editor-view-container border border-secondary">
 
         </Col>
         <Col className="editor-layout-col editor-options-container border border-secondary">
@@ -43,22 +43,22 @@ function Editor() {
               <Container className="image-options-container">
                 {
                   imageOptions.map(element => {
-                      console.log(element);
-                                    return <Row className="image-options-row">
-                                    <Col xs={8} className="d-flex justify-content-start">
-                                        {element[0]}
-                                    </Col>
-                                    <Col className="d-flex justify-content-end align-items-center">
-                                      {console.log(element[1])}
-                                        {element[1]}
-                                    </Col>
-                                  </Row>
+                    console.log(element);
+                    return <Row className="image-options-row">
+                      <Col xs={8} className="d-flex justify-content-start">
+                        {element[0]}
+                      </Col>
+                      <Col className="d-flex justify-content-end align-items-center">
+                        {console.log(element[1])}
+                        {element[1]}
+                      </Col>
+                    </Row>
                   })
                 }
               </Container>
             </Tab>
             <Tab eventKey="profile" title="Text">
-                <ImageTextOptions />
+              <ImageTextOptions />
             </Tab>
             <Tab eventKey="contact" title="Generate">
 
@@ -67,7 +67,7 @@ function Editor() {
         </Col>
       </Row>
     </Container>
-    );
+  );
 }
 
 export default Editor;

@@ -2,7 +2,7 @@ import TopNavigationBar from "./components/TopNavigationBar";
 import Home from "./components/home/Home";
 import Editor from "./components/editor/Editor";
 import Overview from "./components/overview/Overview";
-import Profil from "./components/profil/Profil";
+import Profile from "./components/profile/Profile";
 
 import {
   BrowserRouter as Router,
@@ -25,7 +25,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/editor" element={<Editor/>} />
           <Route path="/overview" element={<Overview />} />
-          <Route path="/profil" element={<Profil />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<Navigate to="/"/>} />
         </Routes>
       </div>
