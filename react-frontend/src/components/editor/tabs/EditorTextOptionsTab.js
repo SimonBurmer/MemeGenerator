@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Dropdown from 'react-bootstrap/Dropdown';
+import React from "react";
 
 var sizeStart = 10;
 var sizeEnd = 64;
@@ -159,26 +160,54 @@ const CSS_COLOR_NAMES = [
     "YellowGreen",
   ];
 
-function ImageTextOptions() {
+const FONT_FAMILIES = 
+[
+  "Arial",
+  "Roboto"
+]
+
+function EditorTextOptionsTab(props) {
+
+  const [fontSize, setFontSize] = React.useState(12);
+  const [textColor, setTextColor] = React.useState("Black");
+  const [backgroundColor, setBackgroundColor] = React.useState("White");
+  const [fontFamily, setFontFamily] = React.useState("Arial");
+  const [text, setText] = React.useState(null);
+  const [x, setX] = React.useState(0);
+  const [y, setY] = React.useState(0);
+
+  const [validated, setValidated] = React.useState(false);
+
+  function HandleAddTextBlock()
+  {
+      if (text === null || text === "")
+      {
+        setValidated(false);
+        return;
+      }
+      setValidated(true);
+      props.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);
+  }
+
   return (
-    <Form>
+    <Form noValidate validated={validated}>
       <Form.Group className="mb-3">
         <Form.Label>Text</Form.Label>
-        <Form.Control placeholder="text" />
+        <Form.Control value={text} onChange={evt => setText(evt.target.value)} required placeholder="text" />
       </Form.Group>
 
-      <Form.Group className="mb-3">
+      <Form.Group noValidate className="mb-3">
         <Row>
             <Col>
             <Form.Label>X</Form.Label>
-        <Form.Control type="number" placeholder="0" />
+        <Form.Control value={x} onChange={evt => setX(evt.target.value)} type="number" placeholder="0" />
         <Form.Text>
             Range -255, 255
         </Form.Text>
             </Col>
             <Col>
             <Form.Label>Y</Form.Label>
-        <Form.Control type="number" placeholder="0" />
+        <Form.Control value={y} onChange={evt => setY(evt.target.value)} type="number" placeholder="0" />
         <Form.Text>
             Range -255, 255
         </Form.Text>
@@ -189,16 +218,15 @@ function ImageTextOptions() {
         <Row>
             <Col>
             <Dropdown>
-      <Dropdown.Toggle variant="light" id="dropdown-basic">
-        Size
+      <Dropdown.Toggle variant="light" id="fontsize-dropdown">
+        font size: {fontSize}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
       {
-            sizes.map(element => {
-                console.log(element);
-                            return <Dropdown.Item key={element}>{element}</Dropdown.Item>
-            })
+          sizes.map(element => {
+                return <Dropdown.Item onClick={(e) => setFontSize(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+          })
         }
       </Dropdown.Menu>
     </Dropdown>
@@ -206,13 +234,13 @@ function ImageTextOptions() {
         <Col>
         <Dropdown>
       <Dropdown.Toggle variant="light" id="dropdown-basic">
-        Color
+        text color: {textColor}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
         {
             CSS_COLOR_NAMES.map(element => {
-                            return <Dropdown.Item key={element}>{element}</Dropdown.Item>
+                            return <Dropdown.Item onClick={(e) => setTextColor(e.target.textContent)} key={element}>{element}</Dropdown.Item>
             })
         }
       </Dropdown.Menu>
@@ -224,26 +252,28 @@ function ImageTextOptions() {
             <Col>
             <Dropdown>
       <Dropdown.Toggle variant="light" id="dropdown-basic">
-        Font
+        font: {fontFamily}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+        {
+      FONT_FAMILIES.map(element => {
+                            return <Dropdown.Item onClick={(e) => setFontFamily(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+            })
+          }
       </Dropdown.Menu>
     </Dropdown>
             </Col>
         <Col>
         <Dropdown>
       <Dropdown.Toggle variant="light" id="dropdown-basic">
-        Background
+        background color: {backgroundColor}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
       {
             CSS_COLOR_NAMES.map(element => {
-                            return <Dropdown.Item key={element}>{element}</Dropdown.Item>
+                            return <Dropdown.Item onClick={(e) => setBackgroundColor(e.target.textContent)} key={element}>{element}</Dropdown.Item>
             })
         }
       </Dropdown.Menu>
@@ -251,11 +281,11 @@ function ImageTextOptions() {
         </Col>
         </Row>
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" onClick={HandleAddTextBlock}>
         Hinzufügen
       </Button>
     </Form>
     );
 }
 
-export default ImageTextOptions;
+export default EditorTextOptionsTab;

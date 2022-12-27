@@ -1,37 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import './Editor.css';
-import ImageTextOptions from './ImageTextOptions';
-import {
-  AiFillAppstore,
-  AiOutlineCamera,
-  AiOutlineGif,
-  AiOutlineVideoCamera,
-  AiOutlineLink,
-  AiOutlineEdit,
-  AiOutlineUpload
-} from "react-icons/ai";
-
-var imageOptions = [
-  ["Choose template", <AiFillAppstore />],
-  ["Upload image", <AiOutlineUpload />],
-  ["Take a photo", <AiOutlineCamera />],
-  ["Upload gif (as image)", <AiOutlineGif />],
-  ["Upload video (as image)", <AiOutlineVideoCamera />],
-  ["Enter an image url", <AiOutlineLink />],
-  ["Create your own", <AiOutlineEdit />],
-]
+import EditorTextOptionsTab from './tabs/EditorTextOptionsTab';
+import EditorImageOptionsTab from './tabs/EditorImageOptionsTab';
+import MemeEditorComponent from './components/MemeEditorComponent';
 
 function Editor() {
+  const memeEditor = useRef(null);
+
+  function addTextBlock (text, x, y, fontSize, fontFamily, textColor, backgroundColor)
+  {
+    console.log("add Text: " + text);
+    memeEditor.current.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);     
+  }
+
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-md-center">
       <Col xs={10} md={7} className="editor-layout-col editor-view-container border border-secondary">
-
+      <MemeEditorComponent ref={memeEditor}/>
         </Col>
         <Col className="editor-layout-col editor-options-container border border-secondary">
           <Tabs
@@ -40,25 +31,10 @@ function Editor() {
             className="mb-3"
           >
             <Tab eventKey="home" title="Image">
-              <Container className="image-options-container">
-                {
-                  imageOptions.map(element => {
-                      console.log(element);
-                                    return <Row className="image-options-row">
-                                    <Col xs={8} className="d-flex justify-content-start">
-                                        {element[0]}
-                                    </Col>
-                                    <Col className="d-flex justify-content-end align-items-center">
-                                      {console.log(element[1])}
-                                        {element[1]}
-                                    </Col>
-                                  </Row>
-                  })
-                }
-              </Container>
+              <EditorImageOptionsTab />
             </Tab>
             <Tab eventKey="profile" title="Text">
-                <ImageTextOptions />
+              <EditorTextOptionsTab addTextBlock={addTextBlock}/>
             </Tab>
             <Tab eventKey="contact" title="Generate">
 
