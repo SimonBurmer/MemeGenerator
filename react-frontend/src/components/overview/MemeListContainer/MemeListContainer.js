@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Meme from "../Meme/Meme";
 import MemeMetaInformation from "../MemeMetaInformation/MemeMetaInformation";
 import "./MemeListContainer.css";
+import SingleView from "../../singleview/SingleView";
 
 function MemeListContainer(props) {
+    const [selectedMeme, setSelectedMeme] = useState(null);
+
     const filteredMemes = props.memes.filter((meme) => {
         if (props.filter.title && !meme.title.toLowerCase().includes(props.filter.title.toLowerCase())) {
             return false;
@@ -16,14 +19,17 @@ function MemeListContainer(props) {
         }
         return true;
     });
-    const handleMemeClick = (event, title) => {
-        alert("Meme with the name: " + title + " was clicked! Open SingleView Here")
+    const handleMemeClick = (meme) => {
+        setSelectedMeme(meme);
+    }
+    const handleCloseSingleView = () => {
+        setSelectedMeme(null);
     }
 
     return (
         <div className={"meme-list"}>
             {filteredMemes.map(meme => (
-                <button className="meme-item" onClick={() => handleMemeClick(meme.title)}>
+                <button className="meme-item" onClick={() => handleMemeClick(meme)}>
                     <div className={"meme-image"}>
                         <Meme meme={meme.image}></Meme>
                     </div>
@@ -37,6 +43,10 @@ function MemeListContainer(props) {
                     }}></MemeMetaInformation>
                 </button>
             ))}
+            {selectedMeme && (
+                <SingleView selectedMeme={selectedMeme} filteredMemes={filteredMemes}
+                            handleCloseSingleView={handleCloseSingleView}/>
+            )}
         </div>
     );
 }

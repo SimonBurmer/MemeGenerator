@@ -1,0 +1,42 @@
+.meme-singleview-item {
+    display: flex;
+    justify-content: center;
+    width: 900px;
+    margin: auto auto 30px;
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: dimgray;
+    border-radius: 12px;
+    background-color: whitesmoke;
+}
+
+.meme-singleview-image {
+    border-right: dimgray;
+    border-right-style: solid;
+    border-width: 2px;
+}
+
+.meme-singleview-meta-information-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.close-button-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.singleview-bottom-container {
+    border-top-style: solid;
+    border-width: 2px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.comment-section {
+    margin-top: 16px;
+}

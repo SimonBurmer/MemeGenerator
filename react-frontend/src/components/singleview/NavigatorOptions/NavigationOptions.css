@@ -1,0 +1,23 @@
+.singleview-navigator-container {
+    border-top-style: solid;
+    border-width: 2px;
+    padding-top: 12px;
+    margin-top: 16px;
+    justify-content: space-between;
+    margin-left: 6px;
+}
+.singleview-navigator-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+.singleview-navigator-buttons button {
+    background-color: white;
+    border-radius: 4px;
+}
+
+.autoplay-selector {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
