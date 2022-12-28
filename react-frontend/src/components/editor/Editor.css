@@ -39,3 +39,8 @@ background-color: lightgray;
 .textbox-row:hover {
   background-color: lightgrey;
 }
+
+.image{
+  width: '10%';
+  height: undefined;
+}

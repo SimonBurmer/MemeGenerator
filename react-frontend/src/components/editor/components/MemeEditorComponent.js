@@ -11,10 +11,10 @@ class MemeEditorComponent extends React.Component {
     };
     this.prevTextBlocks = props.textBlocks;
   }
-    
+
   render() {
     return (
-      <Container className='position-relative' style={{width: "100%", height: "100%"}}>
+      <Container className='position-relative' style={{ width: "100%", height: "100%" }}>
         {
             this.props.textBlocks.map(element => {
               return <TextBlock key={element.key} hasChanges={element.hasChanges} text={element.text} 
@@ -23,8 +23,9 @@ class MemeEditorComponent extends React.Component {
               ></TextBlock>
           })
         }
+        <img src={this.props.image} style={{ width: "100%", height: "100%" }} />
       </Container>
-      );
+    );
   }
 }
 
