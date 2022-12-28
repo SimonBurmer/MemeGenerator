@@ -43,6 +43,9 @@ function GenerateImageTab(props) {
     const test = new Image(props.image)
     //console.log(typeof test)
 
+    const myImage = new Image(1000, 2000);
+myImage.src = props.image;
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
@@ -55,7 +58,7 @@ function GenerateImageTab(props) {
     //ctx.fillRect(0, 0, 100, 100);
 
 
-    ctx.drawImage(test, 0, 100)
+    ctx.drawImage(myImage, 0, 100)
 
     const dataURL = canvas.toDataURL()
     saveAs(dataURL, 'meme.jpg')
