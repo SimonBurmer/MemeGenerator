@@ -1,0 +1,30 @@
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-input-text {
+    width: 200px;
+    margin: 0 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.filter-input-number {
+    width: 160px;
+    margin: 0 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.filter-input::placeholder {
+    color: #999;
+}

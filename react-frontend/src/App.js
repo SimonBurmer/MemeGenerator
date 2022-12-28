@@ -19,6 +19,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import { Button } from "react-bootstrap";
+import Profile from "./components/profile/Profile";
 
 function App() {
   const [user, setUser] = useState(null);

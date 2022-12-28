@@ -1,0 +1,18 @@
+.meme-item {
+    display: flex;
+    justify-content: center;
+    width: 900px;
+    margin: auto auto 30px;
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: dimgray;
+    border-radius: 12px;
+    background-color: steelblue;
+}
+
+.meme-image {
+    border-right: dimgray;
+    border-right-style: solid;
+    border-width: 2px;
+}
