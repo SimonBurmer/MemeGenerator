@@ -8,6 +8,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/esm/Button';
 import { saveAs } from 'file-saver';
 import { useRef } from "react";
+import {
+  AiOutlineDesktop,
+  AiOutlineUpload,
+  AiOutlineDownload
+} from "react-icons/ai";
 
 
 function ModalUploadImage(props) {
@@ -28,41 +33,35 @@ function GenerateImageTab(props) {
   const [modalUploadImageShow, setModalUploadImageShow] = React.useState(false);
 
   function downloadMeme() {
-    console.log("hier")
-    console.log(props.text)
-    saveAs(props.image, 'meme.jpg') // Put your image url here.
+    saveAs(generateMeme(), 'meme.jpg') // Put your image url here.
   }
 
-  function ComponentDidMount() {
-    console.log("jsadkjkhdasdfjhk")
+  function uploadMeme(){
+    const meme = generateMeme()
+    console.log("TODO")
+  }
 
-    //const img = createImageBitmap(props.image)
+  function generateMeme() {
+    console.log("Generate Meme")
 
-    //console.log(typeof props.image)
-    //console.log(typeof img)
-    const test = new Image(props.image)
-    //console.log(typeof test)
+    const myImage = new Image();
+    myImage.src = props.image;
 
-    const myImage = new Image(1000, 2000);
-myImage.src = props.image;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-
-    //const img = URL.createObjectURL(props.image);
-
-    ctx.fillStyle = "green";
-    ctx.font = "50px serif";
-    ctx.fillText("Hello world", 0, 100);
-    //ctx.fillRect(0, 0, 100, 100);
-
-
-    ctx.drawImage(myImage, 0, 100)
-
-    const dataURL = canvas.toDataURL()
-    saveAs(dataURL, 'meme.jpg')
-
+    if(canvasRef && canvasRef.current) {
+      const canvas = canvasRef.current;
+      canvas.width  = 800;
+      canvas.height = 600;
+      const ctx = canvas.getContext('2d');
+  
+      ctx.drawImage(myImage, 0, 0, 800, 600)
+  
+      ctx.fillStyle = "green";
+      ctx.font = "40px serif";
+      ctx.fillText("Hello world", 0, 50);
+  
+      const dataURL = canvas.toDataURL()
+      return dataURL
+    }
   }
 
   return (
@@ -73,26 +72,37 @@ myImage.src = props.image;
           Show Meme
         </Col>
         <Col className="d-flex justify-content-end align-items-center">
-          Icon
+          <AiOutlineDesktop/>
         </Col>
       </Row>
-      <Row className="image-options-row" onClick={ComponentDidMount}>
+      <Row className="image-options-row" onClick={downloadMeme}>
         <Col className="d-flex justify-content-start">
           Download Meme
         </Col>
         <Col className="d-flex justify-content-end align-items-center">
-          Icon
+          <AiOutlineDownload/>
+        </Col>
+      </Row>
+      <Row className="image-options-row" onClick={uploadMeme}>
+        <Col className="d-flex justify-content-start">
+          Upload to Server
+        </Col>
+        <Col className="d-flex justify-content-end align-items-center">
+        <AiOutlineUpload/>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+        <canvas  hidden ref={canvasRef}/>
         </Col>
       </Row>
 
       <ModalUploadImage
         show={modalUploadImageShow}
         onHide={() => setModalUploadImageShow(false)}
-        image={props.image}
+        image={generateMeme()}
       />
-
-      <canvas ref={canvasRef} />
-
     </Container>
   );
 }
