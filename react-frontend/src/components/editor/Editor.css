@@ -18,9 +18,25 @@ background-color: lightgray;
 .image-options-row {
   padding: 10px;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .image-options-row:hover {
+  background-color: lightgrey;
+}
+
+.textbox-row {
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.textbox-row.active{
+  background-color: gray;
+}
+
+.textbox-row:hover {
   background-color: lightgrey;
 }
 
