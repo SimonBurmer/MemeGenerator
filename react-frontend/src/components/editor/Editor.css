@@ -23,3 +23,8 @@ background-color: lightgray;
 .image-options-row:hover {
   background-color: lightgrey;
 }
+
+.image{
+  width: '10%';
+  height: undefined;
+}

@@ -4,35 +4,35 @@ import React from "react";
 
 class MemeEditorComponent extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       textBlocks: [],
     }
   }
-    
+
   render() {
     return (
-      <Container className='position-relative' style={{width: "100%", height: "100%"}}>
+      <Container className='position-relative' style={{ width: "100%", height: "100%" }}>
         {
-            this.state.textBlocks.map(element => {
-              return <TextBlock text={element.text} 
+          this.state.textBlocks.map(element => {
+            return <TextBlock text={element.text}
               x={element.x} y={element.y} fontSize={element.fontSize} fontFamily={element.fontFamily} textColor={element.textColor} backgroundColor={element.backgroundColor}
-              
-              ></TextBlock>
-        })
+
+            ></TextBlock>
+          })
         }
+        <img src={this.props.image} style={{ width: "100%", height: "100%" }} />
       </Container>
-      );
+    );
   }
 
-  addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor)
-  {
+  addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor) {
     console.log(text);
-      let newTextBlocks = this.state.textBlocks.slice();
-      newTextBlocks.push({text: text, x: x, y: y, fontSize: fontSize, fontFamily: fontFamily, textColor: textColor, backgroundColor: backgroundColor});
-      console.log(newTextBlocks);
-      this.setState({textBlocks: newTextBlocks});
+    let newTextBlocks = this.state.textBlocks.slice();
+    newTextBlocks.push({ text: text, x: x, y: y, fontSize: fontSize, fontFamily: fontFamily, textColor: textColor, backgroundColor: backgroundColor });
+    console.log(newTextBlocks);
+    this.setState({ textBlocks: newTextBlocks });
   }
 }
 
