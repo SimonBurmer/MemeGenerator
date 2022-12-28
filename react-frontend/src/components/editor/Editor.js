@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,36 +9,25 @@ import EditorTextOptionsTab from './tabs/EditorTextOptionsTab';
 import EditorImageOptionsTab from './tabs/EditorImageOptionsTab';
 import GenerateImageTab from './tabs/GenerateImageTab';
 import MemeEditorComponent from './components/MemeEditorComponent';
-import { useState } from "react";
 
 function Editor() {
   const memeEditor = useRef(null);
-  const [textBlocks, setTextBlocks] = React.useState([]);
+  const [textBlocks, setTextBlocks] = useState([]);
+  const [image, setImage] = useState("");
   let key = 1;
 
   function addTextBlock (text, x, y, fontSize, fontFamily, textColor, backgroundColor)
   {
-    console.log(textBlocks);
     let newTextBlocks = textBlocks.slice();
-    console.log(newTextBlocks);
     newTextBlocks.push({hasChanges: false, key: key, text: text, x: x, y: y, fontSize: fontSize, fontFamily: fontFamily, textColor: textColor, backgroundColor: backgroundColor});
-    console.log(newTextBlocks);
     setTextBlocks(newTextBlocks);
-    key = key + 1;
-    // memeEditor.setState({textBlocks: textBlocks});
-    // memeEditor.current.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);     
+    key = key + 1;    
   }
 
   function updateTextBlocks()
   {
     let newTextBlocks = textBlocks.slice();
     setTextBlocks(newTextBlocks);
-  const [image, setImage] = useState("");
-  }
-
-  function addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor) {
-    console.log("add Text: " + text);
-    memeEditor.current.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);
   }
 
   function addImage(image) {
