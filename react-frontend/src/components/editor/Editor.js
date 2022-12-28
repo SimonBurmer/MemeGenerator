@@ -11,20 +11,35 @@ import MemeEditorComponent from './components/MemeEditorComponent';
 
 function Editor() {
   const memeEditor = useRef(null);
+  const [textBlocks, setTextBlocks] = React.useState([]);
+  let key = 1;
 
   function addTextBlock (text, x, y, fontSize, fontFamily, textColor, backgroundColor)
   {
-    console.log("add Text: " + text);
-    memeEditor.current.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);     
+    console.log(textBlocks);
+    let newTextBlocks = textBlocks.slice();
+    console.log(newTextBlocks);
+    newTextBlocks.push({hasChanges: false, key: key, text: text, x: x, y: y, fontSize: fontSize, fontFamily: fontFamily, textColor: textColor, backgroundColor: backgroundColor});
+    console.log(newTextBlocks);
+    setTextBlocks(newTextBlocks);
+    key = key + 1;
+    // memeEditor.setState({textBlocks: textBlocks});
+    // memeEditor.current.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);     
+  }
+
+  function updateTextBlocks()
+  {
+    let newTextBlocks = textBlocks.slice();
+    setTextBlocks(newTextBlocks);
   }
 
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-md-center">
       <Col xs={10} md={7} className="editor-layout-col editor-view-container border border-secondary">
-      <MemeEditorComponent ref={memeEditor}/>
+      <MemeEditorComponent ref={memeEditor} textBlocks={textBlocks}/>
         </Col>
-        <Col className="editor-layout-col editor-options-container border border-secondary">
+      <Col className="editor-layout-col editor-options-container border border-secondary" style={{    overflow: "overlay"}}>
           <Tabs
             defaultActiveKey="profile"
             id="uncontrolled-tab-example"
@@ -34,7 +49,7 @@ function Editor() {
               <EditorImageOptionsTab />
             </Tab>
             <Tab eventKey="profile" title="Text">
-              <EditorTextOptionsTab addTextBlock={addTextBlock}/>
+              <EditorTextOptionsTab updateTextBlocks={updateTextBlocks} addTextBlock={addTextBlock} textBlocks={textBlocks}/>
             </Tab>
             <Tab eventKey="contact" title="Generate">
 

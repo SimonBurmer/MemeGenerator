@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Dropdown from 'react-bootstrap/Dropdown';
 import React from "react";
+import Container from 'react-bootstrap/esm/Container';
 
 var sizeStart = 10;
 var sizeEnd = 64;
@@ -172,44 +173,107 @@ function EditorTextOptionsTab(props) {
   const [textColor, setTextColor] = React.useState("Black");
   const [backgroundColor, setBackgroundColor] = React.useState("White");
   const [fontFamily, setFontFamily] = React.useState("Arial");
-  const [text, setText] = React.useState(null);
+  const [text, setText] = React.useState("");
   const [x, setX] = React.useState(0);
   const [y, setY] = React.useState(0);
+  const [textBlocks, setTextBlocks] = React.useState(props.textBlocks);
+  const [selected, setSelected] = React.useState(-1);
 
-  const [validated, setValidated] = React.useState(false);
+  React.useEffect(() => { setTextBlocks(props.textBlocks) }, [props.textBlocks]);
 
   function HandleAddTextBlock()
   {
       if (text === null || text === "")
       {
-        setValidated(false);
+        alert("Text einfügen");
         return;
       }
-      setValidated(true);
+
       props.addTextBlock(text, x, y, fontSize, fontFamily, textColor, backgroundColor);
+      SelectTextBlock(textBlocks.length);
+  }
+
+  function SelectTextBlock(index)
+  {
+    setSelected(index);
+    let block = textBlocks[index];
+    if (block == null)
+    {
+      return;
+    }
+
+    setText(block.text);
+    setX(block.x);
+    setY(block.y);
+    setFontSize(block.fontSize);
+    setFontFamily(block.fontFamily);
+    setTextColor(block.textColor);
+    setBackgroundColor(block.backgroundColor);
+  }
+
+  function UpdateTextBlock(setFunc, val, property)
+  {
+    setFunc(val);
+
+    if(selected < 0)
+    {
+      return;
+    }
+    let block = textBlocks[selected];
+    block.hasChanges = true;
+
+    switch(property)
+    {
+      case "text":
+        block.text = val;
+        break;
+        case "x":
+          block.x = val;
+          break;
+          case "y":
+            block.y = val;
+            break;
+            case "fontSize":
+              block.fontSize = val;
+              break;
+              case "fontFamily":
+                block.fontFamily = val;
+                break;
+                case "textColor":
+                  block.textColor = val;
+                  break;
+                  case "backgroundColor":
+                    block.backgroundColor = val;
+                    break;
+      default:
+        break;
+    }
+    
+    props.updateTextBlocks();
   }
 
   return (
-    <Form noValidate validated={validated}>
-      <Form.Group className="mb-3">
+    <Container>
+    <Form>
+      <Form.Group required className="mb-3">
         <Form.Label>Text</Form.Label>
-        <Form.Control value={text} onChange={evt => setText(evt.target.value)} required placeholder="text" />
+        <Form.Control value={text} onChange={evt => UpdateTextBlock(setText, evt.target.value, "text")} required placeholder="text" />
       </Form.Group>
 
-      <Form.Group noValidate className="mb-3">
+      <Form.Group className="mb-3">
         <Row>
             <Col>
             <Form.Label>X</Form.Label>
-        <Form.Control value={x} onChange={evt => setX(evt.target.value)} type="number" placeholder="0" />
+        <Form.Control value={x} onChange={evt => UpdateTextBlock(setX, evt.target.value, "x")} type="number" placeholder="0" />
         <Form.Text>
-            Range -255, 255
+            Range: 0 - 100%
         </Form.Text>
             </Col>
             <Col>
             <Form.Label>Y</Form.Label>
-        <Form.Control value={y} onChange={evt => setY(evt.target.value)} type="number" placeholder="0" />
+        <Form.Control value={y} onChange={evt => UpdateTextBlock(setY, evt.target.value, "y")} type="number" placeholder="0" />
         <Form.Text>
-            Range -255, 255
+        Range: 0 - 100%
         </Form.Text>
             </Col>
         </Row>
@@ -225,7 +289,7 @@ function EditorTextOptionsTab(props) {
       <Dropdown.Menu>
       {
           sizes.map(element => {
-                return <Dropdown.Item onClick={(e) => setFontSize(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+                return <Dropdown.Item onClick={e => UpdateTextBlock(setFontSize, e.target.textContent, "fontSize")} key={element}>{element}</Dropdown.Item>
           })
         }
       </Dropdown.Menu>
@@ -240,7 +304,7 @@ function EditorTextOptionsTab(props) {
       <Dropdown.Menu>
         {
             CSS_COLOR_NAMES.map(element => {
-                            return <Dropdown.Item onClick={(e) => setTextColor(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+                            return <Dropdown.Item onClick={e => UpdateTextBlock(setTextColor, e.target.textContent, "textColor")} key={element}>{element}</Dropdown.Item>
             })
         }
       </Dropdown.Menu>
@@ -258,7 +322,7 @@ function EditorTextOptionsTab(props) {
       <Dropdown.Menu>
         {
       FONT_FAMILIES.map(element => {
-                            return <Dropdown.Item onClick={(e) => setFontFamily(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+                            return <Dropdown.Item onClick={e=> UpdateTextBlock(setFontFamily, e.target.textContent, "fontFamily")} key={element}>{element}</Dropdown.Item>
             })
           }
       </Dropdown.Menu>
@@ -273,7 +337,7 @@ function EditorTextOptionsTab(props) {
       <Dropdown.Menu>
       {
             CSS_COLOR_NAMES.map(element => {
-                            return <Dropdown.Item onClick={(e) => setBackgroundColor(e.target.textContent)} key={element}>{element}</Dropdown.Item>
+                            return <Dropdown.Item onClick={e => UpdateTextBlock(setBackgroundColor, e.target.textContent, "backgroundColor")} key={element}>{element}</Dropdown.Item>
             })
         }
       </Dropdown.Menu>
@@ -285,6 +349,18 @@ function EditorTextOptionsTab(props) {
         Hinzufügen
       </Button>
     </Form>
+
+    <div style={{backgroundColor: "lightgrey", height: "1px", margin: "10px"}}></div>
+    
+    <Container>
+      <h6>Erstellte Textblöcke:</h6>
+    {
+            textBlocks.map((element, index) => {
+              return <Row key={index} onClick={(e) => SelectTextBlock(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>{element.text}</Row>
+          })
+      }
+    </Container>
+    </Container>
     );
 }
 
