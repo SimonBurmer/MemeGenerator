@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
-import { Link } from "react-router-dom";
+import { Navbar, Form, Nav, Container, Button, ButtonGroup } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
@@ -10,7 +8,27 @@ import {
   AiOutlineEdit
 } from "react-icons/ai";
 
-function TopNavigationBar() {
+function TopNavigationBar(props) {
+
+
+  const handleLogoutClick = () => {
+      window.open("http://localhost:5000/auth/logout", "_self");
+  }
+
+  const authButton = () => {
+    if (props.userName === null) {
+        return (
+            <ButtonGroup>
+                <Button variant="secondary" as={Link} to="/login">Login</Button>
+                <Button variant="secondary" as={Link} to="/signup">Signup</Button>
+            </ButtonGroup>
+        )
+            
+    } else {
+        return <Button variant="secondary" onClick={handleLogoutClick}>Logout</Button>
+    }
+}
+
   return (
     <Navbar
       expand="md"
@@ -47,7 +65,6 @@ function TopNavigationBar() {
                 Overview
               </Nav.Link>
             </Nav.Item>
-
             <Nav.Item>
             <Nav.Link
                 as={Link}
@@ -60,6 +77,9 @@ function TopNavigationBar() {
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <Form inline className="mx-3">
+                {authButton()}
+            </Form>
     </Navbar>
   );
 }

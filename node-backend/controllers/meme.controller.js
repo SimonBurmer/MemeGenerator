@@ -42,23 +42,13 @@ const getMeme = async (req, res) => {
 };
 
 const allMemes = async (req, res) => {
-    try{
-        let autorFilter = {author: {$not: /^api$/}, private: false}
-        if (req.query.name) dbFilter.name = req.query.name
-        let sortFilter = req.query.sort && req.query.sort === "oldest" ? {date: 1} : {date: -1}
-        console.log(gteDateFilter)
+    let dbFilter = req.query.author ? {author: req.query.author} : {author: {$not: /^api$/}}
+        if (req.query.private) dbFilter.private = req.query.private
         Meme
-            .find(autorFilter)
-            .limit(req.query.limit)
-            .sort(sortFilter)
-//            .setOptions({ sanitizeFilter: true })
+            .find(dbFilter)
             .then(memes => {
                 res.send(memes)
-            }, err => console.error(err))
-    }catch(err){
-        console.error(er)
-    }
-    
+            }, err => console.error(err))   
 };
 
 const retrieve = async (req, res) => {

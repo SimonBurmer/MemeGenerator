@@ -1,12 +1,14 @@
 const upload = require("../middlewares/upload");
 const dbConfig = require("../config/db.config");
+const passport = require("passport");
+const userModel = require("../models/user.model");
 
 const MongoClient = require("mongodb").MongoClient;
 const GridFSBucket = require("mongodb").GridFSBucket;
 
 const url = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
 
-const baseUrl = "http://localhost:3001/files/";
+const baseUrl = "http://localhost:5000/img/";
 
 const mongoClient = new MongoClient(url);
 
@@ -22,7 +24,8 @@ const uploadFiles = async (req, res) => {
     }
 
     return res.send({
-      message: "Files have been uploaded.",
+      message: req.files.map(files => files.filename),
+      
     });
   } catch (error) {
     console.log(error);
@@ -36,13 +39,14 @@ const uploadFiles = async (req, res) => {
 const getListFiles = async (req, res) => {
   try {
     await mongoClient.connect();
-
+    // filter images by google id of user
+    let dbFilter = req.query.metadata ? {metadata: req.query.metadata} : {metadata: {$not: /^api$/}}
     const database = mongoClient.db(dbConfig.database);
     const images = database.collection(dbConfig.imgBucket + ".files");
 
-    const cursor = images.find({});
+    const cursor = images.find(dbFilter);
 
-    if ((await cursor.count()) === 0) {
+    if ((await cursor.count) === 0) {
       return res.status(500).send({
         message: "No files found!",
       });
@@ -52,6 +56,7 @@ const getListFiles = async (req, res) => {
     await cursor.forEach((doc) => {
       fileInfos.push({
         name: doc.filename,
+        //author: passport.deserializeUser(),
         url: baseUrl + doc.filename,
       });
     });
