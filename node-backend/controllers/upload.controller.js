@@ -1,8 +1,5 @@
 const upload = require("../middlewares/upload");
 const dbConfig = require("../config/db.config");
-const passport = require("passport");
-const userModel = require("../models/user.model");
-
 const MongoClient = require("mongodb").MongoClient;
 const GridFSBucket = require("mongodb").GridFSBucket;
 
@@ -14,8 +11,13 @@ const mongoClient = new MongoClient(url);
 
 const uploadFiles = async (req, res) => {
   try {
-    await upload(req, res);
-    console.log(req.files);
+    if(req.query.type == null){
+      return res
+        .status(406)
+        .send({ message: "Pls specify the typ of file in the body, e.g. meme or template", });
+    }else{
+      await upload(req, res);
+    }
 
     if (req.files.length <= 0) {
         return res
@@ -38,14 +40,18 @@ const uploadFiles = async (req, res) => {
 
 const getListFiles = async (req, res) => {
   try {
+    if (req.query.type == null) {
+      return res.status(406).send({
+        message: "Pls specify the typ of file in the body, e.g. meme or template",
+      });
+    }
     await mongoClient.connect();
     // filter images by google id of user
     let dbFilter = req.query.metadata ? {metadata: req.query.metadata} : {metadata: {$not: /^api$/}}
     const database = mongoClient.db(dbConfig.database);
-    const images = database.collection(dbConfig.imgBucket + ".files");
-
+    let images = database.collection(dbConfig.memeBucket + ".files");
+    if (req.query.type === "template") images = database.collection(dbConfig.templateBucket + ".files");
     const cursor = images.find(dbFilter);
-
     if ((await cursor.count) === 0) {
       return res.status(500).send({
         message: "No files found!",

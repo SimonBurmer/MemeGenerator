@@ -53,12 +53,11 @@ const allMemes = async (req, res) => {
 
 const retrieve = async (req, res) => {
     try{
-        let autorFilter = {author: {$not: /^api$/}, private: false}
+        let dbFilter = {author: {$not: /^api$/}, private: false}
         if (req.query.name) dbFilter.name = req.query.name
         let sortFilter = req.query.sort && req.query.sort === "oldest" ? {date: 1} : {date: -1}
-        console.log(gteDateFilter)
         Meme
-            .find(autorFilter)
+            .find(dbFilter)
             .limit(req.query.limit)
             .sort(sortFilter)
 //            .setOptions({ sanitizeFilter: true })
@@ -66,7 +65,7 @@ const retrieve = async (req, res) => {
                 res.send(memes)
             }, err => console.error(err))
     }catch(err){
-        console.error(er)
+        console.error(err)
     }
     
 };

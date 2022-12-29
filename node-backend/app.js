@@ -26,8 +26,8 @@ db.mongoose
     process.exit();
   });
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+var debugRouter = require('./routes/debug');
 var memeRouter = require('./routes/memes');
 require('./config/passport.config.js')(passport)
 
@@ -61,8 +61,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Routes
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
+app.use('/debug', debugRouter);
 app.use('/auth', require('./routes/auth.js'))
 app.use("/img", templates);
 app.use('/memes', memeRouter)

@@ -15,12 +15,20 @@ var storage = new GridFsStorage({
       const filename = `${Date.now()}-omm-${file.originalname}`;
       return filename;
     }
-    console.log(req.params)
-    return {
-      bucketName: dbConfig.imgBucket,
-      filename: `${Date.now()}-omm-${file.originalname}`,
-      metadata: req.user._id
-    };
+    if(req.query.type === 'meme'){
+      return {
+        bucketName: dbConfig.memeBucket,
+        filename: `${Date.now()}-omm-${file.originalname}`,
+        metadata: req.user._id
+      };
+    }
+    if(req.query.type === 'template'){
+      return {
+        bucketName: dbConfig.templateBucket,
+        filename: `${Date.now()}-omm-${file.originalname}`,
+        metadata: req.user._id
+      };
+    }   
   }
 });
 

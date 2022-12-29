@@ -5,5 +5,6 @@ module.exports = {
     HOST: "127.0.0.1",
     PORT: DB_PORT,
     DB: "omm-2223",
-    imgBucket: "photos",
+    memeBucket: "memes",
+    templateBucket: "templates",
   };
