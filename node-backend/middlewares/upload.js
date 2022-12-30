@@ -2,7 +2,6 @@ const util = require("util");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const dbConfig = require("../config/db.config");
-const passport = require("passport");
 const dbUrl = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
 
 var storage = new GridFsStorage({

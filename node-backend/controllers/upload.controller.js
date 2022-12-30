@@ -29,11 +29,11 @@ const uploadFiles = async (req, res) => {
       message: req.files.map(files => files.filename),
       
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
 
-    return res.send({
-      message: "Error when trying upload image: ${error}",
+    return res.status(406).send({
+      message: "Error when trying upload image:" + err,
     });
   }
 };

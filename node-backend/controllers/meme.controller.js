@@ -81,10 +81,18 @@ const deleteMeme = async(req,res) => {
         .catch(err => console.log(err))
 };
 
+const addLike = async(req,res) => {
+    Meme
+        .findOneAndUpdate({_id: req.body.id}, {votes: req.body.votes}, {new: true})
+        .then(result => res.send(result))
+        .catch(() => console.log(`ERROR in /addLike: could not find meme with ID ${req.body.id}`))
+};
+
 module.exports = {
     saveMeme,
     getMeme,
     allMemes,
     retrieve,
-    deleteMeme
+    deleteMeme,
+    addLike
   };

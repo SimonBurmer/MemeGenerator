@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const requireJwtAuth = require("../middlewares/requireJwtAuth")
 
-router.get('/debug', (req, res, next) => {
+router.get('/debug', requireJwtAuth,(req, res, next) => {
 
-    res.send(req.cookies)
+    res.send("plss")
   })
 
 

@@ -10,15 +10,16 @@ module.exports = function (passport) {
         clientID: config.googleClientID,
         clientSecret: config.googleSecret,
         callbackURL: '/auth/google/callback',
+//        proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log(accessToken)
         const newUser = {
+          provider: 'google',
           googleId: profile.id,
-          displayName: profile.displayName,
-          firstName: profile.name.givenName,
-          lastName: profile.name.familyName,
-          image: profile.photos[0].value,
+          username: profile.name.givenName,
+          email: profile.emails[0].value,
+          name: profile.displayName,
         }
 
         try {

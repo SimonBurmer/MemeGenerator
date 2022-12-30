@@ -7,7 +7,8 @@ var logger = require('morgan');
 const templates = require("./routes/templates");
 const dbConfig = require("./config/db.config");
 const passport = require('passport');
-const session = require('express-session');
+// const session = require('express-session');
+// var MongoDBStore = require('connect-mongodb-session')(session);
 const db = require("./models");
 const { mongoose } = require('./models');
 const { requestLoggerMiddleware } = require("./middlewares/logger");
@@ -29,12 +30,17 @@ db.mongoose
 
 var debugRouter = require('./routes/debug');
 var memeRouter = require('./routes/memes');
-require('./config/passport.config.js')(passport)
+var commentRouter = require('./routes/comment');
+
 
 var app = express();
+// var store = new MongoDBStore({
+//   uri: dbUrl,
+//   collection: 'mySessions'
+// });
 app.use(cors({
   origin: "http://localhost:3000",
-  methods: "GET,POST,PUT,DELETE,HEAD",
+  methods: "GET,POST,PUT,DELETE",
   credentials: true,
 }));
 // view engine setup
@@ -48,23 +54,31 @@ app.use(cookieParser());
 
 //Logger
 app.use(requestLoggerMiddleware({ logger: console.log }));
+// store.on('error', function(error) {
+//   console.log(error);
+// });
 
 // Session
-app.use(session({
-  secret: 'omm secret',
-  resave: false,
-  saveUninitialized: false,
-}))
+// app.use(session({
+//   secret: 'omm secret',
+//   resave: false,
+//   saveUninitialized: false,
+//   store: store,
+// }))
 
 // Passport middleware
 app.use(passport.initialize())
-app.use(passport.session())
+//app.use(passport.session())
+
+require('./config/jwtStrategy')(passport)
+require('./config/passport.config.js')(passport)
 
 //Routes
 app.use('/debug', debugRouter);
 app.use('/auth', require('./routes/auth.js'))
 app.use("/img", templates);
 app.use('/memes', memeRouter)
+app.use('/comment', commentRouter)
 
 
 

@@ -4,29 +4,29 @@ const router = express.Router()
 
 const CLIENT_URL = "http://localhost:3000/";
 
-router.get("/login/success", (req, res) => {
-  console.log(req.user)
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "successfull",
-      user: req.user,
-      //cookies: req.cookies
-    });
-  }else{
-    res.status(401).json({
-      success: false,
-      message: "failure",
-    });
-  }
-});
+// router.get("/login/success", (req, res) => {
+//   console.log(req.user)
+//   if (req.user) {
+//     res.status(200).json({
+//       success: true,
+//       message: "successfull",
+//       user: req.user,
+//       //cookies: req.cookies
+//     });
+//   }else{
+//     res.status(401).json({
+//       success: false,
+//       message: "failure",
+//     });
+//   }
+// });
 
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "failure",
-  });
-});
+// router.get("/login/failed", (req, res) => {
+//   res.status(401).json({
+//     success: false,
+//     message: "failure",
+//   });
+// });
 
 // @desc    Auth with Google
 // @route   GET /auth/google
@@ -37,11 +37,17 @@ router.get('/google', passport.authenticate('google', { scope: ['email','profile
 // @route   GET /auth/google/callback
 router.get(
   '/google/callback',
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/auth/login/failed",
-  })
-)
+  passport.authenticate('google', {
+    failureRedirect: '/',
+    session: false,
+  }),
+  (req, res) => {
+    const token = req.user.generateJWT();
+    res.cookie('jwt', token)
+    res.redirect("http://localhost:3000");
+    //res.status(200).json({ success: true, token: token });
+  },
+);
 
 // @desc    Logout user
 // @route   /auth/logout
