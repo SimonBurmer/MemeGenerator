@@ -1,12 +1,17 @@
 import React from "react";
 import {useRef, useState, useEffect} from "react";
 import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Form from 'react-bootstrap/Form';
 
 
 function MemeEditorCanvas(props) {
   const canvasRef = useRef(null);
   const [textBlocks, setTextBlocks] = useState(props.textBlocks);
   const [images, setImages] = useState(props.images);
+  const [canvasWidth, setCanvasWidth] = useState(500);
+  const [canvasHeight, setCanvasHeight] = useState(500);
 
   const loadImage = (src) => 
   {
@@ -20,7 +25,10 @@ function MemeEditorCanvas(props) {
     return p;
   }
 
-  const draw = (ctx) => {
+  const draw = () => {
+    var canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
 
     Promise.all(props.images.map(img => loadImage(img.src))).then(imgs => {
@@ -54,32 +62,57 @@ function MemeEditorCanvas(props) {
     ctx.fillText(textBlock.text, textBlock.x, textBlock.y);
   }
 
-  // Changes Image
-  useEffect(() => 
-  { 
-    setImages(props.images);
-    var canvas = canvasRef.current;
-    var ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    draw(ctx);
-  }, 
-  [props.images]);
+      useEffect(() => 
+      { 
+        draw();
+      }, 
+      [canvasWidth]);
 
-  // Changes Text
+    useEffect(() => 
+    { 
+      draw();
+    }, 
+    [canvasHeight]);
+
+    useEffect(() => 
+    { 
+      setImages(props.images);
+      draw();
+    }, 
+    [props.images]);
+
   useEffect(() => 
   { 
-    setTextBlocks(props.textBlocks);
-    var canvas = canvasRef.current;
-    var ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    draw(ctx);
+    setTextBlocks(props.images);
+    draw();
   }, 
   [props.textBlocks]);
 
   return (
   <Container style={{ width: "100%", height: "100%" }}>
-      <canvas ref={canvasRef} width="500" height="500" className="border border-secondary" />
-
+    <Row>
+      <Col>
+      <Form>
+      <Form.Group className="mb-3">
+        <Row >
+            <Col>
+            <Form.Label>Canvas Width: </Form.Label>
+        <Form.Control value={canvasWidth} onChange={evt => setCanvasWidth(evt.target.value)} type="number" placeholder="0" />
+            </Col>
+            <Col>
+            <Form.Label>Canvas Height: </Form.Label>
+        <Form.Control value={canvasHeight} onChange={evt => setCanvasHeight(evt.target.value)} type="number" placeholder="0" />
+            </Col>
+        </Row>
+      </Form.Group>
+      </Form>
+      </Col>
+    </Row>
+    <Row>
+      <Col className="col-auto">
+        <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className="border border-secondary" />
+      </Col>
+    </Row>
   </Container>
       );
 }

@@ -6,25 +6,10 @@ import Form from 'react-bootstrap/Form';
 import React from "react";
 import {useState, useEffect} from "react";
 
-
-import ModalUploadImage from './modals/ModalUploadImage';
-import ModalURLImage from './modals/ModalURLImage';
 import ModalAddImageOptions from './modals/ModalAddImageOptions';
-
-import {
-  AiFillAppstore,
-  AiOutlineCamera,
-  AiOutlineGif,
-  AiOutlineVideoCamera,
-  AiOutlineLink,
-  AiOutlineEdit,
-  AiOutlineUpload,
-} from "react-icons/ai";
 import ImageBlock from '../models/ImageBlock';
 
 function EditorImageOptionsTab(props) {
-  const [modalUploadImageShow, setModalUploadImageShow] = useState(false);
-  const [modalURLImageShow, setModalURLImageShow] = useState(false);
   const [modalAddImageOptionsShow, setModalAddImageOptionsShow] = useState(false);
   const [images, setImages] = useState(props.images);
   const [image, setImage] = useState(new ImageBlock());
@@ -34,16 +19,6 @@ function EditorImageOptionsTab(props) {
   { 
     setImages(props.images) 
   }, [props.images]);
-
-  var imageOptions = [
-    ["Choose template", <AiFillAppstore />, () => setModalUploadImageShow(true)],
-    ["Upload image", <AiOutlineUpload />, () => setModalUploadImageShow(true)],
-    ["Take a photo", <AiOutlineCamera />, () => setModalUploadImageShow(true)],
-    ["Upload gif (as image)", <AiOutlineGif />, () => setModalUploadImageShow(true)],
-    ["Upload video (as image)", <AiOutlineVideoCamera />, () => setModalUploadImageShow(true)],
-    ["Enter an image url", <AiOutlineLink />, () => setModalURLImageShow(true)],
-    ["Create your own", <AiOutlineEdit />, () => setModalUploadImageShow(true)],
-  ];
 
   function selectImage(index)
   {
@@ -142,18 +117,6 @@ function EditorImageOptionsTab(props) {
         show={modalAddImageOptionsShow}
         addImage={addImage}
         onHide={() => setModalAddImageOptionsShow(false)}
-      />
-
-      <ModalUploadImage
-        show={modalUploadImageShow}
-        onHide={() => setModalUploadImageShow(false)}
-        addImage={addImage}
-      />
-
-      <ModalURLImage
-        show={modalURLImageShow}
-        onHide={() => setModalURLImageShow(false)}
-        addImage={addImage}
       />
 
     </Container>

@@ -91,11 +91,9 @@ function ModalAddImageOptions(props) {
           <Row>
         <Col className="add-image-modal-container">
         {(() => {
-          console.log(selectedOptionIndex);
                       switch(selectedOptionIndex)
                       {
                         case 0: 
-                        return "Button";
                         break;
                         case 1: 
                         return <Container>
@@ -104,7 +102,6 @@ function ModalAddImageOptions(props) {
                         </p>
                         <input type="file" onChange={(e) => setSrc(URL.createObjectURL(e.target.files[0]))} className="mt-3" />
                         </Container>;
-                        break;
                         case 2: 
                         break;
                         case 3: 
@@ -126,7 +123,6 @@ function ModalAddImageOptions(props) {
                 
                 
                         </Container>;
-                        break;
                         case 6: 
                         break;
                         default: 

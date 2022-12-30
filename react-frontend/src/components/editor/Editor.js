@@ -48,11 +48,11 @@ function Editor() {
 
   return (
     <Container className="editor-layout-container">
-      <Row className="justify-content-md-center">
-      <Col xs={10} md={7} className="editor-layout-col align-end text-align-end">
-      <MemeEditorCanvas ref={memeEditor} textBlocks={textBlocks} images={images}/>
+      <Row className="justify-content-between">
+      <Col md={10} lg={5}  className="editor-layout-col align-end text-align-end fit-content">
+          <MemeEditorCanvas ref={memeEditor} textBlocks={textBlocks} images={images}/>
         </Col>
-      <Col className="editor-layout-col editor-options-container border border-secondary" style={{    overflow: "overlay"}}>
+      <Col md={10} lg={5} className="editor-layout-col editor-options-container border border-secondary" style={{overflow: "overlay"}}>
           <Tabs
             defaultActiveKey="home"
             id="uncontrolled-tab-example"
