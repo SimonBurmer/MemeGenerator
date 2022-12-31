@@ -17,7 +17,7 @@ function MemeMetaInformation({memeMetaInformation}) {
 
     return (
         <div className="meta">
-            <h2>Title: {memeMetaInformation.title}</h2>
+            <h2>Title: {memeMetaInformation.name}</h2>
             <h4>Template: {memeMetaInformation.template}</h4>
             <h4>Votes Total: {memeMetaInformation.votesTotal}</h4>
             <div className={"voting-container"}>

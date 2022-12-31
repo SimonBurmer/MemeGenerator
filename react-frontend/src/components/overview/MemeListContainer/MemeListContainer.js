@@ -6,11 +6,14 @@ import SingleView from "../../singleview/SingleView";
 
 function MemeListContainer(props) {
     const [selectedMeme, setSelectedMeme] = useState(null);
-
+    const filteredMemes = props.memes
+    console.log("Filtered Memes: " + filteredMemes)
+    /*
     const filteredMemes = props.memes.filter((meme) => {
-        if (props.filter.title && !meme.title.toLowerCase().includes(props.filter.title.toLowerCase())) {
+        if (props.filter.name && !meme.name.toLowerCase().includes(props.filter.name.toLowerCase())) {
             return false;
         }
+        /*
         if (props.filter.votesTotal && meme.votesTotal < props.filter.votesTotal) {
             return false;
         }
@@ -19,6 +22,8 @@ function MemeListContainer(props) {
         }
         return true;
     });
+    */
+
     const handleMemeClick = (meme) => {
         setSelectedMeme(meme);
     }
@@ -31,15 +36,15 @@ function MemeListContainer(props) {
             {filteredMemes.map(meme => (
                 <button className="meme-item" onClick={() => handleMemeClick(meme)}>
                     <div className={"meme-image"}>
-                        <Meme meme={meme.image}></Meme>
+                        <Meme meme={meme.templates.map(attribute => (attribute.url))}></Meme>
                     </div>
                     <MemeMetaInformation memeMetaInformation={{
-                        title: meme.title,
-                        template: meme.template,
-                        votesTotal: meme.votesTotal,
-                        likes: meme.likes,
-                        dislikes: meme.dislikes,
-                        comments: meme.comments
+                        name: meme.name,
+                        template: meme.templates,
+                        votesTotal: meme.votes,
+                        //likes: meme.likes,
+                        //dislikes: meme.dislikes,
+                        //comments: meme.comments
                     }}></MemeMetaInformation>
                 </button>
             ))}
