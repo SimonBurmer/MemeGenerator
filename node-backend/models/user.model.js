@@ -38,7 +38,6 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
   },
   { timestamps: true }
 );

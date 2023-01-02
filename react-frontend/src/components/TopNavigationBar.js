@@ -22,6 +22,7 @@ function TopNavigationBar(props) {
   // TODO redirect after logout
   const handleLogoutClick = () => {
     window.open("http://localhost:5000/auth/logout", "_self");
+    localStorage.clear();
   };
 
   const authButton = () => {

@@ -1,12 +1,4 @@
 import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { LoginSuccess } from "../app/containers/LoginSuccess";
-import {
-  setAuthUser,
-  setIsAuthenticated,
-  selectIsAuthenticated,
-} from "../app/appSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 const API_URL = "http://localhost:5000/auth/";
 //const history = useHistory();
@@ -14,6 +6,7 @@ const API_URL = "http://localhost:5000/auth/";
 class Auth {
   constructor() {
     this.Authenticated = false;
+    this.authUser = null;
   }
 
   fetchAuthUser = async () => {
@@ -25,6 +18,9 @@ class Auth {
 
     if (response && response.data) {
       console.log("User: ", response.data);
+      localStorage.clear();
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.dispatchEvent(new Event("storage"));
       return response;
     }
   };
@@ -63,6 +59,9 @@ class Auth {
 
   isAuthenticated() {
     return this.Authenticated;
+  }
+  getAuthUser() {
+    return this.authUser;
   }
 }
 
