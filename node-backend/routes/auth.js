@@ -1,9 +1,10 @@
-const express = require('express')
-const passport = require('passport')
-const router = express.Router()
+const express = require("express");
+const passport = require("passport");
+const router = express.Router();
 
 const CLIENT_URL = "http://localhost:3000/";
-
+const successLoginUrl = "http://localhost:3000/login/success";
+const errorLoginUrl = "http://localhost:3000/login/error";
 // router.get("/login/success", (req, res) => {
 //   console.log(req.user)
 //   if (req.user) {
@@ -31,31 +32,35 @@ const CLIENT_URL = "http://localhost:3000/";
 // @desc    Auth with Google
 // @route   GET /auth/google
 // http://localhost:5000/auth/google
-router.get('/google', passport.authenticate('google', { scope: ['email','profile'] }))
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
 
 // @desc    Google auth callback
 // @route   GET /auth/google/callback
 router.get(
-  '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/',
-    session: false,
+  "/google/callback",
+  passport.authenticate("google", {
+    failureMessage: "Cannot login to Google, please try again later!",
+    failureRedirect: errorLoginUrl,
+    successRedirect: successLoginUrl,
   }),
   (req, res) => {
-    const token = req.user.generateJWT();
-    res.cookie('jwt', token)
-    res.redirect("http://localhost:3000");
-    //res.status(200).json({ success: true, token: token });
-  },
+    console.log("User: ", req.user);
+    res.send("Thank you for signing in!");
+  }
 );
 
 // @desc    Logout user
 // @route   /auth/logout
-router.get('/logout', (req, res, next) => {
+router.get("/logout", (req, res, next) => {
   req.logout((error) => {
-      if (error) {return next(error)}
-      res.redirect('http://localhost:3000/')
-  })
-})
+    if (error) {
+      return next(error);
+    }
+    res.redirect("http://localhost:3000/");
+  });
+});
 
-module.exports = router
+module.exports = router;

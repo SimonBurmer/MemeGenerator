@@ -21,25 +21,11 @@ function TopNavigationBar(props) {
   let [isLogedIn, setIsLogedIn] = useState(false);
   // TODO redirect after logout
   const handleLogoutClick = () => {
-    Cookies.remove("jwt");
-    authButton();
-  };
-
-  let Button = (props) => {
-    return (
-      <button type="button" onClick={props.onClick}>
-        {props.isLogedIn ? "log out" : "log in"}
-      </button>
-    );
-  };
-
-  let handleClick = () => {
-    setIsLogedIn(!isLogedIn);
+    window.open("http://localhost:5000/auth/logout", "_self");
   };
 
   const authButton = () => {
-    const cookieJwt = Cookies.get("jwt");
-    if (!cookieJwt) {
+    if (props.userName === null) {
       return (
         <ButtonGroup>
           <Button variant="secondary" as={Link} to="/login">
@@ -97,7 +83,7 @@ function TopNavigationBar(props) {
         </Navbar.Collapse>
       </Container>
       <Form inline className="mx-3">
-        <Button isLogedIn={isLogedIn} onClick={handleClick} />
+        {authButton()}
       </Form>
     </Navbar>
   );
