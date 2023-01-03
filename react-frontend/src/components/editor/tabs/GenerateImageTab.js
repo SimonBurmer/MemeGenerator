@@ -8,6 +8,12 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/esm/Button';
 import { saveAs } from 'file-saver';
 import { useRef } from "react";
+import {
+  BsCloudArrowDown,
+  BsCloudArrowUp,
+  BsCardImage,
+} from "react-icons/bs";
+
 
 
 function ModalUploadImage(props) {
@@ -18,7 +24,7 @@ function ModalUploadImage(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <img src={props.image} style={{ width: "100%", height: "100%" }} />
+      <img src={props.canvas} style={{ width: 'auto', height: 'auto' }} />
     </Modal>
   );
 }
@@ -30,68 +36,62 @@ function GenerateImageTab(props) {
   function downloadMeme() {
     console.log("hier")
     console.log(props.text)
-    saveAs(props.image, 'meme.jpg') // Put your image url here.
+    saveAs(props.images, 'meme.jpg') // Put your image url here.
   }
 
-  function ComponentDidMount() {
-    console.log("jsadkjkhdasdfjhk")
+  function saveMemeLocal() {
+    saveAs(props.canvas, 'meme.jpg')
+  }
 
-    //const img = createImageBitmap(props.image)
-
-    //console.log(typeof props.image)
-    //console.log(typeof img)
-    const test = new Image(props.image)
-    //console.log(typeof test)
-
-    const myImage = new Image(1000, 2000);
-myImage.src = props.image;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-
-    //const img = URL.createObjectURL(props.image);
-
-    ctx.fillStyle = "green";
-    ctx.font = "50px serif";
-    ctx.fillText("Hello world", 0, 100);
-    //ctx.fillRect(0, 0, 100, 100);
-
-
-    ctx.drawImage(myImage, 0, 100)
-
-    const dataURL = canvas.toDataURL()
-    saveAs(dataURL, 'meme.jpg')
-
+  function saveMemeOnServer() {
+    saveAs(props.canvas, 'meme.jpg')
   }
 
   return (
     <Container className="image-options-container">
-
-      <Row className="image-options-row" onClick={() => setModalUploadImageShow(true)}>
+        <Row className="image-options-row" onClick={() => setModalUploadImageShow(true)}>
         <Col className="d-flex justify-content-start">
           Show Meme
         </Col>
         <Col className="d-flex justify-content-end align-items-center">
-          Icon
+          <BsCardImage />
         </Col>
       </Row>
-      <Row className="image-options-row" onClick={ComponentDidMount}>
+
+      <div style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}></div>
+
+      <Form>
+      <Form.Group required className="mb-3">
+        <Form.Label>Text</Form.Label>
+        <Form.Control placeholder="Meme Name" />
+      </Form.Group>
+      </Form>
+
+      <Row className="image-options-row" onClick={saveMemeLocal}>
+        <Col className="d-flex justify-content-start">
+          Save Meme on Server
+        </Col>
+        <Col className="d-flex justify-content-end align-items-center">
+          <BsCloudArrowUp />
+        </Col>
+      </Row>
+
+      <div style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}></div>
+
+      <Row className="image-options-row" onClick={saveMemeLocal}>
         <Col className="d-flex justify-content-start">
           Download Meme
         </Col>
         <Col className="d-flex justify-content-end align-items-center">
-          Icon
+          <BsCloudArrowDown />
         </Col>
       </Row>
 
       <ModalUploadImage
         show={modalUploadImageShow}
         onHide={() => setModalUploadImageShow(false)}
-        image={props.image}
+        canvas={props.canvas}
       />
-
-      <canvas ref={canvasRef} />
 
     </Container>
   );
