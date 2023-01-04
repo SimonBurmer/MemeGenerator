@@ -8,14 +8,16 @@ import './Editor.css';
 import TextOptionsTab from './tabs/TextOptionsTab';
 import ImageOptionsTab from './tabs/ImageOptionsTab';
 import GenerateImageTab from './tabs/GenerateImageTab';
+import PencelOptionsTab from './tabs/PencelOptionsTab';
 import MemeEditorCanvas from './components/MemeEditorCanvas';
 import ImageBlock from "./models/ImageBlock";
 
+
 function Editor() {
-  const memeEditor = useRef(null);
   const [textBlocks, setTextBlocks] = useState([]);
   const [images, setImages] = useState([]);
-  const [image, setImage] = useState("");
+  const [canvasImage, setCanvasImage] = useState(null);
+  const [pencilAttributes, setPencilAttributes] = useState({'lineWidth': 5, 'strokeStyle': 'red'});
 
   function addTextBlock (textBlock)
   {
@@ -42,15 +44,13 @@ function Editor() {
     newImage.src = src;
     newImages.unshift(newImage);
     setImages(newImages);
-
-    setImage(image);
   }
 
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-between">
       <Col md={10} lg={5}  className="editor-layout-col align-end text-align-end fit-content">
-          <MemeEditorCanvas ref={memeEditor} textBlocks={textBlocks} images={images}/>
+          <MemeEditorCanvas setCanvasImage={setCanvasImage} textBlocks={textBlocks} images={images} pencil={pencilAttributes}/>
         </Col>
       <Col md={10} lg={5} className="editor-layout-col editor-options-container border border-secondary" style={{overflow: "overlay"}}>
           <Tabs
@@ -64,8 +64,11 @@ function Editor() {
             <Tab eventKey="profile" title="Text">
               <TextOptionsTab updateTextBlocks={updateTextBlocks} addTextBlock={addTextBlock} textBlocks={textBlocks}/>
             </Tab>
+            <Tab eventKey="pencil" title="Pencil">
+              <PencelOptionsTab  setPencilAttributes={setPencilAttributes}/>
+            </Tab>
             <Tab eventKey="generate" title="Generate">
-              <GenerateImageTab image={image} text={memeEditor}/>
+              <GenerateImageTab images={images} canvasImage={canvasImage} text={"test"}/>
             </Tab>
           </Tabs>
         </Col>

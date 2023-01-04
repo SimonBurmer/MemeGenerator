@@ -38,13 +38,13 @@ function AddGIF() {
     <div>
       <input
         type="file"
-        accept="video/*"
+        accept="image/gif"
         onChange={handleChange}
       />
       {preview ? (
         <img src={preview} alt="Gif preview" />
       ) : (
-        'No gif selecteddd'
+        'No gif selected'
       )}
     </div>
   );

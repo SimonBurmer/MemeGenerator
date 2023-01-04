@@ -39,7 +39,6 @@ function EditorImageOptionsTab(props) {
     props.updateImages();      
   }
 
-
   function addImage(image) {
     props.addImage(image)
   }
@@ -94,18 +93,15 @@ function EditorImageOptionsTab(props) {
 
             </Col>
             <Col xs lg="8">
-            <h6>Images in Canvas:</h6>
-            </Col>
-            <Col xs lg="2">
             <Button onClick={(e) => setModalAddImageOptionsShow(true)}>
-              Add
+              Add Image to Canvas
             </Button>
             </Col>
           </Row>
           <Row>
           {
             images.map((element, index) => {
-              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>{element.src}</Row>
+              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>Image {index + 1}</Row>
           })
       }
           </Row>

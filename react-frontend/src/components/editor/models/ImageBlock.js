@@ -1,5 +1,5 @@
 const ImageBlock = class {
-  constructor(src = "", x = 0, y = 0, size = 100) {
+  constructor(src = "", x = 0, y = 0, size = 400) {
     this.src = src;
     this.size = size;
     this.x = x;

@@ -2,7 +2,6 @@ import TopNavigationBar from "./components/TopNavigationBar";
 import Home from "./components/home/Home";
 import Editor from "./components/editor/Editor";
 import Overview from "./components/overview/Overview";
-import Profil from "./components/profil/Profil";
 import Login from "./components/login/Login";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
