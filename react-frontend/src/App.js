@@ -24,17 +24,17 @@ function App() {
   const [user, setUser] = useState(null);
   const [authState, setAuthState] = useState(false);
 
-  useEffect(() => {
-    const handleStorage = () => {
-      if (!(localStorage.getItem("user") === null)) {
-        const userFromStorage = JSON.parse(localStorage.getItem("user"));
-        setUser(userFromStorage.username);
-      }
-    };
+  // useEffect(() => {
+  //   const handleStorage = () => {
+  //     if (!(localStorage.getItem("user") === null)) {
+  //       const userFromStorage = JSON.parse(localStorage.getItem("user"));
+  //       setUser(userFromStorage.username);
+  //     }
+  //   };
 
-    window.addEventListener("storage", handleStorage());
-    return () => window.removeEventListener("storage", handleStorage());
-  }, []);
+  //   window.addEventListener("storage", handleStorage());
+  //   return () => window.removeEventListener("storage", handleStorage());
+  // }, []);
 
   return (
     <Router>
