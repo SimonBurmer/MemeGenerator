@@ -1,8 +1,7 @@
-const path = require('path');
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config')
-
+const path = require("path");
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth.config");
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,7 +14,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
       required: [true, "can't be blank"],
-      match: [/^[a-zA-Z0-9_]+$/, 'is invalid'],
+      match: [/^[a-zA-Z0-9_]+$/, "is invalid"],
       index: true,
     },
     email: {
@@ -23,7 +22,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
       required: [true, "can't be blank"],
-      match: [/\S+@\S+\.\S+/, 'is invalid'],
+      match: [/\S+@\S+\.\S+/, "is invalid"],
       index: true,
     },
     password: {
@@ -39,25 +38,24 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-
 
 const secretOrKey = config.secret;
 
 userSchema.methods.generateJWT = function () {
-  let token = jwt.sign({
+  let token = jwt.sign(
+    {
       id: this._id,
       provider: this.provider,
       email: this.email,
+      name: this.username,
     },
     secretOrKey,
-    {expiresIn: '1h'}
+    { expiresIn: "1h" }
   );
-  return token
+  return token;
 };
 
-
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model("User", userSchema);

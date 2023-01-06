@@ -7,75 +7,60 @@ import NavigationOptions from "./NavigatorOptions/NavigationOptions";
 import CommentList from "./Comments/CommentList";
 import CommentInput from "./Comments/CommentInput";
 import Statistics from "./Statistics/Statistics";
+import MemeService from "../../services/memeService";
 
-const SingleView = ({selectedMeme, filteredMemes, handleCloseSingleView}) => {
-    const customStyles = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            width: '80%',
-            height: '80%',
-        },
-    };
+const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, refetchMemes}) => {
+    const memeService = new MemeService();
 
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            author: "Flo",
-            comment: "Wow was ein cooles Meme",
-        },
-        {
-            id: 1,
-            author: "Flo",
-            comment: "Wow was ein cooles Meme!",
-        },
-        {
-            id: 1,
-            author: "Flo",
-            comment: "Wow was ein cooles Meme!",
-        }
-    ])
-
-    const handleNewComment = (comment) => {
-        setComments([...comments, {id: 1, comment: comment}]);
+    const handleNewComment = async (comment) => {
+        await memeService.updateMemeById(filteredMemes[currentMemeIndex]._id, {
+            comments: [...filteredMemes[selectedMemeIndex].comments, {
+                userId: "123",
+                comment: comment,
+                commentDate: new Date().toISOString()
+            }]
+        });
+        refetchMemes();
     }
 
-    const [currentMemeIndex, setCurrentMemeIndex] = useState(filteredMemes.findIndex(meme => {
-        return meme.id === selectedMeme.id;
-    }))
+    const [currentMemeIndex, setCurrentMemeIndex] = useState(selectedMemeIndex)
 
     return (
         <Modal isOpen={filteredMemes[currentMemeIndex]} style={customStyles} ariaHideApp={false}>
             <div className="meme-singleview-item">
                 <div className={"meme-singleview-image"}>
-                    <Meme meme={filteredMemes[currentMemeIndex].image}></Meme>
+                    <Meme memeURL={filteredMemes[currentMemeIndex].memeURL}></Meme>
                 </div>
                 <div className={"meme-singleview-meta-information-container"}>
-                    <MemeMetaInformation memeMetaInformation={{
-                        title: filteredMemes[currentMemeIndex].title,
-                        template: filteredMemes[currentMemeIndex].template,
-                        votesTotal: filteredMemes[currentMemeIndex].votesTotal,
-                        likes: filteredMemes[currentMemeIndex].likes,
-                        dislikes: filteredMemes[currentMemeIndex].dislikes,
-                        comments: filteredMemes[currentMemeIndex].comments
-                    }}></MemeMetaInformation>
-                    <NavigationOptions filteredMemes={filteredMemes} currentMemeIndex={currentMemeIndex} setCurrentMemeIndex={setCurrentMemeIndex}></NavigationOptions>
+                    <MemeMetaInformation meme={filteredMemes[currentMemeIndex]}
+                                         refetchMemes={refetchMemes}></MemeMetaInformation>
+                    <NavigationOptions filteredMemes={filteredMemes} currentMemeIndex={currentMemeIndex}
+                                       setCurrentMemeIndex={setCurrentMemeIndex}></NavigationOptions>
                 </div>
             </div>
             <button className={"close-button-container"} onClick={handleCloseSingleView}>Close</button>
             <div className={"singleview-bottom-container"}>
                 <div className={"comment-section"}>
-                    <CommentList comments={comments}></CommentList>
+                    <CommentList comments={filteredMemes[selectedMemeIndex].comments}></CommentList>
                     <CommentInput onSubmit={handleNewComment}></CommentInput>
                 </div>
                 <Statistics></Statistics>
             </div>
         </Modal>
     );
+};
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        width: '80%',
+        height: '80%',
+    },
 };
 
 export default SingleView;

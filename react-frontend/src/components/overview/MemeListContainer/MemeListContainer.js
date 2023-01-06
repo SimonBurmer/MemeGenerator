@@ -4,51 +4,58 @@ import MemeMetaInformation from "../MemeMetaInformation/MemeMetaInformation";
 import "./MemeListContainer.css";
 import SingleView from "../../singleview/SingleView";
 
-function MemeListContainer(props) {
-    const [selectedMeme, setSelectedMeme] = useState(null);
+function MemeListContainer({memes, filter, refetchMemes}) {
+    const [selectedMemeIndex, setSelectedMemeIndex] = useState();
+    const creationDate = filter.creationDate ? new Date(filter.creationDate) : null;
 
-    const filteredMemes = props.memes.filter((meme) => {
-        if (props.filter.title && !meme.title.toLowerCase().includes(props.filter.title.toLowerCase())) {
+    const filteredMemes = memes.filter((meme) => {
+        if (filter.title && !meme.title.toLowerCase().includes(filter.title.toLowerCase())) {
             return false;
         }
-        if (props.filter.votesTotal && meme.votesTotal < props.filter.votesTotal) {
+        // exchange with Creator Name
+        if (filter.creator && !meme.creatorId.toLowerCase().includes(filter.creator.toLowerCase())) {
             return false;
         }
-        if (props.filter.comments && meme.comments < props.filter.comments) {
+        if (filter.likes && meme.votes.filter(vote => vote.votingType === "like").length < filter.likes) {
+            return false;
+        }
+        if (filter.dislikes && meme.votes.filter(vote => vote.votingType === "dislike").length < filter.dislikes) {
+            return false;
+        }
+        if (filter.comments && meme.comments.length < filter.comments) {
+            return false;
+        }
+        if (creationDate && new Date(meme.creationDate) < creationDate) {
             return false;
         }
         return true;
     });
-    const handleMemeClick = (meme) => {
-        setSelectedMeme(meme);
+
+
+    const handleMemeClick = (memeIndex) => {
+        setSelectedMemeIndex(memeIndex);
     }
     const handleCloseSingleView = () => {
-        setSelectedMeme(null);
+        setSelectedMemeIndex(null);
     }
 
     return (
         <div className={"meme-list"}>
-            {filteredMemes.map(meme => (
-                <button className="meme-item" onClick={() => handleMemeClick(meme)}>
+            {filteredMemes.map((meme, memeIndex) => (
+                <button className="meme-item" key={meme._id} onClick={() => handleMemeClick(memeIndex)}>
                     <div className={"meme-image"}>
-                        <Meme meme={meme.image}></Meme>
+                        <Meme memeURL={meme.memeURL}></Meme>
                     </div>
-                    <MemeMetaInformation memeMetaInformation={{
-                        title: meme.title,
-                        template: meme.template,
-                        votesTotal: meme.votesTotal,
-                        likes: meme.likes,
-                        dislikes: meme.dislikes,
-                        comments: meme.comments
-                    }}></MemeMetaInformation>
+                    <MemeMetaInformation meme={meme} refetchMemes={refetchMemes}></MemeMetaInformation>
                 </button>
             ))}
-            {selectedMeme && (
-                <SingleView selectedMeme={selectedMeme} filteredMemes={filteredMemes}
-                            handleCloseSingleView={handleCloseSingleView}/>
+            {selectedMemeIndex !== null && selectedMemeIndex !== undefined && (
+                <SingleView selectedMemeIndex={selectedMemeIndex} filteredMemes={filteredMemes}
+                            handleCloseSingleView={handleCloseSingleView} refetchMemes={refetchMemes}/>
             )}
         </div>
     );
+
 }
 
 export default MemeListContainer;

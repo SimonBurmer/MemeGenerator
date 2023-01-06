@@ -1,89 +1,35 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import MemeListContainer from "./MemeListContainer/MemeListContainer";
 import Filter from "./Filter/Filter";
+import MemeService from "../../services/memeService";
 
 function Overview() {
+    const memeService = new MemeService();
     const [filter, setFilter] = useState({
         title: "",
-        template: "",
-        votesTotal: "",
+        creator: "",
         likes: "",
         dislikes: "",
         comments: "",
+        creationDate: "",
     });
-    const [memes, setMemes] = useState([
-        {
-            id: 1,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 1",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 2,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 2",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 3,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 3",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 4,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 4",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 5,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 5",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 6,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 6",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        },
-        {
-            id: 7,
-            image: "https://static01.nyt.com/images/2021/05/09/fashion/07ELON-MEMES1print/07ELON-MEMES1-mediumSquareAt3X.jpg",
-            title: "Meme 7",
-            template: "Elon Musk",
-            votesTotal: 100,
-            likes: 10,
-            dislikes: 5,
-            comments: 10
-        }
-    ])
 
+    const [memes, setMemes] = useState([])
+
+    const fetchMemes = async () => {
+        const allMemes = await memeService.getAllMemes();
+        setMemes(allMemes);
+    }
+
+    // gets and sets the memes when the view mounts
+    useEffect(() => {
+        fetchMemes();
+    });
+
+    const refetchMemes = async () => {
+        const allMemes = await memeService.getAllMemes();
+        setMemes(allMemes);
+    }
     const handleFilterChange = (value, name) => {
         // update the filter object with the new value
         setFilter({...filter, [name]: value});
@@ -92,7 +38,7 @@ function Overview() {
     return (
         <>
             <Filter onFilterChange={handleFilterChange}></Filter>
-            <MemeListContainer memes={memes} filter={filter}></MemeListContainer>
+            <MemeListContainer memes={memes} filter={filter} refetchMemes={refetchMemes}></MemeListContainer>
         </>
     );
 }

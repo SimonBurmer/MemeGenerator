@@ -62,7 +62,7 @@ const getListFiles = async (req, res) => {
     await cursor.forEach((doc) => {
       fileInfos.push({
         name: doc.filename,
-        //author: passport.deserializeUser(),
+        //creator: passport.deserializeUser(),
         url: baseUrl + doc.filename,
       });
     });
@@ -81,7 +81,7 @@ const download = async (req, res) => {
 
     const database = mongoClient.db(dbConfig.database);
     const bucket = new GridFSBucket(database, {
-      bucketName: dbConfig.imgBucket,
+      bucketName: dbConfig.memeBucket,
     });
 
     let downloadStream = bucket.openDownloadStreamByName(req.params.name);

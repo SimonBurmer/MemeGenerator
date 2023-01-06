@@ -1,8 +1,8 @@
 import React from 'react';
 import "./Meme.css"
-function Meme({meme}) {
+function Meme({memeURL}) {
     return (
-        <img src={meme}/>
+        <img src={memeURL}/>
     );
 }
 

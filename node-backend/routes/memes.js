@@ -8,6 +8,9 @@ router.post("/save", memeController.saveMeme);
 // parameter: meme id
 router.get("/getSingle", memeController.getMeme);
 
+// parameter: meme id
+router.patch("/update", memeController.updateMeme);
+
 router.get("/all", memeController.allMemes);
 
 router.get("/retrieve",  memeController.retrieve);

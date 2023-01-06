@@ -18,14 +18,14 @@ var storage = new GridFsStorage({
       return {
         bucketName: dbConfig.memeBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
-        metadata: req.user._id
+        //metadata: req.user._id
       };
     }
     if(req.query.type === 'template'){
       return {
         bucketName: dbConfig.templateBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
-        metadata: req.user._id
+        //metadata: req.user._id
       };
     }   
   }

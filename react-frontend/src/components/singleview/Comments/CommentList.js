@@ -8,11 +8,11 @@ function CommentList({comments}) {
     return (
         <div>
             {comments.map((comment) => (
-            <FloatingLabel controlId="floatingTextarea2" label={"User: " + comment.author} className={"comment-list"}>
+            <FloatingLabel controlId="floatingTextarea2" label={"User: " + comment.userId} className={"comment-list"}>
                 <Form.Control
                     as="textarea"
                     value={comment.comment}
-                    style={{minHeight: '40px', minWidth: '500px'}}
+                    style={{minHeight: '40px', minWidth: '500px', resize: 'none', pointerEvents: 'none'}}
                 />
             </FloatingLabel>
             ))}

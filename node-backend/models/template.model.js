@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
 let template = new schema({
-    author: {
+    creator: {
         type: String,
         required: true
     },

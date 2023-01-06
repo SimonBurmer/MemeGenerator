@@ -8,7 +8,7 @@ const requireJwtAuth = require("../middlewares/requireJwtAuth")
 router.post("/addComment", requireJwtAuth, (req, res) => {
     let comment = new Comment({
         meme: req.body.meme,
-        author: req.body.author,
+        creator: req.body.creator,
         content: req.body.content,
         date: new Date().toISOString()
     })
@@ -35,7 +35,7 @@ router.get("/allCommentsFromAll", (req, res) => {
 router.delete("/deleteComment", requireJwtAuth, (req, res) => {
     let dbFilter = {}
     if (req.body.meme) dbFilter.meme = req.body.meme
-    if (req.body.author) dbFilter.author = req.body.author
+    if (req.body.creator) dbFilter.creator = req.body.creator
     if (req.body.comment) dbFilter.content = req.body.comment
     Comment
         .findOneAndDelete(dbFilter)
