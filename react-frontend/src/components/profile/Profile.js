@@ -11,7 +11,7 @@ import UserSettings from './UserSettings';
 
 function Profile() {
   return (
-    <Container className="Profile">
+    <Container className="editor-layout-container Profile">
       <Row className="">
         <Col className="">
           <Tabs

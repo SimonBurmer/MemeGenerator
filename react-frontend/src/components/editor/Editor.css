@@ -3,12 +3,13 @@
 }
 
 .editor-layout-col {
-  margin: 15px;
-  height: 500px;
+  margin: 5px;
+  height: auto;
+  min-height: 500px;
 }
 
-.editor-view-container {
-background-color: lightgray;
+.fit-content {
+  min-width: fit-content !important;
 }
 
 .editor-options-container {
@@ -23,6 +24,13 @@ background-color: lightgray;
 
 .image-options-row:hover {
   background-color: lightgrey;
+}
+
+.add-image-modal-container {
+  padding: 20px !important;
+  margin: 20px !important;
+  border: 1px solid lightgrey !important;
+  border-radius: 5px !important;
 }
 
 .textbox-row {
