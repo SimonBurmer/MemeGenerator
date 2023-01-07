@@ -105,6 +105,8 @@ function GenerateImageTab(props) {
         <Form.Group required className="mb-3">
           <Form.Label>Meme Description</Form.Label>
           <Form.Control
+            as="textarea" 
+            rows={2}
             name="Description"
             type="text"
             placeholder="Meme Description"
@@ -199,7 +201,6 @@ function GenerateImageTab(props) {
         onHide={() => setModalUploadImageShow(false)}
         canvasImage={props.canvasImage}
       />
-
     </Container>
   );
 }

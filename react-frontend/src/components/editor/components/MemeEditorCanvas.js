@@ -40,7 +40,7 @@ function MemeEditorCanvas(props) {
     var canvas = canvasRef.current;
     var ctx = canvas.getContext("2d");
 
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
 
     Promise.all(props.images.map(img => loadImage(img.src))).then(imgs => {

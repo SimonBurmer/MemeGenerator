@@ -95,7 +95,7 @@ function ModalAddImageOptions(props) {
                 switch (selectedOptionIndex) {
                   case 0:
                     return <Container>
-                      <AddTemplates/>
+                      <AddTemplates setImage={setSrc} uploadImage={uploadImage}/>
                     </Container>
                   case 1:
                     return <Container>
