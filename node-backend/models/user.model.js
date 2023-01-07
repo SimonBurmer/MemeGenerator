@@ -42,20 +42,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const secretOrKey = config.secret;
-
-userSchema.methods.generateJWT = function () {
-  let token = jwt.sign(
-    {
-      id: this._id,
-      provider: this.provider,
-      email: this.email,
-      name: this.username,
-    },
-    secretOrKey,
-    { expiresIn: "1h" }
-  );
-  return token;
-};
-
 module.exports = mongoose.model("User", userSchema);

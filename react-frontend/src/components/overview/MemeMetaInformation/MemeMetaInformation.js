@@ -5,15 +5,16 @@ import {faThumbsUp, faThumbsDown} from '@fortawesome/free-solid-svg-icons';
 import Button from "react-bootstrap/Button";
 import MemeService from "../../../services/memeService";
 
-function MemeMetaInformation({meme, refetchMemes}) {
+function MemeMetaInformation({meme, fetchMemes}) {
     const memeService = new MemeService();
     const handleVoteClick = async (event, memeId, voteType) => {
         event.stopPropagation();
         const previousVotingType = await memeService.voteOnMeme(memeId, voteType);
         checkForPreviouslyVoted(previousVotingType, voteType);
-        refetchMemes();
+        fetchMemes();
     }
 
+    // under title <h4>Template: {memeMetaInformation.template}</h4>
     return (
         <div className="meta">
             <h2>Title: {meme.title}</h2>

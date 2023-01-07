@@ -2,7 +2,7 @@ const util = require("util");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const dbConfig = require("../config/db.config");
-const dbUrl = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
+const dbUrl = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
 
 var storage = new GridFsStorage({
   url: dbUrl,
@@ -14,21 +14,21 @@ var storage = new GridFsStorage({
       const filename = `${Date.now()}-omm-${file.originalname}`;
       return filename;
     }
-    if(req.query.type === 'meme'){
+    if (req.query.type === "meme") {
       return {
         bucketName: dbConfig.memeBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
         //metadata: req.user._id
       };
     }
-    if(req.query.type === 'template'){
+    if (req.query.type === "template") {
       return {
         bucketName: dbConfig.templateBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
         //metadata: req.user._id
       };
-    }   
-  }
+    }
+  },
 });
 
 //var uploadFiles = multer({ storage: storage }).single("file");

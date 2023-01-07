@@ -8,12 +8,16 @@ const templates = require("./routes/templates");
 const dbConfig = require("./config/db.config");
 const passport = require("passport");
 const session = require("express-session");
+
+const dotenv = require("dotenv");
 // var MongoDBStore = require('connect-mongodb-session')(session);
 const db = require("./models");
 const { mongoose } = require("./models");
 const { requestLoggerMiddleware } = require("./middlewares/logger");
 const dbUrl = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
 console.log(dbUrl);
+dotenv.config();
+
 db.mongoose
   .connect(dbUrl, {
     useNewUrlParser: true,
@@ -31,6 +35,8 @@ var debugRouter = require("./routes/debug");
 var memeRouter = require("./routes/memes");
 var commentRouter = require("./routes/comment");
 var userRouter = require("./routes/user");
+const authRouter = require("./routes/auth.js");
+
 
 var app = express();
 // var store = new MongoDBStore({
@@ -55,36 +61,19 @@ app.use(cookieParser());
 
 //Logger
 app.use(requestLoggerMiddleware({ logger: console.log }));
-// store.on('error', function(error) {
-//   console.log(error);
-// });
 
-//Session;
-app.use(
-  session({
-    secret: "omm secret",
-    resave: false,
-    saveUninitialized: false,
-    //    store: store,
-  })
-);
 
-// Passport middleware
 app.use(passport.initialize());
-app.use(passport.session());
-
 require("./config/jwtStrategy")(passport);
-require("./config/passport.config.js")(passport);
 
 //Routes
 app.use("/debug", debugRouter);
-app.use("/auth", require("./routes/auth.js"));
+app.use("/auth", authRouter);
 app.use("/img", templates);
 app.use("/memes", memeRouter);
 app.use("/comment", commentRouter);
 app.use("/user", userRouter);
 
-//app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

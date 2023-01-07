@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import auth from "../services/authService";
+import React, { useState } from "react";
 import {
   Navbar,
   Form,
@@ -16,17 +14,26 @@ import {
   AiOutlineUser,
   AiOutlineEdit,
 } from "react-icons/ai";
+import { useLoggedInStore } from "../app/store";
 
 function TopNavigationBar(props) {
-  let [isLogedIn, setIsLogedIn] = useState(false);
+  const [loginData, setLoginData] = useState(
+    localStorage.getItem("loginData")
+      ? JSON.parse(localStorage.getItem("loginData"))
+      : null
+  );
+
+  const loginState = useLoggedInStore((state) => state.loggedIn);
+  const logout = useLoggedInStore((state) => state.logout);
+
   // TODO redirect after logout
   const handleLogoutClick = () => {
-    window.open("http://localhost:5000/auth/logout", "_self");
     localStorage.clear();
+    logout();
   };
 
   const authButton = () => {
-    if (props.userName === null) {
+    if (!loginState) {
       return (
         <ButtonGroup>
           <Button variant="secondary" as={Link} to="/login">

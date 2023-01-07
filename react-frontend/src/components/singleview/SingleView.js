@@ -9,7 +9,7 @@ import CommentInput from "./Comments/CommentInput";
 import Statistics from "./Statistics/Statistics";
 import MemeService from "../../services/memeService";
 
-const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, refetchMemes}) => {
+const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, fetchMemes}) => {
     const memeService = new MemeService();
 
     const handleNewComment = async (comment) => {
@@ -20,7 +20,7 @@ const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, re
                 commentDate: new Date().toISOString()
             }]
         });
-        refetchMemes();
+        fetchMemes();
     }
 
     const [currentMemeIndex, setCurrentMemeIndex] = useState(selectedMemeIndex)
@@ -33,7 +33,7 @@ const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, re
                 </div>
                 <div className={"meme-singleview-meta-information-container"}>
                     <MemeMetaInformation meme={filteredMemes[currentMemeIndex]}
-                                         refetchMemes={refetchMemes}></MemeMetaInformation>
+                                         fetchMemes={fetchMemes}></MemeMetaInformation>
                     <NavigationOptions filteredMemes={filteredMemes} currentMemeIndex={currentMemeIndex}
                                        setCurrentMemeIndex={setCurrentMemeIndex}></NavigationOptions>
                 </div>

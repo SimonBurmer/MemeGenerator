@@ -4,7 +4,8 @@ import MemeMetaInformation from "../MemeMetaInformation/MemeMetaInformation";
 import "./MemeListContainer.css";
 import SingleView from "../../singleview/SingleView";
 
-function MemeListContainer({memes, filter, refetchMemes}) {
+
+function MemeListContainer({memes, filter, fetchMemes}) {
     const [selectedMemeIndex, setSelectedMemeIndex] = useState();
     const creationDate = filter.creationDate ? new Date(filter.creationDate) : null;
 
@@ -31,7 +32,6 @@ function MemeListContainer({memes, filter, refetchMemes}) {
         return true;
     });
 
-
     const handleMemeClick = (memeIndex) => {
         setSelectedMemeIndex(memeIndex);
     }
@@ -46,12 +46,12 @@ function MemeListContainer({memes, filter, refetchMemes}) {
                     <div className={"meme-image"}>
                         <Meme memeURL={meme.memeURL}></Meme>
                     </div>
-                    <MemeMetaInformation meme={meme} refetchMemes={refetchMemes}></MemeMetaInformation>
+                    <MemeMetaInformation meme={meme} fetchMemes={fetchMemes}></MemeMetaInformation>
                 </button>
             ))}
             {selectedMemeIndex !== null && selectedMemeIndex !== undefined && (
                 <SingleView selectedMemeIndex={selectedMemeIndex} filteredMemes={filteredMemes}
-                            handleCloseSingleView={handleCloseSingleView} refetchMemes={refetchMemes}/>
+                            handleCloseSingleView={handleCloseSingleView} fetchMemes={fetchMemes}/>
             )}
         </div>
     );

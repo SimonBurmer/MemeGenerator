@@ -1,9 +1,7 @@
 const express = require("express");
-const { ensureAuth, ensureGuest } = require("../middlewares/verifyAuth");
-
 const router = express.Router();
 
-router.get("/getUser", ensureAuth, (req, res) => {
+router.get("/getUser", (req, res) => {
   res.json(req.user);
 });
 

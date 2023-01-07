@@ -6,8 +6,6 @@ import Login from "./components/login/Login";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import auth from "./services/authService";
-import { LoginSuccess } from "./app/containers/LoginSuccess";
 
 import {
   BrowserRouter as Router,
@@ -24,18 +22,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [authState, setAuthState] = useState(false);
 
-  // useEffect(() => {
-  //   const handleStorage = () => {
-  //     if (!(localStorage.getItem("user") === null)) {
-  //       const userFromStorage = JSON.parse(localStorage.getItem("user"));
-  //       setUser(userFromStorage.username);
-  //     }
-  //   };
-
-  //   window.addEventListener("storage", handleStorage());
-  //   return () => window.removeEventListener("storage", handleStorage());
-  // }, []);
-
   return (
     <Router>
       <div className="App">
@@ -51,10 +37,6 @@ function App() {
           <Route path="/editor" element={<Editor />} />
           <Route path="/overview" element={<Overview />} />
           <Route path="/profile" element={<Profile />} />
-          <Route exact path="/login/success" element={<LoginSuccess />} />
-          <Route exact path="/login/error">
-            Error loging in. Please try again later!
-          </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
