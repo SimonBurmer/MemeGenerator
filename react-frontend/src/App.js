@@ -17,10 +17,12 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Profile from "./components/profile/Profile";
+import Protected from "./components/Protected";
+import { useLoggedInStore } from "./app/store";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [authState, setAuthState] = useState(false);
+  const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
 
   return (
     <Router>
@@ -36,7 +38,14 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/editor" element={<Editor />} />
           <Route path="/overview" element={<Overview />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <Protected isSignedIn={isAuthenticated}>
+                <Profile />
+              </Protected>
+            }
+          />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
