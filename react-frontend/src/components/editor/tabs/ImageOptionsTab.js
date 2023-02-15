@@ -48,9 +48,9 @@ function EditorImageOptionsTab(props) {
       <Row>
       <Col>
             <Form>
-      <Form.Group required className="mb-3">
+      <Form.Group className="mb-3">
         <Form.Label>Source</Form.Label>
-        <Form.Control value={image.src} onChange={evt => updateImage(() => image.src = evt.target.value)} required placeholder="text" />
+        <Form.Label style={{border: "1px solid gray", padding: "10px", borderRadius: "5px", width: "100%", minHeight: "50px"}}>{image.src}</Form.Label>
       </Form.Group>
 
       <Form.Group className="mb-3">

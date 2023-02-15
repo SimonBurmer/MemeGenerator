@@ -222,16 +222,23 @@ function EditorTextOptionsTab(props) {
             <Col>
               <Form.Label>X</Form.Label>
               <Form.Control value={textBlock.x} onChange={evt => UpdateTextBlock(() => textBlock.x = evt.target.value)} type="number" placeholder="0" />
-              <Form.Text>
-                Range: 0 - 100%
-              </Form.Text>
             </Col>
             <Col>
               <Form.Label>Y</Form.Label>
               <Form.Control value={textBlock.y} onChange={evt => UpdateTextBlock(() => textBlock.y = evt.target.value)} type="number" placeholder="0" />
-              <Form.Text>
-                Range: 0 - 100%
-              </Form.Text>
+            </Col>
+          </Row>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Row>
+            <Col>
+              <Form.Label>Width</Form.Label>
+              <Form.Control value={textBlock.width} onChange={evt => UpdateTextBlock(() => textBlock.width = evt.target.value)} type="number" placeholder="0" />
+            </Col>
+            <Col>
+              <Form.Label>Height</Form.Label>
+              <Form.Control value={textBlock.height} onChange={evt => UpdateTextBlock(() => textBlock.height = evt.target.value)} type="number" placeholder="0" />
             </Col>
           </Row>
         </Form.Group>

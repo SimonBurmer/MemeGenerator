@@ -52,3 +52,12 @@
   width: '10%';
   height: undefined;
 }
+
+.template-card {
+  width: 18rem;
+  cursor: pointer;
+}
+
+.template-card.active {
+  border: 3px solid black;
+}

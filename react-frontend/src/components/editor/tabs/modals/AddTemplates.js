@@ -8,14 +8,16 @@ import { useEffect } from "react";
 
 
 function Template(props) {
+
   function setTemplate() {
     props.setImage(props.imgSrc)
     // props.uploadImage() <--- Geht nicht!!!
+    props.clearSelection();
   }
 
   return (
     <Col>
-      <Card style={{ width: '18rem', cursor: "pointer" }} onClick={setTemplate}>
+      <Card className={props.selected === this ? "template-card active" : "template-card"} onClick={() => props.select(this)}>
         <Card.Img variant="top" src={props.imgSrc} />
         <Card.Body>
           <Card.Title>Template 1</Card.Title>
@@ -27,28 +29,40 @@ function Template(props) {
 
 
 function AddTemplates(props) {
-  const [templates, setTemplates] = React.useState(null);
+  const [templates, setTemplates] = React.useState([]);
+  const [selected, setSelected] = React.useState(null);
 
   useEffect(() => {
     let previews = []
     for (let i = 0; i < 5; ++i) {
-      previews.push(<Template setImage={props.setImage} uploadImage={props.uploadImage} imgSrc={"https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"} />)
+      previews.push(<Template selected={selected} select={select} setImage={props.setImage} uploadImage={props.uploadImage} imgSrc={"https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"} />)
     }
     setTemplates(previews)
   }, []);
 
+  function select(template)
+  {
+    setSelected(template);
+
+    props.setImage(template.imgSrc);
+  }
+
+  function clearSelection()
+  {
+    templates.forEach(template => template.clear());
+  }
 
   function getTemplates(which) {
     if (which === "User") {
       let previews = []
       for (let i = 0; i < 5; ++i) {
-        previews.push(<Template setImage={props.setImage} imgSrc={"https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"} />)
+        previews.push(<Template selected={selected} select={select} setImage={props.setImage} imgSrc={"https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"} />)
       }
       setTemplates(previews)
     } else {
       let previews = []
       for (let i = 0; i < 5; ++i) {
-        previews.push(<Template setImage={props.setImage} imgSrc={"https://finway.de/wp-content/uploads/blog/de/accounting-memes/accounting-meme-1-friends.png"} />)
+        previews.push(<Template selected={selected} select={select} setImage={props.setImage} imgSrc={"https://finway.de/wp-content/uploads/blog/de/accounting-memes/accounting-meme-1-friends.png"} />)
       }
       setTemplates(previews)
     }
