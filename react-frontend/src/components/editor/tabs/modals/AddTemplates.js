@@ -39,7 +39,6 @@ function AddTemplates(props) {
   }, []);
 
   useEffect(() => {
-    console.log(prev.length);
     if (prev.length > 0) {
       let previews = [];
       for (let i = 0; i < prev.length; ++i) {
@@ -61,35 +60,35 @@ function AddTemplates(props) {
   //   setPrev(allMemes);
   // };
 
-  // function getTemplates(which) {
-  //   if (which === "User") {
-  //     let previews = [];
-  //     for (let i = 0; i < 5; ++i) {
-  //       previews.push(
-  //         <Template
-  //           setImage={props.setImage}
-  //           imgSrc={
-  //             "https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"
-  //           }
-  //         />
-  //       );
-  //     }
-  //     setTemplates(previews);
-  //   } else {
-  //     let previews = [];
-  //     for (let i = 0; i < 5; ++i) {
-  //       previews.push(
-  //         <Template
-  //           setImage={props.setImage}
-  //           imgSrc={
-  //             "https://finway.de/wp-content/uploads/blog/de/accounting-memes/accounting-meme-1-friends.png"
-  //           }
-  //         />
-  //       );
-  //     }
-  //     setTemplates(previews);
-  //  }
-  //}
+  function getTemplates(which) {
+    if (which === "User") {
+      let previews = [];
+      for (let i = 0; i < 5; ++i) {
+        previews.push(
+          <Template
+            setImage={props.setImage}
+            imgSrc={
+              "https://www.galileo.tv/app/uploads/2021/03/Wie-entsteht-ein-Meme-Von-der-Idee-bis-zum-viralen-Hit-500x500.jpg"
+            }
+          />
+        );
+      }
+      setTemplates(previews);
+    } else {
+      let previews = [];
+      for (let i = 0; i < 5; ++i) {
+        previews.push(
+          <Template
+            setImage={props.setImage}
+            imgSrc={
+              "https://finway.de/wp-content/uploads/blog/de/accounting-memes/accounting-meme-1-friends.png"
+            }
+          />
+        );
+      }
+      setTemplates(previews);
+    }
+  }
 
   return (
     <>

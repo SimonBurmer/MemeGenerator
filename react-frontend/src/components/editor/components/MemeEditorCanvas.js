@@ -1,11 +1,9 @@
 import React from "react";
 import { useRef, useCallback, useState, useEffect } from "react";
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Form from 'react-bootstrap/Form';
-
-
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
 
 function MemeEditorCanvas(props) {
   const canvasRef = useRef(null);
@@ -31,10 +29,9 @@ function MemeEditorCanvas(props) {
       img.onload = () => resolve(img);
       img.onerror = reject;
       img.src = src;
-    })
-      ;
+    });
     return p;
-  }
+  };
 
   const draw = () => {
     var canvas = canvasRef.current;
@@ -43,24 +40,34 @@ function MemeEditorCanvas(props) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
 
-    Promise.all(props.images.map(img => loadImage(img.src))).then(imgs => {
-      props.images.forEach((image, i) => {
-        let ratio = imgs[i].height / imgs[i].width;
-        ctx.drawImage(imgs[i], image.x, image.y, image.size, image.size * ratio);
-      }
-      )
-    }).then(i => {
-      props.textBlocks.map(element => {
-        drawTextBlock(ctx, element);
+    Promise.all(props.images.map((img) => loadImage(img.src)))
+      .then((imgs) => {
+        props.images.forEach((image, i) => {
+          let ratio = imgs[i].height / imgs[i].width;
+          ctx.drawImage(
+            imgs[i],
+            image.x,
+            image.y,
+            image.size,
+            image.size * ratio
+          );
+        });
+      })
+      .then((i) => {
+        props.textBlocks.map((element) => {
+          drawTextBlock(ctx, element);
+        });
+      })
+      .then((i) => {
+        props.setCanvasImage(canvas.toDataURL());
       });
-    }).then(i => { props.setCanvasImage(canvas.toDataURL()) });
 
     ctx.restore();
-  }
+  };
 
   const drawTextBlock = (ctx, textBlock) => {
-    console.log(textBlock)
-    ctx.textBaseline = 'top';
+    console.log(textBlock);
+    ctx.textBaseline = "top";
     ctx.font = textBlock.fontSize + "px " + textBlock.fontFamily;
 
     var width = ctx.measureText(textBlock.text).width;
@@ -70,45 +77,41 @@ function MemeEditorCanvas(props) {
 
     ctx.fillStyle = textBlock.textColor;
     ctx.fillText(textBlock.text, textBlock.x, textBlock.y);
-  }
+  };
 
   useEffect(() => {
     draw();
-  },
-    [canvasWidth]);
+  }, [canvasWidth]);
 
   useEffect(() => {
     draw();
-  },
-    [canvasHeight]);
+  }, [canvasHeight]);
 
   useEffect(() => {
     setImages(props.images);
     draw();
-  },
-    [props.images]);
+  }, [props.images]);
 
   useEffect(() => {
     setTextBlocks(props.images);
     draw();
-  },
-    [props.textBlocks]);
-  
-  useEffect(()=>{
+  }, [props.textBlocks]);
+
+  useEffect(() => {
     var canvas = canvasRef.current;
     var ctx = canvas.getContext("2d");
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-      }, []);
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) {
       return;
     }
     const canvas = canvasRef.current;
-    canvas.addEventListener('mousedown', startPaint);
+    canvas.addEventListener("mousedown", startPaint);
     return () => {
-      canvas.removeEventListener('mousedown', startPaint);
+      canvas.removeEventListener("mousedown", startPaint);
     };
   }, [startPaint]);
 
@@ -130,9 +133,9 @@ function MemeEditorCanvas(props) {
       return;
     }
     const canvas = canvasRef.current;
-    canvas.addEventListener('mousemove', paint);
+    canvas.addEventListener("mousemove", paint);
     return () => {
-      canvas.removeEventListener('mousemove', paint);
+      canvas.removeEventListener("mousemove", paint);
     };
   }, [paint]);
 
@@ -146,11 +149,11 @@ function MemeEditorCanvas(props) {
       return;
     }
     const canvas = canvasRef.current;
-    canvas.addEventListener('mouseup', exitPaint);
-    canvas.addEventListener('mouseleave', exitPaint);
+    canvas.addEventListener("mouseup", exitPaint);
+    canvas.addEventListener("mouseleave", exitPaint);
     return () => {
-      canvas.removeEventListener('mouseup', exitPaint);
-      canvas.removeEventListener('mouseleave', exitPaint);
+      canvas.removeEventListener("mouseup", exitPaint);
+      canvas.removeEventListener("mouseleave", exitPaint);
     };
   }, [exitPaint]);
 
@@ -160,7 +163,10 @@ function MemeEditorCanvas(props) {
     }
 
     const canvas = canvasRef.current;
-    return { x: event.pageX - canvas.offsetLeft, y: event.pageY - canvas.offsetTop };
+    return {
+      x: event.pageX - canvas.offsetLeft,
+      y: event.pageY - canvas.offsetTop,
+    };
   };
 
   const drawLine = (originalMousePosition, newMousePosition) => {
@@ -168,10 +174,10 @@ function MemeEditorCanvas(props) {
       return;
     }
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (context) {
       context.strokeStyle = props.pencil.strokeStyle;
-      context.lineJoin = 'round';
+      context.lineJoin = "round";
       context.lineWidth = props.pencil.lineWidth;
 
       context.beginPath();
@@ -181,7 +187,7 @@ function MemeEditorCanvas(props) {
 
       context.stroke();
 
-      props.setCanvasImage(canvas.toDataURL())
+      props.setCanvasImage(canvas.toDataURL());
     }
   };
 
@@ -191,14 +197,24 @@ function MemeEditorCanvas(props) {
         <Col>
           <Form>
             <Form.Group className="mb-3">
-              <Row >
+              <Row>
                 <Col>
                   <Form.Label>Canvas Width: </Form.Label>
-                  <Form.Control value={canvasWidth} onChange={evt => setCanvasWidth(evt.target.value)} type="number" placeholder="0" />
+                  <Form.Control
+                    value={canvasWidth}
+                    onChange={(evt) => setCanvasWidth(evt.target.value)}
+                    type="number"
+                    placeholder="0"
+                  />
                 </Col>
                 <Col>
                   <Form.Label>Canvas Height: </Form.Label>
-                  <Form.Control value={canvasHeight} onChange={evt => setCanvasHeight(evt.target.value)} type="number" placeholder="0" />
+                  <Form.Control
+                    value={canvasHeight}
+                    onChange={(evt) => setCanvasHeight(evt.target.value)}
+                    type="number"
+                    placeholder="0"
+                  />
                 </Col>
               </Row>
             </Form.Group>
@@ -207,7 +223,12 @@ function MemeEditorCanvas(props) {
       </Row>
       <Row>
         <Col className="col-auto">
-          <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className="border border-secondary" />
+          <canvas
+            ref={canvasRef}
+            width={canvasWidth}
+            height={canvasHeight}
+            className="border border-secondary"
+          />
         </Col>
       </Row>
     </Container>

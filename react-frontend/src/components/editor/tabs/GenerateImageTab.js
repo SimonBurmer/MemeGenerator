@@ -1,21 +1,17 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import React from "react";
-import Modal from 'react-bootstrap/Modal';
-import { Form, Button } from 'react-bootstrap';
-import { saveAs } from 'file-saver';
+import Modal from "react-bootstrap/Modal";
+import { Form, Button } from "react-bootstrap";
+import { saveAs } from "file-saver";
 import { useRef } from "react";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 import Resizer from "react-image-file-resizer";
-import GeneratedMeme from '../models/GeneratedMeme'
+import GeneratedMeme from "../models/GeneratedMeme";
+import TemplateService from "../../../services/templateService";
 
-import {
-  BsCloudArrowDown,
-  BsCloudArrowUp,
-  BsCardImage,
-} from "react-icons/bs";
-
+import { BsCloudArrowDown, BsCloudArrowUp, BsCardImage } from "react-icons/bs";
 
 function ModalUploadImage(props) {
   return (
@@ -25,32 +21,31 @@ function ModalUploadImage(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <img src={props.canvasImage} style={{ width: 'auto', height: 'auto' }} />
+      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
     </Modal>
   );
 }
 
 function GenerateImageTab(props) {
   const [modalUploadImageShow, setModalUploadImageShow] = React.useState(false);
-  const [fileName, setFileName] = React.useState('MyMeme');
+  const [fileName, setFileName] = React.useState("MyMeme");
   const [fileWidth, setFileWidth] = React.useState(500);
   //const [fileHeight, setFileHeight] = React.useState(500);
-  const [fileFormat, setFileFormat] = React.useState('JPEG');
+  const [fileFormat, setFileFormat] = React.useState("JPEG");
   const [fileQuality, setFileQuality] = React.useState(100);
-  const [memeTitle, setMemeTitle] = React.useState('');
-  const [memeDescription, setMemeDescription] = React.useState('');
+  const [memeTitle, setMemeTitle] = React.useState("");
+  const [memeDescription, setMemeDescription] = React.useState("");
+  const templateService = new TemplateService();
 
-
-  function setFileQualityAndCheck(value){
-    setFileQuality(value)
-    if (value > 100){
-      setFileQuality(100)
+  function setFileQualityAndCheck(value) {
+    setFileQuality(value);
+    if (value > 100) {
+      setFileQuality(100);
     }
-    if (value < 1){
-      setFileQuality(1)
+    if (value < 1) {
+      setFileQuality(1);
     }
   }
-
 
   const resizeFile = (file) =>
     new Promise((resolve) => {
@@ -70,25 +65,40 @@ function GenerateImageTab(props) {
 
   async function saveMemeLocal(event) {
     event.preventDefault();
-    const imageUrl = props.canvasImage
-    const imageBlob = await fetch(imageUrl).then(r => r.blob());
+    const imageUrl = props.canvasImage;
+    console.log(imageUrl);
+    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
 
     const der = await resizeFile(imageBlob);
 
-    saveAs(der, fileName + "." + fileFormat)
+    saveAs(der, fileName + "." + fileFormat);
   }
 
   function saveMemeOnServer() {
-    const generatedMeme = new GeneratedMeme(memeTitle, memeDescription, props.canvasImage)
+    console.log(props.canvasImage);
+    const generatedMeme = new GeneratedMeme(
+      memeTitle,
+      memeDescription,
+      props.canvasImage
+    );
+  }
+
+  async function saveMemeAsTemplate(img) {
+    console.log(props.canvasImage);
+    const responseTemplate = await templateService.uploadTemplate(img);
   }
 
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => setModalUploadImageShow(true)}>Show Generated Meme</Button>
+        <Button onClick={() => setModalUploadImageShow(true)}>
+          Show Generated Meme
+        </Button>
       </Row>
 
-      <div style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}></div>
+      <div
+        style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}
+      ></div>
 
       <Form onSubmit={saveMemeOnServer}>
         <Form.Group required className="mb-3">
@@ -105,7 +115,7 @@ function GenerateImageTab(props) {
         <Form.Group required className="mb-3">
           <Form.Label>Meme Description</Form.Label>
           <Form.Control
-            as="textarea" 
+            as="textarea"
             rows={2}
             name="Description"
             type="text"
@@ -122,14 +132,12 @@ function GenerateImageTab(props) {
           <Col>
             <Button type="submit">Publish Meme</Button>
           </Col>
-
         </Row>
       </Form>
 
-
-
-      <div style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}></div>
-
+      <div
+        style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}
+      ></div>
 
       <Form onSubmit={saveMemeLocal}>
         <Form.Group required className="mb-3">
@@ -183,8 +191,12 @@ function GenerateImageTab(props) {
                   {fileFormat}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={e => setFileFormat("PNG")}>PNG</Dropdown.Item>
-                  <Dropdown.Item onClick={e => setFileFormat("JPEG")}>JPEG</Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("PNG")}>
+                    PNG
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("JPEG")}>
+                    JPEG
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
@@ -193,8 +205,6 @@ function GenerateImageTab(props) {
 
         <Button type="submit">Download Meme</Button>
       </Form>
-
-
 
       <ModalUploadImage
         show={modalUploadImageShow}
