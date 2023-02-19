@@ -63,13 +63,13 @@ function MemeEditorCanvas(props) {
     ctx.textBaseline = 'top';
     ctx.font = textBlock.fontSize + "px " + textBlock.fontFamily;
 
-    var width = ctx.measureText(textBlock.text).width;
-
+    var textWidth = ctx.measureText(textBlock.text).width;
+    var width = textBlock.width;
+    var height = textBlock.height;
     ctx.fillStyle = textBlock.backgroundColor;
-    ctx.fillRect(textBlock.x, textBlock.y, width, textBlock.fontSize);
-
+    ctx.fillRect(textBlock.x, textBlock.y, width, height);
     ctx.fillStyle = textBlock.textColor;
-    ctx.fillText(textBlock.text, textBlock.x, textBlock.y);
+    ctx.fillText(textBlock.text, textBlock.x + ((width - textWidth) / 2), textBlock.y + ((height - textBlock.fontSize) / 2));
   }
 
   useEffect(() => {

@@ -29,7 +29,6 @@ function EditorImageOptionsTab(props) {
       return;
     }
 
-    console.log(image)
     setImage(image);
   }
 
@@ -50,7 +49,7 @@ function EditorImageOptionsTab(props) {
             <Form>
       <Form.Group required className="mb-3">
         <Form.Label>Source</Form.Label>
-        <Form.Control value={image.src} onChange={evt => updateImage(() => image.src = evt.target.value)} required placeholder="text" />
+        <Form.Label style={{border: "1px solid gray", padding: "10px", borderRadius: "5px", width: "100%", minHeight: "50px"}}>{image.src}</Form.Label>
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -101,7 +100,7 @@ function EditorImageOptionsTab(props) {
           <Row>
           {
             images.map((element, index) => {
-              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>Image {index + 1}</Row>
+              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>{element.src}</Row>
           })
       }
           </Row>

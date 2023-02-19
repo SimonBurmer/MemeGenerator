@@ -90,7 +90,7 @@ function TopNavigationBar(props) {
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <Form inline className="mx-3">
+      <Form className="mx-3">
         {authButton()}
       </Form>
     </Navbar>

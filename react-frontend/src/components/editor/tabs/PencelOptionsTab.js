@@ -103,7 +103,7 @@ function PencelOptionsTab(props) {
                 <Dropdown.Menu>
                   {
                     CSS_COLOR_NAMES.map(element => {
-                      return <Dropdown.Item onClick={e => setStrokeStyle(e.target.textContent)}> {element} </Dropdown.Item>
+                      return <Dropdown.Item key={element} onClick={e => setStrokeStyle(e.target.textContent)}> {element} </Dropdown.Item>
                     })
                   }
                 </Dropdown.Menu>
