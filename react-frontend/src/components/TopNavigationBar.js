@@ -7,7 +7,7 @@ import {
   Button,
   ButtonGroup,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
@@ -17,6 +17,7 @@ import {
 import { useLoggedInStore } from "../app/store";
 
 function TopNavigationBar(props) {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState(
     localStorage.getItem("loginData")
       ? JSON.parse(localStorage.getItem("loginData"))
@@ -30,6 +31,7 @@ function TopNavigationBar(props) {
   const handleLogoutClick = () => {
     localStorage.clear();
     logout();
+    navigate("/");
   };
 
   const authButton = () => {
