@@ -11,6 +11,7 @@ const mongoClient = new MongoClient(url);
 
 const uploadFiles = async (req, res) => {
   try {
+    console.log(req);
     if (req.query.type == null) {
       return res.status(406).send({
         message:
