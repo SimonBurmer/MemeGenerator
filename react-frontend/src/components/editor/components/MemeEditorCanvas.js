@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
-import { fontSize } from "@mui/system";
 
 
 
@@ -64,15 +63,13 @@ function MemeEditorCanvas(props) {
     ctx.textBaseline = 'top';
     ctx.font = textBlock.fontSize + "px " + textBlock.fontFamily;
 
-    var textWidth = ctx.measureText(textBlock.text).width;
-    var width = textBlock.width;
-    var height = textBlock.height;
+    var width = ctx.measureText(textBlock.text).width;
 
     ctx.fillStyle = textBlock.backgroundColor;
-    ctx.fillRect(textBlock.x, textBlock.y, width, height);
+    ctx.fillRect(textBlock.x, textBlock.y, width, textBlock.fontSize);
 
     ctx.fillStyle = textBlock.textColor;
-    ctx.fillText(textBlock.text, textBlock.x + ((width - textWidth) / 2), textBlock.y + ((height - textBlock.fontSize) / 2));
+    ctx.fillText(textBlock.text, textBlock.x, textBlock.y);
   }
 
   useEffect(() => {

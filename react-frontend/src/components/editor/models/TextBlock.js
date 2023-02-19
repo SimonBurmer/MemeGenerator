@@ -1,5 +1,5 @@
 const TextBlock = class {
-  constructor(text = "", x = 0, y = 0, height = 12, width = 100, fontSize = 12, textColor = "black", backgroundColor = "transparent", fontFamily = "Arial") {
+  constructor(text = "", x = 0, y = 0, height = 100, width = 100, fontSize = 12, textColor = "black", backgroundColor = "transparent", fontFamily = "Arial") {
     this.text = text;
     this.height = height;
     this.width = width;
