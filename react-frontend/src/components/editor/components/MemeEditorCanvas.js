@@ -25,6 +25,8 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const loadImage = (src) => {
     var p = new Promise((resolve, reject) => {
       const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = "HTTPS://REMOTE.HOST/IMG";
       img.onload = () => resolve(img);
       img.onerror = reject;
       img.src = src;
@@ -76,8 +78,12 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     ctx.fillStyle = textBlock.backgroundColor;
     ctx.fillRect(textBlock.x, textBlock.y, width, height);
     ctx.fillStyle = textBlock.textColor;
-    ctx.fillText(textBlock.text, textBlock.x + ((width - textWidth) / 2), textBlock.y + ((height - textBlock.fontSize) / 2));
-  }
+    ctx.fillText(
+      textBlock.text,
+      textBlock.x + (width - textWidth) / 2,
+      textBlock.y + (height - textBlock.fontSize) / 2
+    );
+  };
 
   useEffect(() => {
     draw();
@@ -106,7 +112,14 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
       if (isPainting) {
         const newMousePosition = getCoordinates(event);
         if (mousePosition && newMousePosition) {
-          let newLine = new DrawnLine(mousePosition.x, mousePosition.y, newMousePosition.x, newMousePosition.y, props.pencil.color, props.pencil.lineWidth);
+          let newLine = new DrawnLine(
+            mousePosition.x,
+            mousePosition.y,
+            newMousePosition.x,
+            newMousePosition.y,
+            props.pencil.color,
+            props.pencil.lineWidth
+          );
           lines.push(newLine);
 
           setMousePosition(newMousePosition);
@@ -159,16 +172,16 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   };
 
   const drawLine = (ctx, drawnLine) => {
-      ctx.strokeStyle = drawnLine.color;
-      ctx.lineJoin = "round";
-      ctx.lineWidth = drawnLine.lineWidth;
+    ctx.strokeStyle = drawnLine.color;
+    ctx.lineJoin = "round";
+    ctx.lineWidth = drawnLine.lineWidth;
 
-      ctx.beginPath();
-      ctx.moveTo(drawnLine.fromX, drawnLine.fromY);
-      ctx.lineTo(drawnLine.toX, drawnLine.toY);
-      ctx.closePath();
+    ctx.beginPath();
+    ctx.moveTo(drawnLine.fromX, drawnLine.fromY);
+    ctx.lineTo(drawnLine.toX, drawnLine.toY);
+    ctx.closePath();
 
-      ctx.stroke();
+    ctx.stroke();
   };
 
   return (
@@ -212,8 +225,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
         </Col>
       </Row>
     </Container>
-);
-})
-
+  );
+});
 
 export default MemeEditorCanvas;
