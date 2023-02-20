@@ -6,8 +6,8 @@ import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import DrawnLine from "../models/DrawnLine";
 
-function MemeEditorCanvas(props) {
-  const canvasRef = useRef(null);
+const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
+  // const canvasRef = useRef(null);
   const [canvasWidth, setCanvasWidth] = useState(500);
   const [canvasHeight, setCanvasHeight] = useState(500);
   const [lines, setLines] = useState([]);
@@ -61,16 +61,12 @@ function MemeEditorCanvas(props) {
         lines.map((element) => {
           drawLine(ctx, element);
         });
-      })
-      .then((i) => {
-        props.setCanvasImage(canvas.toDataURL());
       });
 
     ctx.restore();
   };
 
   const drawTextBlock = (ctx, textBlock) => {
-    console.log(textBlock);
     ctx.textBaseline = "top";
     ctx.font = textBlock.fontSize + "px " + textBlock.fontFamily;
 
@@ -163,7 +159,6 @@ function MemeEditorCanvas(props) {
   };
 
   const drawLine = (ctx, drawnLine) => {
-    console.log("draw Line start");
       ctx.strokeStyle = drawnLine.color;
       ctx.lineJoin = "round";
       ctx.lineWidth = drawnLine.lineWidth;
@@ -174,10 +169,6 @@ function MemeEditorCanvas(props) {
       ctx.closePath();
 
       ctx.stroke();
-
-    console.log("draw Line end");
-
-      // props.setCanvasImage(ctx.toDataURL());
   };
 
   return (
@@ -221,7 +212,8 @@ function MemeEditorCanvas(props) {
         </Col>
       </Row>
     </Container>
-  );
-}
+);
+})
+
 
 export default MemeEditorCanvas;

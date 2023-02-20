@@ -35,7 +35,12 @@ function GenerateImageTab(props) {
   const [fileQuality, setFileQuality] = React.useState(100);
   const [memeTitle, setMemeTitle] = React.useState("");
   const [memeDescription, setMemeDescription] = React.useState("");
+  const [canvasImage, setCanvasImage] = React.useState(props.canvasImage);
   const templateService = new TemplateService();
+
+  React.useEffect(() => {
+    setCanvasImage(props.canvasImage);
+  }, [props.canvasImage]);
 
   function setFileQualityAndCheck(value) {
     setFileQuality(value);
@@ -65,7 +70,7 @@ function GenerateImageTab(props) {
 
   async function saveMemeLocal(event) {
     event.preventDefault();
-    const imageUrl = props.canvasImage;
+    const imageUrl = canvasImage;
     console.log(imageUrl);
     const imageBlob = await fetch(imageUrl).then((r) => r.blob());
 
@@ -75,23 +80,21 @@ function GenerateImageTab(props) {
   }
 
   function saveMemeOnServer() {
-    console.log(props.canvasImage);
     const generatedMeme = new GeneratedMeme(
       memeTitle,
       memeDescription,
-      props.canvasImage
+      canvasImage
     );
   }
 
   async function saveMemeAsTemplate(img) {
-    console.log(props.canvasImage);
     const responseTemplate = await templateService.uploadTemplate(img);
   }
 
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => setModalUploadImageShow(true)}>
+        <Button onClick={() => {props.updateCanvas(); setModalUploadImageShow(true); }}>
           Show Generated Meme
         </Button>
       </Row>
@@ -209,7 +212,7 @@ function GenerateImageTab(props) {
       <ModalUploadImage
         show={modalUploadImageShow}
         onHide={() => setModalUploadImageShow(false)}
-        canvasImage={props.canvasImage}
+        canvasImage={canvasImage}
       />
     </Container>
   );

@@ -18,8 +18,9 @@ function Editor() {
   const [textBlocks, setTextBlocks] = useState([]);
   const [images, setImages] = useState([]);
   const [canvasImage, setCanvasImage] = useState(null);
-
   const [pencil, setPencil] = useState(new Pencil("red", 5));
+
+  const canvasRef = React.useRef(null);
 
   function addTextBlock (textBlock)
   {
@@ -53,11 +54,17 @@ function Editor() {
     setPencil(newPencil);
   }
 
+  function updateCanvas()
+  {
+    let dataUrl = canvasRef.current.toDataURL(); 
+    setCanvasImage(dataUrl);
+  }
+
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-between">
       <Col md={10} lg={5}  className="editor-layout-col align-end text-align-end fit-content">
-          <MemeEditorCanvas setCanvasImage={setCanvasImage} textBlocks={textBlocks} images={images} pencil={pencil}/>
+          <MemeEditorCanvas ref={canvasRef} textBlocks={textBlocks} images={images} pencil={pencil}/>
         </Col>
       <Col md={10} lg={5} className="editor-layout-col editor-options-container border border-secondary" style={{overflow: "overlay"}}>
           <Tabs
@@ -75,7 +82,7 @@ function Editor() {
               <PencelOptionsTab pencil={pencil} changePencil={changePencil}/>
             </Tab>
             <Tab eventKey="generate" title="Generate">
-              <GenerateImageTab images={images} canvasImage={canvasImage} text={"test"}/>
+              <GenerateImageTab images={images} canvasImage={canvasImage} updateCanvas={updateCanvas} text={"test"}/>
             </Tab>
           </Tabs>
         </Col>
