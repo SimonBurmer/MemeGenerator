@@ -4,14 +4,13 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
+import DrawnLine from "../models/DrawnLine";
 
 function MemeEditorCanvas(props) {
   const canvasRef = useRef(null);
-  const [textBlocks, setTextBlocks] = useState(props.textBlocks);
-  const [images, setImages] = useState(props.images);
   const [canvasWidth, setCanvasWidth] = useState(500);
   const [canvasHeight, setCanvasHeight] = useState(500);
-
+  const [lines, setLines] = useState([]);
   const [isPainting, setIsPainting] = useState(false);
   const [mousePosition, setMousePosition] = useState(undefined);
 
@@ -59,6 +58,11 @@ function MemeEditorCanvas(props) {
         });
       })
       .then((i) => {
+        lines.map((element) => {
+          drawLine(ctx, element);
+        });
+      })
+      .then((i) => {
         props.setCanvasImage(canvas.toDataURL());
       });
 
@@ -81,21 +85,7 @@ function MemeEditorCanvas(props) {
 
   useEffect(() => {
     draw();
-  }, [canvasWidth]);
-
-  useEffect(() => {
-    draw();
-  }, [canvasHeight]);
-
-  useEffect(() => {
-    setImages(props.images);
-    draw();
-  }, [props.images]);
-
-  useEffect(() => {
-    setTextBlocks(props.images);
-    draw();
-  }, [props.textBlocks]);
+  }, [props.images, props.textBlocks, canvasHeight, canvasWidth]);
 
   useEffect(() => {
     var canvas = canvasRef.current;
@@ -120,8 +110,11 @@ function MemeEditorCanvas(props) {
       if (isPainting) {
         const newMousePosition = getCoordinates(event);
         if (mousePosition && newMousePosition) {
-          drawLine(mousePosition, newMousePosition);
+          let newLine = new DrawnLine(mousePosition.x, mousePosition.y, newMousePosition.x, newMousePosition.y, props.pencil.color, props.pencil.lineWidth);
+          lines.push(newLine);
+
           setMousePosition(newMousePosition);
+          draw();
         }
       }
     },
@@ -169,26 +162,22 @@ function MemeEditorCanvas(props) {
     };
   };
 
-  const drawLine = (originalMousePosition, newMousePosition) => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    if (context) {
-      context.strokeStyle = props.pencil.strokeStyle;
-      context.lineJoin = "round";
-      context.lineWidth = props.pencil.lineWidth;
+  const drawLine = (ctx, drawnLine) => {
+    console.log("draw Line start");
+      ctx.strokeStyle = drawnLine.color;
+      ctx.lineJoin = "round";
+      ctx.lineWidth = drawnLine.lineWidth;
 
-      context.beginPath();
-      context.moveTo(originalMousePosition.x, originalMousePosition.y);
-      context.lineTo(newMousePosition.x, newMousePosition.y);
-      context.closePath();
+      ctx.beginPath();
+      ctx.moveTo(drawnLine.fromX, drawnLine.fromY);
+      ctx.lineTo(drawnLine.toX, drawnLine.toY);
+      ctx.closePath();
 
-      context.stroke();
+      ctx.stroke();
 
-      props.setCanvasImage(canvas.toDataURL());
-    }
+    console.log("draw Line end");
+
+      // props.setCanvasImage(ctx.toDataURL());
   };
 
   return (

@@ -11,13 +11,15 @@ import GenerateImageTab from './tabs/GenerateImageTab';
 import PencelOptionsTab from './tabs/PencelOptionsTab';
 import MemeEditorCanvas from './components/MemeEditorCanvas';
 import ImageBlock from "./models/ImageBlock";
+import Pencil from "./models/Pencil";
 
 
 function Editor() {
   const [textBlocks, setTextBlocks] = useState([]);
   const [images, setImages] = useState([]);
   const [canvasImage, setCanvasImage] = useState(null);
-  const [pencilAttributes, setPencilAttributes] = useState({'lineWidth': 5, 'strokeStyle': 'red'});
+
+  const [pencil, setPencil] = useState(new Pencil("red", 5));
 
   function addTextBlock (textBlock)
   {
@@ -46,11 +48,16 @@ function Editor() {
     setImages(newImages);
   }
 
+  function changePencil(newPencil)
+  {
+    setPencil(newPencil);
+  }
+
   return (
     <Container className="editor-layout-container">
       <Row className="justify-content-between">
       <Col md={10} lg={5}  className="editor-layout-col align-end text-align-end fit-content">
-          <MemeEditorCanvas setCanvasImage={setCanvasImage} textBlocks={textBlocks} images={images} pencil={pencilAttributes}/>
+          <MemeEditorCanvas setCanvasImage={setCanvasImage} textBlocks={textBlocks} images={images} pencil={pencil}/>
         </Col>
       <Col md={10} lg={5} className="editor-layout-col editor-options-container border border-secondary" style={{overflow: "overlay"}}>
           <Tabs
@@ -65,7 +72,7 @@ function Editor() {
               <TextOptionsTab updateTextBlocks={updateTextBlocks} addTextBlock={addTextBlock} textBlocks={textBlocks}/>
             </Tab>
             <Tab eventKey="pencil" title="Pencil">
-              <PencelOptionsTab  setPencilAttributes={setPencilAttributes}/>
+              <PencelOptionsTab pencil={pencil} changePencil={changePencil}/>
             </Tab>
             <Tab eventKey="generate" title="Generate">
               <GenerateImageTab images={images} canvasImage={canvasImage} text={"test"}/>
