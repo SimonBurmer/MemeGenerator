@@ -87,14 +87,28 @@ function GenerateImageTab(props) {
     );
   }
 
-  async function saveMemeAsTemplate(img) {
-    const responseTemplate = await templateService.uploadTemplate(img);
+  async function saveMemeAsTemplate(event) {
+    event.preventDefault();
+    const imageUrl = canvasImage;
+    console.log(imageUrl);
+    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+    let formData = new FormData();
+    formData.append("file", imageBlob, "image.png");
+
+    const der = await resizeFile(imageBlob);
+    const responseTemplate = await templateService.uploadTemplate(formData);
+    console.log(responseTemplate);
   }
 
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => {props.updateCanvas(); setModalUploadImageShow(true); }}>
+        <Button
+          onClick={() => {
+            props.updateCanvas();
+            setModalUploadImageShow(true);
+          }}
+        >
           Show Generated Meme
         </Button>
       </Row>
@@ -103,7 +117,7 @@ function GenerateImageTab(props) {
         style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}
       ></div>
 
-      <Form onSubmit={saveMemeOnServer}>
+      <Form onSubmit={saveMemeAsTemplate}>
         <Form.Group required className="mb-3">
           <Form.Label>Meme Title</Form.Label>
           <Form.Control
