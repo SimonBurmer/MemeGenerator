@@ -9,23 +9,24 @@ var storage = new GridFsStorage({
   options: { useNewUrlParser: true, useUnifiedTopology: true },
   file: (req, file) => {
     const match = ["image/png", "image/jpeg"];
-
     if (match.indexOf(file.mimetype) === -1) {
+      console.log(file.mimetype);
       const filename = `${Date.now()}-omm-${file.originalname}`;
       return filename;
     }
+
     if (req.query.type === "meme") {
       return {
         bucketName: dbConfig.memeBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
-        metadata: req.user.id,
+        //metadata: req.user.id,
       };
     }
     if (req.query.type === "template") {
       return {
         bucketName: dbConfig.templateBucket,
         filename: `${Date.now()}-omm-${file.originalname}`,
-        metadata: req.user.id,
+        //metadata: req.user.id,
       };
     }
   },
