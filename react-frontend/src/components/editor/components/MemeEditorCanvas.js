@@ -123,7 +123,11 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
           lines.push(newLine);
 
           setMousePosition(newMousePosition);
-          draw();
+
+          var canvas = canvasRef.current;
+          var ctx = canvas.getContext("2d");
+          drawLine(ctx, newLine);
+          // draw();
         }
       }
     },
