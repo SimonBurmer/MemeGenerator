@@ -13,7 +13,7 @@ import MemeEditorCanvas from './components/MemeEditorCanvas';
 import ImageBlock from "./models/ImageBlock";
 
 
-function Editor() {
+function Editor({ meme }) {
   const [textBlocks, setTextBlocks] = useState([]);
   const [images, setImages] = useState([]);
   const [canvasImage, setCanvasImage] = useState(null);

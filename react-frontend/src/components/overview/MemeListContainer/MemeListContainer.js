@@ -3,17 +3,17 @@ import Meme from "../Meme/Meme";
 import MemeMetaInformation from "../MemeMetaInformation/MemeMetaInformation";
 import "./MemeListContainer.css";
 import SingleView from "../../singleview/SingleView";
+import UserService from "../../../services/userService";
 
-
-function MemeListContainer({memes, filter, fetchMemes}) {
+function MemeListContainer({memes, filter, fetchMemes, isUserProfile}) {
     const [selectedMemeIndex, setSelectedMemeIndex] = useState();
     const creationDate = filter.creationDate ? new Date(filter.creationDate) : null;
-
-    const filteredMemes = memes.filter((meme) => {
+    const userService = new UserService();
+    const filteredMemes = memes.filter( (meme) => {
         if (filter.title && !meme.title.toLowerCase().includes(filter.title.toLowerCase())) {
             return false;
         }
-        // exchange with Creator Name
+
         if (filter.creator && !meme.creatorId.toLowerCase().includes(filter.creator.toLowerCase())) {
             return false;
         }
@@ -46,7 +46,7 @@ function MemeListContainer({memes, filter, fetchMemes}) {
                     <div className={"meme-image"}>
                         <Meme memeURL={meme.memeURL}></Meme>
                     </div>
-                    <MemeMetaInformation meme={meme} fetchMemes={fetchMemes}></MemeMetaInformation>
+                    <MemeMetaInformation meme={meme} fetchMemes={fetchMemes} isUserProfile={isUserProfile}></MemeMetaInformation>
                 </button>
             ))}
             {selectedMemeIndex !== null && selectedMemeIndex !== undefined && (

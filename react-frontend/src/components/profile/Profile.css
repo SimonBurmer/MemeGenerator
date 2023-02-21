@@ -1,7 +1,13 @@
-.Profile {
-  text-align: left;
-}
+
 .card-horizontal {
   display: flex;
   flex: 1 1 auto;
+}
+.no-margin-padding {
+  margin: 0;
+  padding: 0;
+}
+
+.centered {
+  margin: 0 auto;
 }

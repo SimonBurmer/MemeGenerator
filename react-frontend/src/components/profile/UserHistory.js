@@ -1,19 +1,9 @@
-import MemePreview from './MemePreview';
-import SearchBar from './SearchBar';
+import Overview from "../overview/Overview";
 
 
 function UserHistory() {
-
-  let previews = []
-  for (let i = 0; i < 10; ++i) {
-    previews.push(<MemePreview/>)
-  }
-
   return (
-    <>
-    <SearchBar/>
-    {previews}
-    </>
+   <Overview isUserProfile={true}></Overview>
   );
 }
 export default UserHistory;

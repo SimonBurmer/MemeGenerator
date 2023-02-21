@@ -4,8 +4,6 @@ import Editor from "./components/editor/Editor";
 import Overview from "./components/overview/Overview";
 import Login from "./components/login/Login";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
 
 import {
   BrowserRouter as Router,
@@ -35,7 +33,7 @@ function App() {
           />
           <Route path="/home" element={<Home />} />
           <Route path="/editor" element={<Editor />} />
-          <Route path="/overview" element={<Overview />} />
+          <Route path="/overview" element={<Overview isUserProfile={false}/>} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

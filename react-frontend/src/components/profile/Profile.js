@@ -11,24 +11,24 @@ import UserSettings from './UserSettings';
 
 function Profile() {
   return (
-    <Container className="editor-layout-container Profile">
-      <Row className="">
-        <Col className="">
-          <Tabs
-            defaultActiveKey="history"
-            id="uncontrolled-tab-example"
-            className="mb-3"
-          >
-            <Tab eventKey="history" title="History">
-              <UserHistory />
-            </Tab>
-            <Tab eventKey="settings" title="Settings">
-              <UserSettings />
-            </Tab>
-          </Tabs>
-        </Col>
-      </Row>
-    </Container>
+      <Container className="editor-layout-container Profile no-margin-padding centered">
+        <Row className="">
+          <Col className="">
+            <Tabs
+                defaultActiveKey="history"
+                id="uncontrolled-tab-example"
+                className="mb-3"
+            >
+              <Tab eventKey="history" title="History">
+                <UserHistory />
+              </Tab>
+              <Tab eventKey="settings" title="Settings">
+                <UserSettings />
+              </Tab>
+            </Tabs>
+          </Col>
+        </Row>
+      </Container>
   );
 }
 

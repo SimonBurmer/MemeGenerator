@@ -1,6 +1,6 @@
 import APIUtils from "../helpers.js/APIUtils";
 import axios from "axios";
-
+import UserService from "./userService";
 
 class MemeService {
     async getMemeById(memeId) {
@@ -19,12 +19,12 @@ class MemeService {
         return response.data;
     }
 
-    // TODO
-    async getAllMemesFromUser(userId) {
-        console.log("Get All Memes from one User")
+    async getAllMemesByUserId(userId) {
+        let response = await axios.get(APIUtils.getURL() + '/memes/all?creatorId=' + userId, APIUtils.getAuthHeader());
+        console.log("Get All Memes from one User: " + response.data);
+        return response.data;
     }
 
-    // TODO
     async getMemeCreatorById(creatorId) {
         try {
             console.log("Get Meme Creator by creatorId")
@@ -49,14 +49,16 @@ class MemeService {
     async voteOnMeme(memeId, voteType) {
         try {
             const votedMeme = await this.getMemeById(memeId);
-            const userId = "123"
-            const userHasVoted = votedMeme.votes.some(vote => vote.userId === userId);
+            const userService = new UserService();
+            const currentUser = await userService.getCurrentUser();
+            console.log("currentUser: " + currentUser.username)
+            const userHasVoted = votedMeme.votes.some(vote => vote.userId === currentUser._id);
             console.log("Previous Vote Length:  " + votedMeme.votes.length)
             let updatedVotes = [];
             let previousVotingType = "";
             if (userHasVoted) {
                 updatedVotes = votedMeme.votes.map(vote => {
-                    if (vote.userId === userId) {
+                    if (vote.userId === currentUser._id) {
                         previousVotingType = vote.votingType;
                         return {...vote, votingType: voteType, votingDate: new Date().toISOString()};
                     }
@@ -65,7 +67,7 @@ class MemeService {
                 console.log("The User already voted the meme and therefore only updated his last vote. The number of votes keeps the same: " + updatedVotes.length);
             } else {
                 updatedVotes = [...votedMeme.votes, {
-                    userId: userId,
+                    userId: currentUser._id,
                     votingType: voteType,
                     votingDate: new Date().toISOString()
                 }];
