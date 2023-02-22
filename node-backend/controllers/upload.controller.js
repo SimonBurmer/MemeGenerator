@@ -19,7 +19,7 @@ const uploadFiles = async (req, res) => {
     } else {
       await upload(req, res);
     }
-
+    console.log(req.files);
     if (req.files.length <= 0) {
       return res
         .status(400)

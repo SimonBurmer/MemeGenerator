@@ -11,6 +11,8 @@ import Resizer from "react-image-file-resizer";
 import GeneratedMeme from "../models/GeneratedMeme";
 import TemplateService from "../../../services/templateService";
 import MemeService from "../../../services/memeService";
+import { useLoggedInStore } from "../../../app/store";
+import jwt_decode from "jwt-decode";
 
 import { BsCloudArrowDown, BsCloudArrowUp, BsCardImage } from "react-icons/bs";
 
@@ -33,12 +35,14 @@ function GenerateImageTab(props) {
   const [fileWidth, setFileWidth] = React.useState(500);
   //const [fileHeight, setFileHeight] = React.useState(500);
   const [fileFormat, setFileFormat] = React.useState("JPEG");
+  const [accessibility, setAccessibility] = React.useState("public");
   const [fileQuality, setFileQuality] = React.useState(100);
   const [memeTitle, setMemeTitle] = React.useState("");
   const [memeDescription, setMemeDescription] = React.useState("");
   const [canvasImage, setCanvasImage] = React.useState(props.canvasImage);
   const templateService = new TemplateService();
   const memeService = new MemeService();
+  const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
 
   useEffect(() => {
     props.updateCanvas();
@@ -105,8 +109,22 @@ function GenerateImageTab(props) {
       console.log(responseTemplate);
     }
     if (publishType === "memeButton") {
-      const responseMeme = await memeService.publishMeme(formData);
-      console.log(responseMeme);
+      console.log(isAuthenticated);
+      if (isAuthenticated) {
+        let userData = localStorage.getItem("loginData");
+        let obj = JSON.parse(userData);
+        var decodedJwt = jwt_decode(obj.jwtoken);
+        const responseMeme = await memeService.publishMeme(
+          formData,
+          memeTitle,
+          decodedJwt.id,
+          accessibility,
+          props.images,
+          props.textBlocks,
+          500,
+          500
+        );
+      }
     }
     //const der = await resizeFile(imageBlob);
   }
@@ -140,16 +158,23 @@ function GenerateImageTab(props) {
         </Form.Group>
 
         <Form.Group required className="mb-3">
-          <Form.Label>Meme Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={2}
-            name="Description"
-            type="text"
-            placeholder="Meme Description"
-            value={memeDescription}
-            onChange={(event) => setMemeDescription(event.target.value)}
-          />
+          <Form.Label>accessibility</Form.Label>
+          <Dropdown>
+            <Dropdown.Toggle variant="light" id="dropdown-acc">
+              {accessibility}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={(e) => setAccessibility("public")}>
+                public
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => setAccessibility("private")}>
+                private
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => setAccessibility("unlisted")}>
+                unlisted
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Form.Group>
 
         <Row>

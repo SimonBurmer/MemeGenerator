@@ -53,14 +53,54 @@ class MemeService {
     }
   }
 
-  async publishMeme(formData) {
+  async publishMeme(
+    formData,
+    titel,
+    userID,
+    accessibility,
+    templates,
+    texts,
+    canvasWidth,
+    canvasHeight
+  ) {
     let response = await axios({
       url: APIUtils.getURL() + "/img/upload?type=meme",
       method: "POST",
       headers: APIUtils.getAuthHeader(),
       data: formData,
-    });
-    return response.data;
+    })
+      .then(function (response) {
+        var data = JSON.stringify({
+          memeURL: "http://localhost:5000/img/meme/" + response.data.message[0],
+          creatorId: userID,
+          title: titel,
+          accessibility: accessibility,
+          templates: templates,
+          texts: texts,
+          canvasWidth: canvasWidth,
+          canvasHeight: canvasHeight,
+        });
+        axios({
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "http://localhost:5000/memes/save",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        })
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log(data);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
   }
 
   // HELPERS

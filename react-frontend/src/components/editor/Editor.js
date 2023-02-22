@@ -101,6 +101,7 @@ function Editor() {
               <GenerateImageTab
                 images={images}
                 canvasImage={canvasImage}
+                textBlocks={textBlocks}
                 updateCanvas={updateCanvas}
                 text={"test"}
               />
