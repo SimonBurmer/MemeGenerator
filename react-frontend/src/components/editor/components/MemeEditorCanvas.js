@@ -230,7 +230,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
 
   // Function draws an image
   function drawImage(ctx, image, x, y, scale, rot){
-    var canvas = document.getElementById('canvas');
+    var canvas = canvasRef.current;
     ctx.setTransform(scale,0,0,scale,x,y);
     ctx.rotate(rot);
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
