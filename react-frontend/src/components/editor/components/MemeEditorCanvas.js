@@ -9,6 +9,24 @@ import { GpsFixedSharp } from "@mui/icons-material";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Modal from 'react-bootstrap/Modal';
 
+function Animation(step, fpsInterval, then) {
+  var timerID, then;
+  var innerStep = function() {
+    timerID = requestAnimationFrame(innerStep);
+    then = step(fpsInterval, then);
+  };
+  return {
+    start: function() {
+      console.log("start anim");
+      timerID = requestAnimationFrame(innerStep);
+    },
+    cancel: function() {
+      console.log("cancel anim");
+      cancelAnimationFrame(timerID);
+    }
+  };
+};
+
 const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const [canvasWidth, setCanvasWidth] = useState(500);
   const [canvasHeight, setCanvasHeight] = useState(500);
@@ -20,12 +38,10 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const [mousePosition, setMousePosition] = useState(undefined);
   const [fps, setFps] = useState(15);
   const [displayFrameIndex, setDisplayFrameIndex] = useState(0);
+  const [currentAnimation, setCurrentAnimation] = useState(null);
 
   var currentFrameIndex = 0;
-  var fpsInterval = 0, now = 0, then = 0, elapsed = 0;
-  var stop = false;
 
-  var reqanimationreference = null;
 
   const startPaint = useCallback((event) => {
     const coordinates = getCoordinates(event);
@@ -109,41 +125,25 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     draw();
   }, [props.images, props.textBlocks, canvasHeight, canvasWidth, props.animate]);
 
-  function startAnimating() {
-    fpsInterval = 1000 / fps;
-    then = Date.now();
-    animate();
-  }
 
-  function animate() {
-
-    if (stop) 
-    {
-      if (reqanimationreference !== null)
-      {
-        cancelAnimationFrame(reqanimationreference);
-      }
-        return;
-    }
-
-    reqanimationreference = requestAnimationFrame(animate);
-    now = Date.now();
-    elapsed = now - then;
+  function animate(fpsInterval, then) {
+    let now = Date.now();
+    let elapsed = now - then;
 
     // if enough time has elapsed, draw the next frame
     if (elapsed > fpsInterval) 
     {
-        then = now - (elapsed % fpsInterval);
         // Put your drawing code here
         update();
+
+        return now - (elapsed % fpsInterval);
     }
+    return then;
   }
 
    // main update function
    function update() 
    {
-    console.log(props.animate);
-
       var canvas = canvasRef.current;
       var ctx = canvas.getContext("2d");
       props.gifs.forEach((gif, i) => {
@@ -203,15 +203,17 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   useEffect(() => {
     currentFrameIndex = 0;
 
-    if (reqanimationreference !== null)
+    console.log(currentAnimation);
+    if (currentAnimation)
     {
-      cancelAnimationFrame(reqanimationreference);
+      console.log("cancel current animation");
+      currentAnimation.cancel();
     }
 
     if(props.animate)
     {
-      stop = false;
-      startAnimating();
+      setCurrentAnimation(new Animation(animate, 1000 / fps, Date.now()));
+
       if (props.video)
       {
         document.getElementById("video").load();
@@ -219,7 +221,6 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     }
     else
     {
-      stop = true;
       if (props.video)
       {
         document.getElementById("video").pause();
@@ -280,6 +281,14 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     },
     [isPainting, mousePosition]
   );
+
+
+  useEffect(() => {
+    if (currentAnimation)
+    {
+      currentAnimation.start();
+    }
+  }, [currentAnimation]);
 
   useEffect(() => {
     if (!canvasRef.current) {
