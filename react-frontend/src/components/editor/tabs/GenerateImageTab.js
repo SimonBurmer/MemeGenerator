@@ -88,12 +88,12 @@ function GenerateImageTab(props) {
 
   function saveMemeAsTemplate(event) {
 
-    props.updateCanvas(async () =>
+    props.updateCanvas(async (dataUrl) =>
     {
       event.preventDefault();
       console.log(event.nativeEvent.submitter.name);
       const publishType = event.nativeEvent.submitter.name;
-      const imageUrl = props.canvasImage;
+      const imageUrl = dataUrl;
       const imageBlob = await fetch(imageUrl).then((r) => r.blob());
       let formData = new FormData();
       formData.append("file", imageBlob, "image.png");
@@ -128,7 +128,7 @@ function GenerateImageTab(props) {
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => {props.updateCanvas(() =>{props.setModalUploadImageShow(true)}); }}>
+        <Button onClick={() => {props.updateCanvas((dataUrl) =>{props.setModalUploadImageShow(true)}); }}>
           Show Generated Meme
         </Button>
       </Row>

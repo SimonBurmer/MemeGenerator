@@ -113,14 +113,14 @@ function Editor() {
         console.log("Finished Encoding Gif");
         setGifEncoder(null);
         setCanvasImage(dataUrl);
-        onfinish();
+        onfinish(dataUrl);
       }});
     }
     else
     {
       dataUrl = canvasRef.current.toDataURL(); 
       setCanvasImage(dataUrl);
-      onfinish();
+      onfinish(dataUrl);
     }
   }
 
