@@ -22,11 +22,11 @@ const login = async (req, res) => {
     name: name,
   };
 
-  const toke = generateJWT(sub, email);
+  const jwtoken = generateJWT(sub, email);
 
   res.status(201);
   res.Header;
-  res.json({ sub, name, email, given_name, toke });
+  res.json({ sub, name, email, given_name, jwtoken });
 
   try {
     let user = await User.findOne({ googleId: sub });

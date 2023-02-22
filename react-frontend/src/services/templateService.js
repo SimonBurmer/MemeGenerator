@@ -18,11 +18,12 @@ class TemplateService {
   }
 
   async uploadTemplate(formData) {
-    let response = await axios.post(
-      APIUtils.getURL() + "/img/upload?type=template",
-      formData,
-      APIUtils.getAuthHeader()
-    );
+    let response = await axios({
+      url: APIUtils.getURL() + "/img/upload?type=template",
+      method: "POST",
+      headers: APIUtils.getAuthHeader(),
+      data: formData,
+    });
     return response.data;
   }
 }

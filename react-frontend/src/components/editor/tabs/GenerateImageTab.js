@@ -5,11 +5,12 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { Form, Button } from "react-bootstrap";
 import { saveAs } from "file-saver";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Resizer from "react-image-file-resizer";
 import GeneratedMeme from "../models/GeneratedMeme";
 import TemplateService from "../../../services/templateService";
+import MemeService from "../../../services/memeService";
 
 import { BsCloudArrowDown, BsCloudArrowUp, BsCardImage } from "react-icons/bs";
 
@@ -36,8 +37,12 @@ function GenerateImageTab(props) {
   const [memeDescription, setMemeDescription] = React.useState("");
   const [canvasImage, setCanvasImage] = React.useState(props.canvasImage);
   const templateService = new TemplateService();
+  const memeService = new MemeService();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    props.updateCanvas();
+  });
+  useEffect(() => {
     setCanvasImage(props.canvasImage);
   }, [props.canvasImage]);
 
@@ -95,8 +100,24 @@ function GenerateImageTab(props) {
     );
   }
 
-  async function saveMemeAsTemplate(img) {
-    const responseTemplate = await templateService.uploadTemplate(img);
+  async function saveMemeAsTemplate(event) {
+    event.preventDefault();
+    console.log(event.nativeEvent.submitter.name);
+    const publishType = event.nativeEvent.submitter.name;
+    const imageUrl = canvasImage;
+    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+    let formData = new FormData();
+    formData.append("file", imageBlob, "image.png");
+
+    if (publishType === "templateButton") {
+      const responseTemplate = await templateService.uploadTemplate(formData);
+      console.log(responseTemplate);
+    }
+    if (publishType === "memeButton") {
+      const responseMeme = await memeService.publishMeme(formData);
+      console.log(responseMeme);
+    }
+    //const der = await resizeFile(imageBlob);
   }
 
   return (
@@ -111,7 +132,7 @@ function GenerateImageTab(props) {
         style={{ backgroundColor: "lightgrey", height: "1px", margin: "10px" }}
       ></div>
 
-      <Form onSubmit={saveMemeOnServer}>
+      <Form onSubmit={saveMemeAsTemplate}>
         <Form.Group required className="mb-3">
           <Form.Label>Meme Title</Form.Label>
           <Form.Control
@@ -138,10 +159,14 @@ function GenerateImageTab(props) {
 
         <Row>
           <Col>
-            <Button type="submit">Sava Meme as Template</Button>
+            <Button name="templateButton" type="submit">
+              Save Meme as Template
+            </Button>
           </Col>
           <Col>
-            <Button type="submit">Publish Meme</Button>
+            <Button name="memeButton" type="submit">
+              Publish Meme
+            </Button>
           </Col>
         </Row>
       </Form>
