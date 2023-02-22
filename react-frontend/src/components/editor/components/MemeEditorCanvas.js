@@ -203,10 +203,8 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   useEffect(() => {
     currentFrameIndex = 0;
 
-    console.log(currentAnimation);
     if (currentAnimation)
     {
-      console.log("cancel current animation");
       currentAnimation.cancel();
     }
 

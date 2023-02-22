@@ -25,15 +25,9 @@ function GenerateImageTab(props) {
   const [fileQuality, setFileQuality] = React.useState(100);
   const [memeTitle, setMemeTitle] = React.useState("");
   const [memeDescription, setMemeDescription] = React.useState("");
-  const [canvasImage, setCanvasImage] = React.useState(props.canvasImage);
   const templateService = new TemplateService();
   const memeService = new MemeService();
   const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
-
-
-  useEffect(() => {
-    setCanvasImage(props.canvasImage);
-  }, [props.canvasImage]);
 
   useEffect(() => {
     console.log(props.modalUploadImageShow);
@@ -67,8 +61,7 @@ function GenerateImageTab(props) {
 
   async function saveMemeLocal(event) {
     event.preventDefault();
-    const imageUrl = canvasImage;
-    console.log(imageUrl);
+    const imageUrl = props.canvasImage;
 
     var der = null;
     switch(fileFormat)
@@ -89,7 +82,7 @@ function GenerateImageTab(props) {
     const generatedMeme = new GeneratedMeme(
       memeTitle,
       memeDescription,
-      canvasImage
+      props.canvasImage
     );
   }
 
@@ -97,7 +90,7 @@ function GenerateImageTab(props) {
     event.preventDefault();
     console.log(event.nativeEvent.submitter.name);
     const publishType = event.nativeEvent.submitter.name;
-    const imageUrl = canvasImage;
+    const imageUrl = props.canvasImage;
     const imageBlob = await fetch(imageUrl).then((r) => r.blob());
     let formData = new FormData();
     formData.append("file", imageBlob, "image.png");
