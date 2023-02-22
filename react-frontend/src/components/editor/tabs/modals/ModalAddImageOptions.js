@@ -27,13 +27,13 @@ function ModalAddImageOptions(props) {
   const [src, setSrc] = useState("");
 
   const imageOptions = [
-    [0, "Choose template", <AiFillAppstore />, () => {}],
-    [1, "Upload image", <AiOutlineUpload />, () => {}],
-    [2, "Take a photo", <AiOutlineCamera />, () => {}],
-    [3, "Upload gif (as image)", <AiOutlineGif />, () => {}],
-    [4, "Upload video (as image)", <AiOutlineVideoCamera />, () => {}],
-    [5, "Enter an image url", <AiOutlineLink />, () => {}],
-    [6, "Get Random Template", <AiOutlineLink />, () => {}],
+    [0, "Choose template", <AiFillAppstore />, () => { }],
+    [1, "Upload image", <AiOutlineUpload />, () => { }],
+    [2, "Take a photo", <AiOutlineCamera />, () => { }],
+    [3, "Upload gif", <AiOutlineGif />, () => { }],
+    [4, "Upload video", <AiOutlineVideoCamera />, () => { }],
+    [5, "Enter an image url", <AiOutlineLink />, () => { }],
+    [6, "Add Random", <AiOutlineLink />, () => { }],
   ];
 
   function uploadImage() {
@@ -107,23 +107,17 @@ function ModalAddImageOptions(props) {
                       </Container>
                     );
                   case 2:
-                    return (
-                      <Container>
-                        <AddWebcamImage addImage={setSrc} />
-                      </Container>
-                    );
+                    return <Container>
+                      <AddWebcamImage setImage={setSrc} />
+                    </Container>;
                   case 3:
-                    return (
-                      <Container>
-                        <AddGIF addImage={setSrc} />
-                      </Container>
-                    );
+                    return <Container>
+                      <AddGIF setImage={setSrc}/>
+                    </Container>;
                   case 4:
-                    return (
-                      <Container>
-                        <AddVideo addImage={setSrc} />
-                      </Container>
-                    );
+                    return <Container>
+                      <AddVideo setImage={setSrc}/>
+                    </Container>
                   case 5:
                     return (
                       <Container>
@@ -143,7 +137,7 @@ function ModalAddImageOptions(props) {
                   case 6:
                     return (
                       <Container>
-                        <AddRandom addImage={setSrc} />
+                        <AddRandom setImage={setSrc} />
                       </Container>
                     );
                   default:

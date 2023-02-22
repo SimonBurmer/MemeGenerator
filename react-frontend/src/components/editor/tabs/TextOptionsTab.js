@@ -243,6 +243,22 @@ function EditorTextOptionsTab(props) {
           </Row>
         </Form.Group>
 
+        {
+          props.animate &&
+            <Form.Group className="mb-3">
+            <Row>
+              <Col>
+                <Form.Label>From Frame</Form.Label>
+                <Form.Control value={textBlock.fromTimeFrame} onChange={evt => UpdateTextBlock(() => textBlock.fromTimeFrame = evt.target.value)} type="number" placeholder="0" />
+              </Col>
+              <Col>
+                <Form.Label>To Frame</Form.Label>
+                <Form.Control value={textBlock.toTimeFrame} onChange={evt => UpdateTextBlock(() => textBlock.toTimeFrame = evt.target.value)} type="number" placeholder="0" />
+              </Col>
+            </Row>
+          </Form.Group>
+        }
+
         <Row>
           <Col>
             <Dropdown>

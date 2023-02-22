@@ -35,7 +35,7 @@ function AddRandom(props) {
     let randImg = preview[randNum].url;
     console.log(randImg);
     setRandImg(randImg);
-    props.addImage(randImg);
+    props.setImage(randImg);
   }
 
   return (

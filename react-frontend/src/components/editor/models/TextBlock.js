@@ -1,5 +1,6 @@
 const TextBlock = class {
-  constructor(text = "", x = 0, y = 0, height = 12, width = 100, fontSize = 12, textColor = "black", backgroundColor = "transparent", fontFamily = "Arial") {
+  constructor(text = "", x = 0, y = 0, height = 12, width = 100, fontSize = 12, textColor = "black", 
+  backgroundColor = "transparent", fontFamily = "Arial", fromTimeFrame=0, toTimeFrame=0) {
     this.text = text;
     this.height = height;
     this.width = width;
@@ -9,6 +10,8 @@ const TextBlock = class {
     this.textColor = textColor;
     this.backgroundColor = backgroundColor;
     this.fontFamily = fontFamily;
+    this.fromTimeFrame = fromTimeFrame;
+    this.toTimeFrame = toTimeFrame;
   }
 
   static Copy(textBlock) {
@@ -22,6 +25,8 @@ const TextBlock = class {
     newTextBlock.textColor = textBlock.textColor;
     newTextBlock.backgroundColor = textBlock.backgroundColor;
     newTextBlock.fontFamily = textBlock.fontFamily;
+    newTextBlock.fromTimeFrame = textBlock.fromTimeFrame;
+    newTextBlock.toTimeFrame = textBlock.toTimeFrame;
     return newTextBlock;
   }
 };

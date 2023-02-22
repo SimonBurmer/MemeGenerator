@@ -1,37 +1,20 @@
 import React, { useState } from 'react';
 
-function AddGIF() {
-  const [gif, setGif] = useState(null);
+function AddGIF(props) {
   const [preview, setPreview] = useState(null);
 
   function handleChange(event) {
-    const file = event.target.files[0];
-    //setGif(file);
+    var tgt = event.target || window.event.srcElement, files = tgt.files;
 
-    //const reader = new FileReader();
-    //reader.readAsDataURL(file);
-    //reader.onloadend = () => {
-    //  setPreview(reader.result);
-    //};
-
-    const video = document.createElement("video");
-    video.src = file;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 300;
-    canvas.height = 200;
-    video.currentTime = 0;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0);
-
-
-    ctx.fillStyle = "green";
-    ctx.font = "40px serif";
-    ctx.fillText("Hello world", 0, 50);
-
-    var img = document.createElement("img");
-    img.src = canvas.toDataURL();
-    setPreview(img.src)
+    // FileReader support
+    if (FileReader && files && files.length) {
+        var fr = new FileReader();
+        fr.onload = function () {
+          setPreview(fr.result);
+          props.setImage(fr.result);
+        }
+        fr.readAsDataURL(files[0]);
+    }
   }
 
   return (

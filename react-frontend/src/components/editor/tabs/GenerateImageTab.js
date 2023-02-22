@@ -16,21 +16,7 @@ import jwt_decode from "jwt-decode";
 
 import { BsCloudArrowDown, BsCloudArrowUp, BsCardImage } from "react-icons/bs";
 
-function ModalUploadImage(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
-    </Modal>
-  );
-}
-
 function GenerateImageTab(props) {
-  const [modalUploadImageShow, setModalUploadImageShow] = React.useState(false);
   const [fileName, setFileName] = React.useState("MyMeme");
   const [fileWidth, setFileWidth] = React.useState(500);
   //const [fileHeight, setFileHeight] = React.useState(500);
@@ -44,12 +30,14 @@ function GenerateImageTab(props) {
   const memeService = new MemeService();
   const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
 
-  useEffect(() => {
-    props.updateCanvas();
-  });
+
   useEffect(() => {
     setCanvasImage(props.canvasImage);
   }, [props.canvasImage]);
+
+  useEffect(() => {
+    console.log(props.modalUploadImageShow);
+  }, [props.modalUploadImageShow]);
 
   function setFileQualityAndCheck(value) {
     setFileQuality(value);
@@ -80,9 +68,19 @@ function GenerateImageTab(props) {
   async function saveMemeLocal(event) {
     event.preventDefault();
     const imageUrl = canvasImage;
-    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+    console.log(imageUrl);
 
-    const der = await resizeFile(imageBlob);
+    var der = null;
+    switch(fileFormat)
+    {
+      case "GIF":
+        der = await fetch(imageUrl).then((r) => r.blob());
+        break;
+      default:
+        const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+        der = await resizeFile(imageBlob);
+        break;
+    }
 
     saveAs(der, fileName + "." + fileFormat);
   }
@@ -132,11 +130,7 @@ function GenerateImageTab(props) {
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button
-          onClick={() => {
-            setModalUploadImageShow(true);
-          }}
-        >
+        <Button onClick={() => {props.updateCanvas(); }}>
           Show Generated Meme
         </Button>
       </Row>
@@ -253,6 +247,9 @@ function GenerateImageTab(props) {
                   <Dropdown.Item onClick={(e) => setFileFormat("JPEG")}>
                     JPEG
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("GIF")}>
+                    GIF
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
@@ -262,11 +259,15 @@ function GenerateImageTab(props) {
         <Button type="submit">Download Meme</Button>
       </Form>
 
-      <ModalUploadImage
-        show={modalUploadImageShow}
-        onHide={() => setModalUploadImageShow(false)}
-        canvasImage={canvasImage}
-      />
+      <Modal
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      show={props.modalUploadImageShow}
+      onHide={() => props.setModalUploadImageShow(false)}
+    >
+      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
+    </Modal>
     </Container>
   );
 }
