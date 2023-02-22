@@ -33,6 +33,7 @@ function ModalAddImageOptions(props) {
     [3, "Upload gif", <AiOutlineGif />, () => { }],
     [4, "Upload video", <AiOutlineVideoCamera />, () => { }],
     [5, "Enter an image url", <AiOutlineLink />, () => { }],
+    [6, "Add Random", <AiOutlineLink />, () => { }],
   ];
 
   function uploadImage() {
@@ -136,7 +137,7 @@ function ModalAddImageOptions(props) {
                   case 6:
                     return (
                       <Container>
-                        <AddRandom addImage={setSrc} />
+                        <AddRandom setImage={setSrc} />
                       </Container>
                     );
                   default:

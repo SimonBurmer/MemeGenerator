@@ -93,6 +93,7 @@ function Editor() {
   {
     let dataUrl = ""; 
 
+    console.log("Hallo");
     // old condition: images.some(i => i.src.startsWith("data:image/gif"))
     if (animate)
     {
@@ -114,17 +115,6 @@ function Editor() {
         setCanvasImage(dataUrl);
         setModalUploadImageShow(true);
       }});
-
-      // encoder.setRepeat(0); //0  -> loop forever
-      // //1+ -> loop n times then stop
-      // encoder.setDelay(500); //go to next frame every n milliseconds
-      // encoder.start();
-      // encoder.addFrame(canvasRef.current.getContext("2d"));
-
-      // encoder.finish();
-      // var binary_gif = encoder.stream().getData() //notice this is different from the as3gif package!
-      // dataUrl = 'data:image/gif;base64,'+ btoa(binary_gif);
-
     }
     else
     {

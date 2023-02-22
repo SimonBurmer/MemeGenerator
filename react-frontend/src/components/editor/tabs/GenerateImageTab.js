@@ -14,19 +14,6 @@ import MemeService from "../../../services/memeService";
 
 import { BsCloudArrowDown, BsCloudArrowUp, BsCardImage } from "react-icons/bs";
 
-function ModalUploadImage(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
-    </Modal>
-  );
-}
-
 function GenerateImageTab(props) {
   const [fileName, setFileName] = React.useState("MyMeme");
   const [fileWidth, setFileWidth] = React.useState(500);
@@ -39,12 +26,14 @@ function GenerateImageTab(props) {
   const templateService = new TemplateService();
   const memeService = new MemeService();
 
-  useEffect(() => {
-    props.updateCanvas();
-  });
+
   useEffect(() => {
     setCanvasImage(props.canvasImage);
   }, [props.canvasImage]);
+
+  useEffect(() => {
+    console.log(props.modalUploadImageShow);
+  }, [props.modalUploadImageShow]);
 
   function setFileQualityAndCheck(value) {
     setFileQuality(value);
@@ -245,11 +234,15 @@ function GenerateImageTab(props) {
         <Button type="submit">Download Meme</Button>
       </Form>
 
-      <ModalUploadImage
-        show={props.modalUploadImageShow}
-        onHide={() => props.setModalUploadImageShow(false)}
-        canvasImage={canvasImage}
-      />
+      <Modal
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      show={props.modalUploadImageShow}
+      onHide={() => props.setModalUploadImageShow(false)}
+    >
+      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
+    </Modal>
     </Container>
   );
 }
