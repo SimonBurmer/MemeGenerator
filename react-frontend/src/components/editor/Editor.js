@@ -89,7 +89,7 @@ function Editor() {
     setPencil(newPencil);
   }
 
-  function updateCanvas()
+  function updateCanvas(onfinish)
   {
     let dataUrl = ""; 
 
@@ -113,14 +113,14 @@ function Editor() {
         console.log("Finished Encoding Gif");
         setGifEncoder(null);
         setCanvasImage(dataUrl);
-        setModalUploadImageShow(true);
+        onfinish();
       }});
     }
     else
     {
       dataUrl = canvasRef.current.toDataURL(); 
       setCanvasImage(dataUrl);
-      setModalUploadImageShow(true);
+      onfinish();
     }
   }
 

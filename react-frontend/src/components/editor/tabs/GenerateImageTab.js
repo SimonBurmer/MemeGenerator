@@ -86,44 +86,49 @@ function GenerateImageTab(props) {
     );
   }
 
-  async function saveMemeAsTemplate(event) {
-    event.preventDefault();
-    console.log(event.nativeEvent.submitter.name);
-    const publishType = event.nativeEvent.submitter.name;
-    const imageUrl = props.canvasImage;
-    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
-    let formData = new FormData();
-    formData.append("file", imageBlob, "image.png");
+  function saveMemeAsTemplate(event) {
 
-    if (publishType === "templateButton") {
-      const responseTemplate = await templateService.uploadTemplate(formData);
-      console.log(responseTemplate);
-    }
-    if (publishType === "memeButton") {
-      console.log(isAuthenticated);
-      if (isAuthenticated) {
-        let userData = localStorage.getItem("loginData");
-        let obj = JSON.parse(userData);
-        var decodedJwt = jwt_decode(obj.jwtoken);
-        const responseMeme = await memeService.publishMeme(
-          formData,
-          memeTitle,
-          decodedJwt.id,
-          accessibility,
-          props.images,
-          props.textBlocks,
-          500,
-          500
-        );
+    props.updateCanvas(async () =>
+    {
+      event.preventDefault();
+      console.log(event.nativeEvent.submitter.name);
+      const publishType = event.nativeEvent.submitter.name;
+      const imageUrl = props.canvasImage;
+      const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+      let formData = new FormData();
+      formData.append("file", imageBlob, "image.png");
+  
+      if (publishType === "templateButton") {
+        const responseTemplate = await templateService.uploadTemplate(formData);
+        console.log(responseTemplate);
       }
-    }
+      if (publishType === "memeButton") {
+        console.log(isAuthenticated);
+        if (isAuthenticated) {
+          let userData = localStorage.getItem("loginData");
+          let obj = JSON.parse(userData);
+          var decodedJwt = jwt_decode(obj.jwtoken);
+          const responseMeme = await memeService.publishMeme(
+            formData,
+            memeTitle,
+            decodedJwt.id,
+            accessibility,
+            props.images,
+            props.textBlocks,
+            500,
+            500
+          );
+        }
+      }
+    });
+
     //const der = await resizeFile(imageBlob);
   }
 
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => {props.updateCanvas(); }}>
+        <Button onClick={() => {props.updateCanvas(() =>{props.setModalUploadImageShow(true)}); }}>
           Show Generated Meme
         </Button>
       </Row>
