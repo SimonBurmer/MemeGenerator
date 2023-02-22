@@ -31,8 +31,8 @@ function ModalAddImageOptions(props) {
     [0, "Choose template", <AiFillAppstore />, () => { }],
     [1, "Upload image", <AiOutlineUpload />, () => { }],
     [2, "Take a photo", <AiOutlineCamera />, () => { }],
-    [3, "Upload gif (as image)", <AiOutlineGif />, () => { }],
-    [4, "Upload video (as image)", <AiOutlineVideoCamera />, () => { }],
+    [3, "Upload gif", <AiOutlineGif />, () => { }],
+    [4, "Upload video", <AiOutlineVideoCamera />, () => { }],
     [5, "Enter an image url", <AiOutlineLink />, () => { }],
   ];
 
@@ -106,15 +106,15 @@ function ModalAddImageOptions(props) {
                     </Container>;
                   case 2:
                     return <Container>
-                      <AddWebcamImage addImage={setSrc} />
+                      <AddWebcamImage setImage={setSrc} />
                     </Container>;
                   case 3:
                     return <Container>
-                      <AddGIF addImage={setSrc}/>
+                      <AddGIF setImage={setSrc}/>
                     </Container>;
                   case 4:
                     return <Container>
-                      <AddVideo addImage={setSrc}/>
+                      <AddVideo setImage={setSrc}/>
                     </Container>
                   case 5:
                     return <Container>

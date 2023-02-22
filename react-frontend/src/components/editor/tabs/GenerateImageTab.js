@@ -27,7 +27,6 @@ function ModalUploadImage(props) {
 }
 
 function GenerateImageTab(props) {
-  const [modalUploadImageShow, setModalUploadImageShow] = React.useState(false);
   const [fileName, setFileName] = React.useState("MyMeme");
   const [fileWidth, setFileWidth] = React.useState(500);
   //const [fileHeight, setFileHeight] = React.useState(500);
@@ -72,9 +71,18 @@ function GenerateImageTab(props) {
     event.preventDefault();
     const imageUrl = canvasImage;
     console.log(imageUrl);
-    const imageBlob = await fetch(imageUrl).then((r) => r.blob());
 
-    const der = await resizeFile(imageBlob);
+    var der = null;
+    switch(fileFormat)
+    {
+      case "GIF":
+        der = await fetch(imageUrl).then((r) => r.blob());
+        break;
+      default:
+        const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+        der = await resizeFile(imageBlob);
+        break;
+    }
 
     saveAs(der, fileName + "." + fileFormat);
   }
@@ -94,7 +102,7 @@ function GenerateImageTab(props) {
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => {props.updateCanvas(); setModalUploadImageShow(true); }}>
+        <Button onClick={() => {props.updateCanvas(); }}>
           Show Generated Meme
         </Button>
       </Row>
@@ -200,6 +208,9 @@ function GenerateImageTab(props) {
                   <Dropdown.Item onClick={(e) => setFileFormat("JPEG")}>
                     JPEG
                   </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("GIF")}>
+                    GIF
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
@@ -210,8 +221,8 @@ function GenerateImageTab(props) {
       </Form>
 
       <ModalUploadImage
-        show={modalUploadImageShow}
-        onHide={() => setModalUploadImageShow(false)}
+        show={props.modalUploadImageShow}
+        onHide={() => props.setModalUploadImageShow(false)}
         canvasImage={canvasImage}
       />
     </Container>
