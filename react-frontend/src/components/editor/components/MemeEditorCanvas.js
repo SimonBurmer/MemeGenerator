@@ -29,7 +29,7 @@ function Animation(step, fpsInterval, then) {
 
 const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const [canvasWidth, setCanvasWidth] = useState(500);
-  const [canvasHeight, setCanvasHeight] = useState(500);
+  const [canvasHeight, setCanvasHeight] = useState(400);
   const [lines, setLines] = useState([]);
   const [isPainting, setIsPainting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -106,7 +106,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
 
   const drawTextBlock = (ctx, textBlock) => {
     ctx.textBaseline = "top";
-    ctx.font = textBlock.fontSize + "px " + textBlock.fontFamily;
+    ctx.font = "bold " + textBlock.fontSize + "px " + textBlock.fontFamily;
 
     var textWidth = ctx.measureText(textBlock.text).width;
     var width = textBlock.width;
@@ -114,10 +114,19 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     ctx.fillStyle = textBlock.backgroundColor;
     ctx.fillRect(textBlock.x, textBlock.y, width, height);
     ctx.fillStyle = textBlock.textColor;
+
+    // make text look like typical meme text
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 5;
+    ctx.strokeText(
+        textBlock.text,
+        parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
+        parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
+    );
     ctx.fillText(
-      textBlock.text,
-      parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
-      parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
+        textBlock.text,
+        parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
+        parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
     );
   };
 

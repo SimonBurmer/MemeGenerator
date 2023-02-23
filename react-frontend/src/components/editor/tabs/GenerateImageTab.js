@@ -121,7 +121,7 @@ function GenerateImageTab(props) {
             props.images,
             props.textBlocks,
             500,
-            500
+            300
           );
         }
       }

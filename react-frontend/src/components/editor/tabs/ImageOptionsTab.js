@@ -20,7 +20,7 @@ function EditorImageOptionsTab(props) {
 
   useEffect(() => 
   { 
-    setImages(props.images) 
+    setImages(props.images)
   }, [props.images]);
 
   function selectImage(index)
