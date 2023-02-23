@@ -86,7 +86,7 @@ function Editor({ meme }) {
       }, 0);
     } else if (src.startsWith("blob:")) {
       setVideo(src);
-      setAnimate(true);
+      setAnimate(false);
     }
 
     let newImage = new ImageBlock();
