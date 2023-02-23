@@ -17,7 +17,7 @@ import { Modal } from "react-bootstrap";
 const { GIF } = require("./util/GIF");
 const { GIFEncoder } = require("./util/GIFEncoder");
 
-function Editor() {
+function Editor({ meme }) {
   const [textBlocks, setTextBlocks] = useState([]);
   const [images, setImages] = useState([]);
   const [gifs, setGifs] = useState([]);

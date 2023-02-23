@@ -1,8 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Workbox } from 'workbox-window';
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
+if ('serviceWorker' in navigator) {
+    const wb = new Workbox('/service-worker.js');
+    wb.register();
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

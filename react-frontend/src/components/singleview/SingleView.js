@@ -8,14 +8,17 @@ import CommentList from "./Comments/CommentList";
 import CommentInput from "./Comments/CommentInput";
 import Statistics from "./Statistics/Statistics";
 import MemeService from "../../services/memeService";
+import UserService from "../../services/userService";
 
 const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, fetchMemes}) => {
     const memeService = new MemeService();
+    const userService = new UserService();
 
     const handleNewComment = async (comment) => {
+        const currentUser = await userService.getCurrentUser();
         await memeService.updateMemeById(filteredMemes[currentMemeIndex]._id, {
             comments: [...filteredMemes[selectedMemeIndex].comments, {
-                userId: "123",
+                userId: currentUser._id,
                 comment: comment,
                 commentDate: new Date().toISOString()
             }]
@@ -41,10 +44,10 @@ const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, fe
             <button className={"close-button-container"} onClick={handleCloseSingleView}>Close</button>
             <div className={"singleview-bottom-container"}>
                 <div className={"comment-section"}>
-                    <CommentList comments={filteredMemes[selectedMemeIndex].comments}></CommentList>
+                    <CommentList comments={filteredMemes[currentMemeIndex].comments}></CommentList>
                     <CommentInput onSubmit={handleNewComment}></CommentInput>
                 </div>
-                <Statistics></Statistics>
+                <Statistics votes={filteredMemes[currentMemeIndex].votes}></Statistics>
             </div>
         </Modal>
     );

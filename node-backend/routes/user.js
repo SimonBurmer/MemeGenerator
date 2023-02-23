@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const userController = require("../controllers/user.controller")
 
-router.get("/getUser", (req, res) => {
-  res.json(req.user);
-});
+router.get("/getUserById", userController.getUserById);
+router.get("/getCurrentUser", userController.getCurrentUser);
 
 module.exports = router;
