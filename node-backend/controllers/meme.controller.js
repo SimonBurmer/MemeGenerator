@@ -73,7 +73,16 @@ const allMemes = async (req, res) => {
 
 const retrieve = async (req, res) => {
   try {
-    let dbFilter = { creatorId: { $not: /^api$/ }, private: false };
+    //let dbFilter = { creatorId: { $not: /^api$/ }, private: false };
+    // let dbFilter = req.query.accessibility
+    //   ? { accessibility: req.query.accessibility }
+    //   : { accessibility: { $not: /^api$/ } };
+    let dbFilter = {};
+    if (req.query.accessibility) {
+      dbFilter = {
+        accessibility: req.query.accessibility,
+      };
+    }
     if (req.query.title) dbFilter.title = req.query.title;
     let sortFilter =
       req.query.sort && req.query.sort === "oldest"

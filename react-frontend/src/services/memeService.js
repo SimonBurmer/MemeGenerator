@@ -33,6 +33,19 @@ class MemeService {
     return response.data;
   }
 
+  async retrieveMemesAccess(limit, accessibility) {
+    let response = await axios.get(
+      APIUtils.getURL() +
+        "/memes/retrieve?limit=" +
+        limit +
+        "&accessibility=" +
+        accessibility,
+      APIUtils.getAuthHeader()
+    );
+    console.log("retrieve Memes: " + response.data.length);
+    return response.data;
+  }
+
   // TODO
   async getAllMemesFromUser(userId) {
     console.log("Get All Memes from one User");

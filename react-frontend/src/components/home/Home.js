@@ -24,7 +24,7 @@ function Home() {
   });
 
   const fetchMemes = async () => {
-    const allMemes = await memeService.retrieveMemes(2);
+    const allMemes = await memeService.retrieveMemesAccess(2, "public");
     //const newMemes = allMemes.slice(0, 2);
     setMemes(allMemes);
   };
