@@ -94,18 +94,25 @@ function GenerateImageTab(props) {
       const imageBlob = await fetch(imageUrl).then((r) => r.blob());
       let formData = new FormData();
       formData.append("file", imageBlob, "image.png");
-      console.log(imageUrl);
 
-      if (publishType === "templateButton") {
-        const responseTemplate = await templateService.uploadTemplate(formData);
-        console.log(responseTemplate);
-      }
-      if (publishType === "memeButton") {
-        console.log(isAuthenticated);
-        if (isAuthenticated) {
-          let userData = localStorage.getItem("loginData");
-          let obj = JSON.parse(userData);
-          var decodedJwt = jwt_decode(obj.jwtoken);
+      if (isAuthenticated) {
+        let userData = localStorage.getItem("loginData");
+        let obj = JSON.parse(userData);
+        var decodedJwt = jwt_decode(obj.jwtoken);
+
+        if (publishType === "templateButton") {
+          console.log("template");
+          const responseTemplate = await templateService.uploadTemplate(
+            formData,
+            decodedJwt.id,
+            memeTitle,
+            accessibility
+          );
+          console.log(responseTemplate);
+        }
+        if (publishType === "memeButton") {
+          console.log(isAuthenticated);
+
           const responseMeme = await memeService.publishMeme(
             formData,
             memeTitle,

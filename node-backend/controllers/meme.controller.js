@@ -5,7 +5,7 @@ const saveMeme = async (req, res) => {
     creatorId: req.body.creatorId,
     title: req.body.title,
   };
-
+  console.log("meme body: " + req.body);
   let meme = {
     memeURL: req.body.memeURL,
     creatorId: req.body.creatorId,

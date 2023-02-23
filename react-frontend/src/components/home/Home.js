@@ -6,6 +6,7 @@ import "./Home.css";
 import { useLoggedInStore } from "../../app/store";
 import MemeListContainer from "../overview/MemeListContainer/MemeListContainer";
 import MemeService from "../../services/memeService";
+import { useNavigate, Link } from "react-router-dom";
 
 function Home() {
   const [userName, setUserName] = useState("");
@@ -48,11 +49,25 @@ function Home() {
         </Col>
       </Row>
       <Row className="index-fast-actions-container">
-        <Col className="index-fast-actions shadow rounded">Create new Meme</Col>
-        <Col className="index-fast-actions shadow rounded">
+        <Col
+          className="index-fast-actions shadow rounded"
+          as={Link}
+          to="/editor"
+        >
+          Create new Meme
+        </Col>
+        <Col
+          className="index-fast-actions shadow rounded"
+          as={Link}
+          to="/overview"
+        >
           <Container>Search for Memes</Container>
         </Col>
-        <Col className="index-fast-actions shadow rounded">
+        <Col
+          className="index-fast-actions shadow rounded"
+          as={Link}
+          to="/profile"
+        >
           <Container>View Profil</Container>
         </Col>
       </Row>

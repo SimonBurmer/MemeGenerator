@@ -58,7 +58,7 @@ function AddTemplates(props) {
               >
                 <Card.Img variant="top" src={element} />
                 <Card.Body>
-                  <Card.Title>Template 1</Card.Title>
+                  <Card.Title>Template {index + 1}</Card.Title>
                 </Card.Body>
               </Card>
             </Col>

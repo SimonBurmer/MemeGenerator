@@ -89,6 +89,7 @@ class MemeService {
           canvasWidth: canvasWidth,
           canvasHeight: canvasHeight,
         });
+        console.log(data);
         axios({
           method: "post",
           maxBodyLength: Infinity,

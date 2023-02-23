@@ -2,6 +2,7 @@ const upload = require("../middlewares/upload");
 const dbConfig = require("../config/db.config");
 const MongoClient = require("mongodb").MongoClient;
 const GridFSBucket = require("mongodb").GridFSBucket;
+const Template = require("../models/template.model");
 
 const url = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
 
@@ -138,9 +139,24 @@ const downloadTemplate = async (req, res) => {
   }
 };
 
+const addTemplate = async (req, res) => {
+  let template = new Template({
+    creator: req.body.creator,
+    name: req.body.name,
+    date: new Date().toISOString(),
+    image: req.body.src,
+    accessibility: req.body.accessibility,
+  });
+  template
+    .save()
+    .then((result) => res.send(result))
+    .catch((err) => console.error(err));
+};
+
 module.exports = {
   uploadFiles,
   getListFiles,
   downloadMeme,
   downloadTemplate,
+  addTemplate,
 };
