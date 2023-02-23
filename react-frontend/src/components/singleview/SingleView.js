@@ -44,10 +44,10 @@ const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, fe
             <button className={"close-button-container"} onClick={handleCloseSingleView}>Close</button>
             <div className={"singleview-bottom-container"}>
                 <div className={"comment-section"}>
-                    <CommentList comments={filteredMemes[selectedMemeIndex].comments}></CommentList>
+                    <CommentList comments={filteredMemes[currentMemeIndex].comments}></CommentList>
                     <CommentInput onSubmit={handleNewComment}></CommentInput>
                 </div>
-                <Statistics></Statistics>
+                <Statistics votes={filteredMemes[currentMemeIndex].votes}></Statistics>
             </div>
         </Modal>
     );
