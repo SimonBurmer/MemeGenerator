@@ -16,7 +16,7 @@ function AddWebcamImage(props) {
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
         setImg(imageSrc);
-        props.addImage(imageSrc)
+        props.setImage(imageSrc)
     }, [webcamRef]);
 
     return (

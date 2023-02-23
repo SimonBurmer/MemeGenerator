@@ -16,10 +16,12 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Profile from "./components/profile/Profile";
+import Protected from "./components/Protected";
+import { useLoggedInStore } from "./app/store";
 
 function App() {
     const [user, setUser] = useState(null);
-    const [authState, setAuthState] = useState(false);
+    const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
 
     const [isOnline, setIsOnline] = React.useState(navigator.onLine);
 
@@ -38,19 +40,26 @@ function App() {
             {isOnline ? (
                 <Router>
                     <div className="App">
-                        <TopNavigationBar userName={user}/>
+                        <TopNavigationBar userName={user} />
                         <Routes>
-                            <Route path="/" element={<Home/>}/>
+                            <Route path="/" element={<Home />} />
                             <Route
                                 exact
                                 path="/login"
-                                element={user ? <Navigate to="/"/> : <Login/>}
+                                element={user ? <Navigate to="/" /> : <Login />}
                             />
-                            <Route path="/home" element={<Home/>}/>
-                            <Route path="/editor" element={<Editor/>}/>
-                            <Route path="/overview" element={<Overview isUserProfile={false}/>}/>
-                            <Route path="/profile" element={<Profile/>}/>
-                            <Route path="*" element={<Navigate to="/"/>}/>
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/editor" element={<Editor />} />
+                            <Route path="/overview" element={<Overview />} />
+                            <Route
+                                path="/profile"
+                                element={
+                                    <Protected isSignedIn={isAuthenticated}>
+                                        <Profile />
+                                    </Protected>
+                                }
+                            />
+                            <Route path="*" element={<Navigate to="/" />} />
                         </Routes>
                     </div>
                 </Router>

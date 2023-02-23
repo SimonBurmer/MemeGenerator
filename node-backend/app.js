@@ -37,7 +37,6 @@ var commentRouter = require("./routes/comment");
 var userRouter = require("./routes/user");
 const authRouter = require("./routes/auth.js");
 
-
 var app = express();
 // var store = new MongoDBStore({
 //   uri: dbUrl,
@@ -56,12 +55,11 @@ app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Logger
 app.use(requestLoggerMiddleware({ logger: console.log }));
-
 
 app.use(passport.initialize());
 require("./config/jwtStrategy")(passport);
@@ -73,7 +71,6 @@ app.use("/img", templates);
 app.use("/memes", memeRouter);
 app.use("/comment", commentRouter);
 app.use("/user", userRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

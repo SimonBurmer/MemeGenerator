@@ -7,20 +7,22 @@ function AddVideo(props) {
     const file = event.target.files[0];
     const url = URL.createObjectURL(file);
 
-    const video = document.createElement("video");
-    video.src = url;
+    props.setImage(url);
 
-    video.addEventListener('seeked', (event) => {
-      var canvas = document.createElement("canvas");
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, 350, 200);
+    // const video = document.createElement("video");
+    // video.src = url;
+
+    // video.addEventListener('seeked', (event) => {
+    //   var canvas = document.createElement("canvas");
+    //   var ctx = canvas.getContext("2d");
+    //   ctx.drawImage(video, 0, 0, 350, 200);
   
-      var img = document.createElement("img");
-      img.src = canvas.toDataURL();
-      props.addImage(img.src)
+    //   var img = document.createElement("img");
+    //   img.src = canvas.toDataURL();
+    //   props.addImage(img.src)
       
-    });
-    video.currentTime = 1;
+    // });
+    // video.currentTime = 1;
   };
 
   return (
