@@ -117,12 +117,15 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     ctx.fillText(
       textBlock.text,
       parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
-      textBlock.y + (height - textBlock.fontSize) / 2
+      parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
     );
   };
 
   useEffect(() => {
-    draw();
+    if (!props.animate)
+    {
+      draw();
+    }
   }, [props.images, props.textBlocks, canvasHeight, canvasWidth, props.animate]);
 
 
@@ -225,7 +228,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
       }
     }
 
-  }, [props.gifs, props.textBlocks, props.gifEncoder, props.animate, fps, props.frameCount]);
+  }, [props.gifs, props.textBlocks, props.images, props.gifEncoder, props.animate, fps, props.frameCount]);
 
   // Function draws an image
   function drawImage(ctx, image, x, y, scale, rot){
