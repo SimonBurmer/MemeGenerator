@@ -64,9 +64,8 @@ function GenerateImageTab(props) {
     const imageUrl = props.canvasImage;
 
     var der = null;
-    switch(fileFormat)
-    {
-      case "GIF":
+    switch (fileFormat) {
+      case "gif":
         der = await fetch(imageUrl).then((r) => r.blob());
         break;
       default:
@@ -87,17 +86,16 @@ function GenerateImageTab(props) {
   }
 
   function saveMemeAsTemplate(event) {
-
-    props.updateCanvas(async (dataUrl) =>
-    {
+    props.updateCanvas(async (dataUrl) => {
+      props.setModalUploadImageShow(true);
       event.preventDefault();
-      console.log(event.nativeEvent.submitter.name);
       const publishType = event.nativeEvent.submitter.name;
       const imageUrl = dataUrl;
       const imageBlob = await fetch(imageUrl).then((r) => r.blob());
       let formData = new FormData();
       formData.append("file", imageBlob, "image.png");
-  
+      console.log(imageUrl);
+
       if (publishType === "templateButton") {
         const responseTemplate = await templateService.uploadTemplate(formData);
         console.log(responseTemplate);
@@ -128,7 +126,13 @@ function GenerateImageTab(props) {
   return (
     <Container className="image-options-container">
       <Row className="">
-        <Button onClick={() => {props.updateCanvas((dataUrl) =>{props.setModalUploadImageShow(true)}); }}>
+        <Button
+          onClick={() => {
+            props.updateCanvas((dataUrl) => {
+              props.setModalUploadImageShow(true);
+            });
+          }}
+        >
           Show Generated Meme
         </Button>
       </Row>
@@ -245,8 +249,8 @@ function GenerateImageTab(props) {
                   <Dropdown.Item onClick={(e) => setFileFormat("JPEG")}>
                     JPEG
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={(e) => setFileFormat("GIF")}>
-                    GIF
+                  <Dropdown.Item onClick={(e) => setFileFormat("gif")}>
+                    gif
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -258,14 +262,17 @@ function GenerateImageTab(props) {
       </Form>
 
       <Modal
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      show={props.modalUploadImageShow}
-      onHide={() => props.setModalUploadImageShow(false)}
-    >
-      <img src={props.canvasImage} style={{ width: "auto", height: "auto" }} />
-    </Modal>
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={props.modalUploadImageShow}
+        onHide={() => props.setModalUploadImageShow(false)}
+      >
+        <img
+          src={props.canvasImage}
+          style={{ width: "auto", height: "auto" }}
+        />
+      </Modal>
     </Container>
   );
 }

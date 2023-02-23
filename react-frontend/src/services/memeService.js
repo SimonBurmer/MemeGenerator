@@ -24,6 +24,15 @@ class MemeService {
     return response.data;
   }
 
+  async retrieveMemes(limit) {
+    let response = await axios.get(
+      APIUtils.getURL() + "/memes/retrieve?limit=" + limit,
+      APIUtils.getAuthHeader()
+    );
+    console.log("retrieve Memes: " + response.data.length);
+    return response.data;
+  }
+
   // TODO
   async getAllMemesFromUser(userId) {
     console.log("Get All Memes from one User");
