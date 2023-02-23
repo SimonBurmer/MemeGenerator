@@ -217,6 +217,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
 
       if (props.video)
       {
+        props.setFrameCount(props.frameCount == 0 ? document.getElementById("video").duration / fps : props.frameCount); 
         document.getElementById("video").load();
       }
     }
@@ -348,7 +349,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   return (
     <Container style={{ width: "100%", height: "100%" }}>
         {
-          props.animate && 
+          props.animate && !props.video &&
             <Row>
               <Col>
                 {displayFrameIndex} / 
@@ -409,8 +410,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
         <Form.Label>Frames per Second: </Form.Label>
           <Form.Control
             value={fps}
-            disabled={true}
-            // disabled={!props.animate}
+            disabled={!props.animate || props.video}
             onChange={(evt) => setFps(evt.target.value)}
             type="number"
             placeholder="0"

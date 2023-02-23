@@ -33,6 +33,7 @@ function Editor() {
 
   function addTextBlock(textBlock) {
     let newTextBlocks = textBlocks.slice();
+    textBlock.toTimeFrame = frameCount;
     newTextBlocks.unshift(textBlock);
     setTextBlocks(newTextBlocks);
   }
