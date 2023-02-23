@@ -47,6 +47,22 @@ function Editor() {
     setImages(newImages);
   }
 
+  function removeTextBlock(text)
+  {
+    let newTextBlocks = textBlocks.slice();
+    let index = newTextBlocks.indexOf(text);
+    newTextBlocks.splice(index, 1);
+    setTextBlocks(newTextBlocks);
+  }
+
+  function removeImage(image)
+  {
+    let newImages = images.slice();
+    let index = newImages.indexOf(image);
+    newImages.splice(index, 1);
+    setImages(newImages);
+  }
+
   function addImage(src) {
     let newImages = images.slice();
 
@@ -144,12 +160,13 @@ function Editor() {
             <Tab eventKey="home" title="Image">
               <ImageOptionsTab
                 addImage={addImage}
+                removeImage={removeImage}
                 images={images}
                 updateImages={updateImages}
               />
             </Tab>
             <Tab eventKey="profile" title="Text">
-              <TextOptionsTab animate={animate} updateTextBlocks={updateTextBlocks} addTextBlock={addTextBlock} textBlocks={textBlocks}/>
+              <TextOptionsTab removeTextBlock={removeTextBlock} animate={animate} updateTextBlocks={updateTextBlocks} addTextBlock={addTextBlock} textBlocks={textBlocks}/>
             </Tab>
             <Tab eventKey="pencil" title="Pencil">
               <PencelOptionsTab pencil={pencil} changePencil={changePencil} />

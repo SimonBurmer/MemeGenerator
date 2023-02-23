@@ -8,6 +8,9 @@ import {useState, useEffect} from "react";
 
 import ModalAddImageOptions from './modals/ModalAddImageOptions';
 import ImageBlock from '../models/ImageBlock';
+import {
+  AiFillDelete
+} from "react-icons/ai";
 
 function EditorImageOptionsTab(props) {
   const [modalAddImageOptionsShow, setModalAddImageOptionsShow] = useState(false);
@@ -100,7 +103,12 @@ function EditorImageOptionsTab(props) {
           <Row>
           {
             images.map((element, index) => {
-              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>{element.src}</Row>
+              return <Row key={index} onClick={(e) => selectImage(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>
+                <Col>{element.src}</Col>
+                <Col>
+                  <AiFillDelete onClick={() => props.removeImage(element)}/>
+                </Col>
+              </Row>
           })
       }
           </Row>

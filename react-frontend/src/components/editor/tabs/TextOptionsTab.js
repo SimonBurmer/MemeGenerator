@@ -7,6 +7,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from 'react-bootstrap/esm/Container';
 import TextBlock from '../models/TextBlock'
+import {
+  AiFillDelete
+} from "react-icons/ai";
 
 var sizeStart = 10;
 var sizeEnd = 64;
@@ -327,12 +330,12 @@ function EditorTextOptionsTab(props) {
         <Row className="justify-content-md-end mt-4">
           <Col xs lg="5">
             <Button style={{ width: "100%" }} variant="primary" onClick={Clear}>
-              Clear
+              Clear Selection
             </Button>
           </Col>
           <Col xs lg="5">
             <Button style={{ width: "100%" }} disabled={selected !== -1 || (textBlock.text === null || textBlock.text === "")} variant="primary" onClick={HandleAddTextBlock}>
-              Hinzufügen
+              Add
             </Button>
           </Col>
         </Row>
@@ -344,7 +347,12 @@ function EditorTextOptionsTab(props) {
         <h6>Erstellte Textblöcke:</h6>
         {
           textBlocks.map((element, index) => {
-            return <Row key={index} onClick={(e) => SelectTextBlock(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>{element.text}</Row>
+            return <Row key={index} onClick={(e) => SelectTextBlock(index)} className={selected === index ? "textbox-row active" : "textbox-row"}>
+                <Col>{element.text}</Col>
+                <Col>
+                  <AiFillDelete onClick={() => props.removeTextBlock(element)}/>
+                </Col>
+            </Row>
           })
         }
       </Container>
