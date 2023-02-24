@@ -102,21 +102,23 @@ function GenerateImageTab(props) {
     });
 
   async function saveMemeLocal(event) {
-    event.preventDefault();
-    const imageUrl = props.canvasImage;
+    props.updateCanvas(async (dataUrl) => {
+      event.preventDefault();
+      const imageUrl = dataUrl;
 
-    var der = null;
-    switch (fileFormat) {
-      case "gif":
-        der = await fetch(imageUrl).then((r) => r.blob());
-        break;
-      default:
-        const imageBlob = await fetch(imageUrl).then((r) => r.blob());
-        der = await resizeFile(imageBlob);
-        break;
-    }
+      var der = null;
+      switch (fileFormat) {
+        case "gif":
+          der = await fetch(imageUrl).then((r) => r.blob());
+          break;
+        default:
+          const imageBlob = await fetch(imageUrl).then((r) => r.blob());
+          der = await resizeFile(imageBlob);
+          break;
+      }
 
-    saveAs(der, fileName + "." + fileFormat);
+      saveAs(der, fileName + "." + fileFormat);
+    }, false);
   }
 
   function saveMemeOnServer() {
