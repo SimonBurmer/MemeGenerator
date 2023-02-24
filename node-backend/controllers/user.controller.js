@@ -9,7 +9,7 @@ exports.userBoard = (req, res) => {
 
 const getUserById = async (req, res) => {
     console.log(req.query.id)
-    User.findOne({_id: req.query.id})
+    User.findOne({googleId: req.query.id})
         .then(result => {
             res.send(result)
         })

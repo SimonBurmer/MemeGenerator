@@ -17,7 +17,7 @@ const SingleView = ({selectedMemeIndex, filteredMemes, handleCloseSingleView, fe
     const handleNewComment = async (comment) => {
         const currentUser = await userService.getCurrentUser();
         await memeService.updateMemeById(filteredMemes[currentMemeIndex]._id, {
-            comments: [...filteredMemes[selectedMemeIndex].comments, {
+            comments: [...filteredMemes[currentMemeIndex].comments, {
                 userId: currentUser._id,
                 comment: comment,
                 commentDate: new Date().toISOString()

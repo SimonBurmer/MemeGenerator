@@ -10,7 +10,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 function Home() {
   const [userName, setUserName] = useState("");
-  const [memes, setMemes] = useState([]);
+  const [mostRecentPublishedMemes, setMostRecentPublishedMemes] = useState([]);
+  const [latestPublicMemes, setLatestPublicMemes] = useState([]);
   const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
   const memeService = new MemeService();
 
@@ -24,9 +25,14 @@ function Home() {
   });
 
   const fetchMemes = async () => {
-    const allMemes = await memeService.retrieveMemesAccess(2, "public");
-    //const newMemes = allMemes.slice(0, 2);
-    setMemes(allMemes);
+    const mostRecentPublishedMemes = await memeService.retrieveMemesAccess(2, "public");
+    const allMemes = await memeService.getAllMemes();
+    const sortedMemes = allMemes.sort((a, b) => b.votes.length - a.votes.length);
+    const mostVotedMemes = sortedMemes.slice(0, 2);
+
+    //const newMemes = mostRecentPublishedMemes.slice(0, 2);
+    setMostRecentPublishedMemes(mostRecentPublishedMemes);
+    setLatestPublicMemes(mostVotedMemes);
   };
 
   useEffect(() => {
@@ -73,10 +79,10 @@ function Home() {
       </Row>
       <Row>
         <Col>
-          <h4 className="index-header">Latest public memes</h4>
+          <h4 className="index-header">Recently published memes</h4>
           <Container className="index-container">
             <MemeListContainer
-              memes={memes}
+              memes={mostRecentPublishedMemes}
               filter={filter}
               fetchMemes={fetchMemes}
             ></MemeListContainer>
@@ -85,18 +91,13 @@ function Home() {
       </Row>
       <Row>
         <Col>
-          <h4 className="index-header">Latest Users</h4>
+          <h4 className="index-header">Most viral memes</h4>
           <Container className="index-container">
-            Hier kommen die neuesten Nutzer rein
-          </Container>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <h4 className="index-header">Most popular memes</h4>
-          <Container className="index-container">
-            Hier kommen die am meisten gelikten public memes rein im gleiche
-            Template wie im Overview etc.
+            <MemeListContainer
+                memes={latestPublicMemes}
+                filter={filter}
+                fetchMemes={fetchMemes}
+            ></MemeListContainer>
           </Container>
         </Col>
       </Row>

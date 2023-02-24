@@ -80,6 +80,7 @@ class MemeService {
         formData,
         titel,
         userID,
+        username,
         accessibility,
         templates,
         texts,
@@ -96,6 +97,7 @@ class MemeService {
                 var data = JSON.stringify({
                     memeURL: "http://localhost:5000/img/meme/" + response.data.message[0],
                     creatorId: userID,
+                    creator: username,
                     title: titel,
                     accessibility: accessibility,
                     templates: templates,

@@ -4,6 +4,7 @@ const schema = mongoose.Schema;
 let meme = new schema({
   memeURL: String,
   creatorId: String,
+  creator: String,
   title: String,
   creationDate: Date,
   accessibility: {
