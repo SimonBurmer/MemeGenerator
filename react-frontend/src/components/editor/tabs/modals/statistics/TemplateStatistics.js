@@ -27,7 +27,7 @@ function TemplateStatistics({template}) {
     const fillUpData = () => {
         const updatedUsage = [...templateUsage]; // create a copy of the state array to avoid mutation
         memes.forEach(meme => {
-            if (meme.templates[0].src === template.url) {
+            if (meme.templates?.[0]?.src === template.url) {
                 const memeDate = new Date(meme.creationDate);
                 const memeMonth = memeDate.getMonth();
                 updatedUsage[memeMonth]++;

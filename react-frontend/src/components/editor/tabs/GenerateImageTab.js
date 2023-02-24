@@ -267,6 +267,7 @@ function GenerateImageTab(props) {
         </Form.Group>
 
         <Button type="submit">Download Meme</Button>
+        <Button type="submit" style={{marginLeft: "20px"}}>Copy Link</Button>
       </Form>
 
       <Modal
