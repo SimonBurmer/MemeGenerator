@@ -14,7 +14,9 @@ var storage = new GridFsStorage({
       const filename = `${Date.now()}-omm-${file.originalname}`;
       return filename;
     }
+    // if(file.mimetype ==="image/gif"){
 
+    // }
     if (req.query.type === "meme") {
       return {
         bucketName: dbConfig.memeBucket,
