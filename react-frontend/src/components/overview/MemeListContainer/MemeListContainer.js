@@ -1,10 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Meme from "../Meme/Meme";
 import MemeMetaInformation from "../MemeMetaInformation/MemeMetaInformation";
 import "./MemeListContainer.css";
 import SingleView from "../../singleview/SingleView";
-import UserService from "../../../services/userService";
-import {useLoggedInStore} from "../../../app/store";
 
 function MemeListContainer({memes, filter, fetchMemes, isUserProfile}) {
     const [selectedMemeIndex, setSelectedMemeIndex] = useState();

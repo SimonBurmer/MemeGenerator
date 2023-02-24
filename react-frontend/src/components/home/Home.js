@@ -6,7 +6,7 @@ import "./Home.css";
 import { useLoggedInStore } from "../../app/store";
 import MemeListContainer from "../overview/MemeListContainer/MemeListContainer";
 import MemeService from "../../services/memeService";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [userName, setUserName] = useState("");
