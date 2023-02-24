@@ -81,6 +81,7 @@ function Editor({ meme }) {
 
           let newGifs = gifs.slice();
           newGifs.unshift(myGif);
+          console.log(newGifs);
           setGifs(newGifs);
         };
       }, 0);
@@ -99,12 +100,10 @@ function Editor({ meme }) {
     setPencil(newPencil);
   }
 
-  function updateCanvas(onfinish) {
+  function updateCanvas(onfinish, download) {
     let dataUrl = "";
-
-    console.log("Hallo");
     // old condition: images.some(i => i.src.startsWith("data:image/gif"))
-    if (animate) {
+    if (animate && download) {
       var encoder = new GIFEncoder();
       encoder.start();
       console.log("start encoder");
@@ -115,9 +114,7 @@ function Editor({ meme }) {
         frameCount: frameCount,
         callback: () => {
           console.log("callback");
-
           encoder.finish();
-
           var binary_gif = encoder.stream().getData(); //notice this is different from the as3gif package!
           dataUrl = "data:image/gif;base64," + btoa(binary_gif);
           console.log(dataUrl);

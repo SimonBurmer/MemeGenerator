@@ -9,5 +9,6 @@ router.get("/all", uploadController.getListFiles);
 router.get("/meme/:name", uploadController.downloadMeme);
 router.get("/template/:name", uploadController.downloadTemplate);
 router.post("/addTemplate", uploadController.addTemplate);
+router.get("/templateStatistic");
 
 module.exports = router;
