@@ -8,6 +8,7 @@ import UserService from "../../services/userService";
 function Overview({ isUserProfile }) {
   const memeService = new MemeService();
   const userService = new UserService();
+  const [memes, setMemes] = useState([]);
   const [filter, setFilter] = useState({
     title: "",
     creator: "",
@@ -16,8 +17,6 @@ function Overview({ isUserProfile }) {
     comments: "",
     creationDate: "",
   });
-
-  const [memes, setMemes] = useState([]);
 
   const fetchMemes = async () => {
     const currentUser = await userService.getCurrentUser();

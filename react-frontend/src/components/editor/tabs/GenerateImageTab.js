@@ -112,11 +112,12 @@ function GenerateImageTab(props) {
         }
         if (publishType === "memeButton") {
           console.log(isAuthenticated);
-
+          console.log("HIER IST DER USERNAME: " + obj.name);
           const responseMeme = await memeService.publishMeme(
             formData,
             memeTitle,
             decodedJwt.id,
+            obj.name,
             accessibility,
             props.images,
             props.textBlocks,

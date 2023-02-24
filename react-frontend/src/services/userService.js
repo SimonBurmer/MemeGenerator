@@ -11,6 +11,7 @@ class UserService {
             console.log(error);
         }
     }
+
     async getCurrentUser() {
         try {
             const currentUser = JSON.parse(localStorage.getItem("loginData"))

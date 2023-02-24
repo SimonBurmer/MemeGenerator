@@ -9,6 +9,7 @@ const saveMeme = async (req, res) => {
   let meme = {
     memeURL: req.body.memeURL,
     creatorId: req.body.creatorId,
+    creator: req.body.creator,
     title: req.body.title,
     creationDate: new Date().toISOString(),
     accessibility: req.body.accessibility,
