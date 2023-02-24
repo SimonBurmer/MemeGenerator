@@ -5,7 +5,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { Form, Button } from "react-bootstrap";
 import { saveAs } from "file-saver";
-import { useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Resizer from "react-image-file-resizer";
 import GeneratedMeme from "../models/GeneratedMeme";
@@ -28,10 +28,52 @@ function GenerateImageTab(props) {
   const templateService = new TemplateService();
   const memeService = new MemeService();
   const isAuthenticated = useLoggedInStore((state) => state.loggedIn);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    window.addEventListener("offline", () => setIsOnline(false));
+    window.addEventListener("online", () => setIsOnline(true));
+
+    return () => {
+      window.removeEventListener("offline", () => setIsOnline(false));
+      window.removeEventListener("online", () => setIsOnline(true));
+    };
+  }, []);
 
   useEffect(() => {
     console.log(props.modalUploadImageShow);
   }, [props.modalUploadImageShow]);
+
+  useEffect(() => {
+    const fetchData = async (offlineMemes) => {
+      const imageBlob = await fetch(offlineMemes[0]).then((r) => r.blob());
+      let formData = new FormData();
+      formData.append("file", imageBlob, "image." + fileFormat);
+      let userData = localStorage.getItem("loginData");
+      let obj = JSON.parse(userData);
+      var decodedJwt = jwt_decode(obj.jwtoken);
+      const responseMeme = await memeService.publishMeme(
+        formData,
+        offlineMemes[1],
+        decodedJwt.id,
+        obj.name,
+        offlineMemes[4],
+        offlineMemes[5],
+        offlineMemes[6],
+        offlineMemes[7],
+        offlineMemes[8]
+      );
+    };
+    if (isOnline && isAuthenticated) {
+      let offlineMemes = JSON.parse(localStorage.getItem("offlineMemes"));
+      if (!(offlineMemes === null)) {
+        offlineMemes.forEach((offlineMemes) => {
+          fetchData(offlineMemes);
+        });
+      }
+      localStorage.removeItem("offlineMemes");
+    }
+  }, [isOnline]);
 
   function setFileQualityAndCheck(value) {
     setFileQuality(value);
@@ -91,55 +133,94 @@ function GenerateImageTab(props) {
       event.preventDefault();
       const publishType = event.nativeEvent.submitter.name;
       const imageUrl = dataUrl;
-      console.log(imageUrl);
       const imageBlob = await fetch(imageUrl).then((r) => r.blob());
       let formData = new FormData();
       formData.append("file", imageBlob, "image." + fileFormat);
+      if (isOnline) {
+        if (isAuthenticated) {
+          let userData = localStorage.getItem("loginData");
+          let obj = JSON.parse(userData);
+          var decodedJwt = jwt_decode(obj.jwtoken);
 
-      if (isAuthenticated) {
-        let userData = localStorage.getItem("loginData");
-        let obj = JSON.parse(userData);
-        var decodedJwt = jwt_decode(obj.jwtoken);
-
-        if (publishType === "templateButton") {
-          const responseTemplate = await templateService.uploadTemplate(
-            formData,
-            decodedJwt.id,
-            memeTitle,
-            accessibility
-          );
-        }
-        if (publishType === "memeButton") {
-          if (fileFormat === "gif") {
-            const responseMeme = await memeService.publishMeme(
+          if (publishType === "templateButton") {
+            const responseTemplate = await templateService.uploadTemplate(
               formData,
-              memeTitle,
               decodedJwt.id,
-              obj.name,
-              accessibility,
-              "",
-              props.textBlocks,
-              500,
-              300
-            );
-          } else {
-            const responseMeme = await memeService.publishMeme(
-              formData,
               memeTitle,
-              decodedJwt.id,
-              obj.name,
-              accessibility,
-              props.images,
-              props.textBlocks,
-              500,
-              300
+              accessibility
             );
           }
+          if (publishType === "memeButton") {
+            if (fileFormat === "gif") {
+              const responseMeme = await memeService.publishMeme(
+                formData,
+                memeTitle,
+                decodedJwt.id,
+                obj.name,
+                accessibility,
+                "",
+                props.textBlocks,
+                500,
+                300
+              );
+            } else {
+              const responseMeme = await memeService.publishMeme(
+                formData,
+                memeTitle,
+                decodedJwt.id,
+                obj.name,
+                accessibility,
+                props.images,
+                props.textBlocks,
+                500,
+                500
+              );
+            }
+          }
         }
+      } else {
+        updateOfflineStorage(imageUrl);
       }
-    });
+    }, false);
 
     //const der = await resizeFile(imageBlob);
+  }
+
+  function updateOfflineStorage(imageUrl) {
+    console.log(imageUrl);
+    let offlineMemes = JSON.parse(localStorage.getItem("offlineMemes"));
+    if (offlineMemes === null) {
+      let newMeme = [
+        [
+          imageUrl,
+          memeTitle,
+          null,
+          null,
+          accessibility,
+          props.images,
+          props.textBlocks,
+          500,
+          500,
+        ],
+      ];
+      localStorage.setItem("offlineMemes", JSON.stringify(newMeme));
+    } else {
+      let newMeme = [
+        imageUrl,
+        memeTitle,
+        null,
+        null,
+        accessibility,
+        props.images,
+        props.textBlocks,
+        500,
+        500,
+      ];
+      offlineMemes.push(newMeme);
+      localStorage.removeItem("offlineMemes");
+      console.log(offlineMemes);
+      localStorage.setItem("offlineMemes", JSON.stringify(offlineMemes));
+    }
   }
 
   return (
@@ -149,7 +230,7 @@ function GenerateImageTab(props) {
           onClick={() => {
             props.updateCanvas((dataUrl) => {
               props.setModalUploadImageShow(true);
-            });
+            }, true);
           }}
         >
           Show Generated Meme

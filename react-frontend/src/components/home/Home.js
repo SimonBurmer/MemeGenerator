@@ -25,9 +25,14 @@ function Home() {
   });
 
   const fetchMemes = async () => {
-    const mostRecentPublishedMemes = await memeService.retrieveMemesAccess(2, "public");
+    const mostRecentPublishedMemes = await memeService.retrieveMemesAccess(
+      2,
+      "public"
+    );
     const allMemes = await memeService.getAllMemes();
-    const sortedMemes = allMemes.sort((a, b) => b.votes.length - a.votes.length);
+    const sortedMemes = allMemes.sort(
+      (a, b) => b.votes.length - a.votes.length
+    );
     const mostVotedMemes = sortedMemes.slice(0, 2);
 
     //const newMemes = mostRecentPublishedMemes.slice(0, 2);
@@ -94,9 +99,9 @@ function Home() {
           <h4 className="index-header">Most viral memes</h4>
           <Container className="index-container">
             <MemeListContainer
-                memes={latestPublicMemes}
-                filter={filter}
-                fetchMemes={fetchMemes}
+              memes={latestPublicMemes}
+              filter={filter}
+              fetchMemes={fetchMemes}
             ></MemeListContainer>
           </Container>
         </Col>
