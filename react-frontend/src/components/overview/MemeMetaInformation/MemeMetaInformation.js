@@ -26,7 +26,6 @@ function MemeMetaInformation({meme, fetchMemes, isUserProfile}) {
     return (
         <div className="meta">
             <h2>Title: {meme.title}</h2>
-            <h4>Template: TODOOO</h4>
             <h4>Votes Total: {meme.votes.length}</h4>
             <div className={"voting-container"}>
                 <Button variant="success" onClick={(event) => handleVoteClick(event, meme._id, "like")}>
