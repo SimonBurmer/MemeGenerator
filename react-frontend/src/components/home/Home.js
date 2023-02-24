@@ -6,7 +6,7 @@ import "./Home.css";
 import { useLoggedInStore } from "../../app/store";
 import MemeListContainer from "../overview/MemeListContainer/MemeListContainer";
 import MemeService from "../../services/memeService";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [userName, setUserName] = useState("");
@@ -52,34 +52,63 @@ function Home() {
       setUserName("");
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const createMemeButton = document.getElementById("create-meme-button");
+    const searchMemesButton = document.getElementById("search-meme-button");
+    const viewProfileButton = document.getElementById("view-profile-button");
+    if (createMemeButton) {
+      const recognition = new window.webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.lang = "en-US";
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        if (transcript === "create new meme") {
+          createMemeButton.click();
+        }
+        if (transcript === "search for memes") {
+          searchMemesButton.click();
+        }
+        if (transcript === "view profile") {
+          viewProfileButton.click();
+        }
+      };
+      recognition.start();
+      return () => recognition.stop();
+    }
+  }, []);
+
   return (
-    <Container className="index-root">
-      <Row>
-        <Col>
-          <h1>Welcome back {userName}</h1>
-        </Col>
-      </Row>
-      <Row className="index-fast-actions-container">
-        <Col
-          className="index-fast-actions shadow rounded"
-          as={Link}
-          to="/editor"
-        >
-          Create new Meme
-        </Col>
-        <Col
-          className="index-fast-actions shadow rounded"
-          as={Link}
-          to="/overview"
-        >
+      <Container className="index-root">
+        <Row>
+          <Col>
+            <h1>Welcome back {userName}</h1>
+          </Col>
+        </Row>
+        <Row className="index-fast-actions-container">
+          <Col
+              className="index-fast-actions shadow rounded"
+              as={Link}
+              to="/editor"
+              id="create-meme-button"
+          >
+            Create new Meme
+          </Col>
+          <Col
+              className="index-fast-actions shadow rounded"
+              as={Link}
+              to="/overview"
+              id="search-meme-button"
+          >
           <Container>Search for Memes</Container>
         </Col>
         <Col
           className="index-fast-actions shadow rounded"
           as={Link}
           to="/profile"
+          id="view-profile-button"
         >
-          <Container>View Profil</Container>
+          <Container>View Profile</Container>
         </Col>
       </Row>
       <Row>

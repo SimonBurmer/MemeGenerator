@@ -1,32 +1,48 @@
 import React from 'react';
 import "./Filter.css";
 import TextField from '@mui/material/TextField';
+import VoiceControlledTextField from "../../../helpers.js/VoiceControlledTextField";
 
 function Filter(props) {
 
     const handleChange = (event) => {
-        // get the value from the input field
-        const {name, value} = event.target;
-        // call the onFilterChange prop function with the value and type
+        const { name, value } = event.target;
         props.onFilterChange(value, name);
     };
 
+
     return (
         <div className="filter-container">
-            <input className="filter-input-text" type="text" name={"title"} onChange={handleChange}
-                   placeholder="Title..."/>
-            {/*
-            <input className="filter-input-text" type="text" name={"template"} onChange={handleChange}
-                   placeholder="Template..."/>
-                   */}
-            <input className="filter-input-text" type="text" name={"creator"} onChange={handleChange}
-                   placeholder="Creator..."/>
-            <input className="filter-input-number" type="number" name={"likes"} onChange={handleChange}
-                   placeholder="Likes >="/>
-            <input className="filter-input-number" type="number" name={"dislikes"} onChange={handleChange}
-                   placeholder="Dislikes >="/>
-            <input className="filter-input-number" type="number" name={"comments"} onChange={handleChange}
-                   placeholder="Comments >="/>
+            <VoiceControlledTextField
+                placeholder="Title ..."
+                name="title"
+                type={"text"}
+                onChange={handleChange} // add the new handler prop
+            />
+            <VoiceControlledTextField
+                placeholder="Creator ..."
+                name="creator"
+                type={"text"}
+                onChange={handleChange} // add the new handler prop
+            />
+            <VoiceControlledTextField
+                placeholder="Likes >="
+                name="likes"
+                type={"number"}
+                onChange={handleChange} // add the new handler prop
+            />
+            <VoiceControlledTextField
+                placeholder="Dislikes >="
+                name="dislikes"
+                type={"number"}
+                onChange={handleChange} // add the new handler prop
+            />
+            <VoiceControlledTextField
+                placeholder="Comments >="
+                name="comments"
+                type={"number"}
+                onChange={handleChange} // add the new handler prop
+            />
             <TextField
                 id="start-date"
                 label="Creation Date >="
