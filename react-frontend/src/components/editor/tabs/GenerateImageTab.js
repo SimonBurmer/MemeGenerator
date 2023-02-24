@@ -87,13 +87,14 @@ function GenerateImageTab(props) {
 
   function saveMemeAsTemplate(event) {
     props.updateCanvas(async (dataUrl) => {
-      props.setModalUploadImageShow(true);
+      //props.setModalUploadImageShow(true);
       event.preventDefault();
       const publishType = event.nativeEvent.submitter.name;
       const imageUrl = dataUrl;
+      console.log(imageUrl);
       const imageBlob = await fetch(imageUrl).then((r) => r.blob());
       let formData = new FormData();
-      formData.append("file", imageBlob, "image.png");
+      formData.append("file", imageBlob, "image." + fileFormat);
 
       if (isAuthenticated) {
         let userData = localStorage.getItem("loginData");
@@ -101,28 +102,37 @@ function GenerateImageTab(props) {
         var decodedJwt = jwt_decode(obj.jwtoken);
 
         if (publishType === "templateButton") {
-          console.log("template");
           const responseTemplate = await templateService.uploadTemplate(
             formData,
             decodedJwt.id,
             memeTitle,
             accessibility
           );
-          console.log(responseTemplate);
         }
         if (publishType === "memeButton") {
-          console.log(isAuthenticated);
-
-          const responseMeme = await memeService.publishMeme(
-            formData,
-            memeTitle,
-            decodedJwt.id,
-            accessibility,
-            props.images,
-            props.textBlocks,
-            500,
-            300
-          );
+          if (fileFormat === "gif") {
+            const responseMeme = await memeService.publishMeme(
+              formData,
+              memeTitle,
+              decodedJwt.id,
+              accessibility,
+              "",
+              props.textBlocks,
+              500,
+              300
+            );
+          } else {
+            const responseMeme = await memeService.publishMeme(
+              formData,
+              memeTitle,
+              decodedJwt.id,
+              accessibility,
+              props.images,
+              props.textBlocks,
+              500,
+              300
+            );
+          }
         }
       }
     });
@@ -161,23 +171,46 @@ function GenerateImageTab(props) {
         </Form.Group>
 
         <Form.Group required className="mb-3">
-          <Form.Label>accessibility</Form.Label>
-          <Dropdown>
-            <Dropdown.Toggle variant="light" id="dropdown-acc">
-              {accessibility}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => setAccessibility("public")}>
-                public
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => setAccessibility("private")}>
-                private
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => setAccessibility("unlisted")}>
-                unlisted
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <Row>
+            <Col>
+              <Form.Label>accessibility</Form.Label>
+              <Dropdown>
+                <Dropdown.Toggle variant="light" id="dropdown-acc">
+                  {accessibility}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={(e) => setAccessibility("public")}>
+                    public
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setAccessibility("private")}>
+                    private
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setAccessibility("unlisted")}>
+                    unlisted
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+            <Col>
+              <Form.Label>Format</Form.Label>
+              <Dropdown>
+                <Dropdown.Toggle variant="light" id="dropdown-basic">
+                  {fileFormat}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={(e) => setFileFormat("PNG")}>
+                    PNG
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("JPEG")}>
+                    JPEG
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => setFileFormat("gif")}>
+                    gif
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
         </Form.Group>
 
         <Row>
