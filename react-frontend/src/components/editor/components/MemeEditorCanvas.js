@@ -6,26 +6,26 @@ import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import DrawnLine from "../models/DrawnLine";
 import { GpsFixedSharp } from "@mui/icons-material";
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import Modal from 'react-bootstrap/Modal';
+import ProgressBar from "react-bootstrap/ProgressBar";
+import Modal from "react-bootstrap/Modal";
 
 function Animation(step, fpsInterval, then) {
   var timerID, then;
-  var innerStep = function() {
+  var innerStep = function () {
     timerID = requestAnimationFrame(innerStep);
     then = step(fpsInterval, then);
   };
   return {
-    start: function() {
+    start: function () {
       console.log("start anim");
       timerID = requestAnimationFrame(innerStep);
     },
-    cancel: function() {
+    cancel: function () {
       console.log("cancel anim");
       cancelAnimationFrame(timerID);
-    }
+    },
   };
-};
+}
 
 const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const [canvasWidth, setCanvasWidth] = useState(500);
@@ -41,7 +41,6 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
   const [currentAnimation, setCurrentAnimation] = useState(null);
 
   var currentFrameIndex = 0;
-
 
   const startPaint = useCallback((event) => {
     const coordinates = getCoordinates(event);
@@ -63,9 +62,9 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     return p;
   };
 
-//   useEffect(() => {
-//     reqanimationreference = requestAnimationFrame(update);
-//  }, [currentFrameIndex]);
+  //   useEffect(() => {
+  //     reqanimationreference = requestAnimationFrame(update);
+  //  }, [currentFrameIndex]);
 
   const draw = () => {
     var canvas = canvasRef.current;
@@ -77,8 +76,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     Promise.all(props.images.map((img) => loadImage(img.src)))
       .then((imgs) => {
         props.images.forEach((image, i) => {
-          if (!imgs[i].src.startsWith("data:image/gif"))
-          {
+          if (!imgs[i].src.startsWith("data:image/gif")) {
             let ratio = imgs[i].height / imgs[i].width;
             ctx.drawImage(
               imgs[i],
@@ -87,7 +85,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
               image.size,
               image.size * ratio
             );
-        }
+          }
         });
       })
       .then((i) => {
@@ -119,131 +117,137 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 5;
     ctx.strokeText(
-        textBlock.text,
-        parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
-        parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
+      textBlock.text,
+      parseInt(textBlock.x) + (textBlock.width - textWidth) / 2.0,
+      parseInt(textBlock.y) + (height - textBlock.fontSize) / 2
     );
     ctx.fillText(
-        textBlock.text,
-        parseInt(textBlock.x) + ((textBlock.width - textWidth) / 2.0),
-        parseInt(textBlock.y) + ((height - textBlock.fontSize) / 2)
+      textBlock.text,
+      parseInt(textBlock.x) + (textBlock.width - textWidth) / 2.0,
+      parseInt(textBlock.y) + (height - textBlock.fontSize) / 2
     );
   };
 
   useEffect(() => {
-    if (!props.animate)
-    {
+    if (!props.animate) {
       draw();
     }
-  }, [props.images, props.textBlocks, canvasHeight, canvasWidth, props.animate]);
-
+  }, [
+    props.images,
+    props.textBlocks,
+    canvasHeight,
+    canvasWidth,
+    props.animate,
+  ]);
 
   function animate(fpsInterval, then) {
     let now = Date.now();
     let elapsed = now - then;
 
     // if enough time has elapsed, draw the next frame
-    if (elapsed > fpsInterval) 
-    {
-        // Put your drawing code here
-        update();
+    if (elapsed > fpsInterval) {
+      // Put your drawing code here
+      update();
 
-        return now - (elapsed % fpsInterval);
+      return now - (elapsed % fpsInterval);
     }
     return then;
   }
 
-   // main update function
-   function update() 
-   {
-      var canvas = canvasRef.current;
-      var ctx = canvas.getContext("2d");
-      props.gifs.forEach((gif, i) => {
-        if(!gif.loading) 
-        { 
-          if (!props.animate)
-          {
-            drawImage(ctx, gif.frames[0].image,0,0, 1, 0); // displays the current frame.
-          }
-          else
-          {
-            drawImage(ctx, gif.frames[currentFrameIndex].image,0,0, 1, 0); // displays the current frame.
-          }
-        }
-      });
-
-      if(props.video)
-      {
-        ctx.drawImage(document.querySelector("video"), 0, 0, canvas.width, canvas.height);
-      }
-
-      props.textBlocks.map((textBlock) => {
-        if (textBlock.fromTimeFrame < currentFrameIndex && textBlock.toTimeFrame > currentFrameIndex)
-        {
-          drawTextBlock(ctx, textBlock);
-        }
-      });
-
-      lines.map((element) => {
-        drawLine(ctx, element);
-      });
-
-      if (props.gifEncoder)
-      {
-        if (props.gifEncoder.isEncoding)
-        {
-          setShowProgressModal(true);
-          if(props.gifEncoder.frameCount > 0)
-          {
-            props.gifEncoder.frameCount -= 1; 
-            setProgress(props.gifEncoder.frameCount);
-            props.gifEncoder.encoder.addFrame(canvasRef.current.getContext("2d"));
-          }
-          else
-          {
-            props.gifEncoder.isEncoding = false;
-            setShowProgressModal(false);
-            props.gifEncoder.callback();
-          }
+  // main update function
+  function update() {
+    var canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    props.gifs.forEach((gif, i) => {
+      if (!gif.loading) {
+        if (!props.animate) {
+          drawImage(ctx, gif.frames[0].image, 0, 0, 1, 0); // displays the current frame.
+        } else {
+          drawImage(ctx, gif.frames[currentFrameIndex].image, 0, 0, 1, 0); // displays the current frame.
         }
       }
+    });
 
-      currentFrameIndex = currentFrameIndex + 1 >= props.frameCount ? 0 : currentFrameIndex + 1;
-      setDisplayFrameIndex(currentFrameIndex);
-   }
+    if (props.video) {
+      ctx.drawImage(
+        document.querySelector("video"),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+    }
+
+    props.textBlocks.map((textBlock) => {
+      if (
+        textBlock.fromTimeFrame < currentFrameIndex &&
+        textBlock.toTimeFrame > currentFrameIndex
+      ) {
+        drawTextBlock(ctx, textBlock);
+      }
+    });
+
+    lines.map((element) => {
+      drawLine(ctx, element);
+    });
+
+    if (props.gifEncoder) {
+      if (props.gifEncoder.isEncoding) {
+        setShowProgressModal(true);
+        if (props.gifEncoder.frameCount > 0) {
+          props.gifEncoder.frameCount -= 1;
+          setProgress(props.gifEncoder.frameCount);
+          props.gifEncoder.encoder.addFrame(canvasRef.current.getContext("2d"));
+        } else {
+          props.gifEncoder.isEncoding = false;
+          setShowProgressModal(false);
+          props.gifEncoder.callback();
+        }
+      }
+    }
+
+    currentFrameIndex =
+      currentFrameIndex + 1 >= props.frameCount ? 0 : currentFrameIndex + 1;
+    setDisplayFrameIndex(currentFrameIndex);
+  }
 
   useEffect(() => {
     currentFrameIndex = 0;
 
-    if (currentAnimation)
-    {
+    if (currentAnimation) {
       currentAnimation.cancel();
     }
 
-    if(props.animate)
-    {
+    if (props.animate) {
       setCurrentAnimation(new Animation(animate, 1000 / fps, Date.now()));
 
-      if (props.video)
-      {
-        props.setFrameCount(props.frameCount == 0 ? document.getElementById("video").duration / fps : props.frameCount); 
+      if (props.video) {
+        props.setFrameCount(
+          props.frameCount == 0
+            ? document.getElementById("video").duration / fps
+            : props.frameCount
+        );
         document.getElementById("video").load();
       }
-    }
-    else
-    {
-      if (props.video)
-      {
+    } else {
+      if (props.video) {
         document.getElementById("video").pause();
       }
     }
-
-  }, [props.gifs, props.textBlocks, props.images, props.gifEncoder, props.animate, fps, props.frameCount]);
+  }, [
+    props.gifs,
+    props.textBlocks,
+    props.images,
+    props.gifEncoder,
+    props.animate,
+    fps,
+    props.frameCount,
+  ]);
 
   // Function draws an image
-  function drawImage(ctx, image, x, y, scale, rot){
+  function drawImage(ctx, image, x, y, scale, rot) {
     var canvas = canvasRef.current;
-    ctx.setTransform(scale,0,0,scale,x,y);
+    ctx.setTransform(scale, 0, 0, scale, x, y);
     ctx.rotate(rot);
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   }
@@ -293,10 +297,8 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
     [isPainting, mousePosition]
   );
 
-
   useEffect(() => {
-    if (currentAnimation)
-    {
+    if (currentAnimation) {
       currentAnimation.start();
     }
   }, [currentAnimation]);
@@ -357,15 +359,13 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
 
   return (
     <Container style={{ width: "100%", height: "100%" }}>
-        {
-          props.animate && !props.video &&
-            <Row>
-              <Col>
-                {displayFrameIndex} / 
-                {props.frameCount}
-              </Col>
-            </Row>   
-        }
+      {props.animate && !props.video && (
+        <Row>
+          <Col>
+            {displayFrameIndex} /{props.frameCount}
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col className="col-auto">
           <canvas
@@ -374,10 +374,18 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
             height={canvasHeight}
             className="border border-secondary"
           />
-          {
-            props.video && 
-            <video loop autoPlay muted playsInline controls id="video" style={{width: "0", height: "0"}} src={props.video}></video>
-          }
+          {props.video && (
+            <video
+              loop
+              autoPlay
+              muted
+              playsInline
+              controls
+              id="video"
+              style={{ width: "0", height: "0" }}
+              src={props.video}
+            ></video>
+          )}
         </Col>
       </Row>
 
@@ -404,19 +412,20 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
 
       <Row>
         <Col>
-
-                <Form.Label>Animate: </Form.Label>
-                <Form.Check           
-          type="switch"
-          checked={props.animate}
-          onChange={() => {props.setAnimate(!props.animate)}}
-        />
+          <Form.Label>Animate: </Form.Label>
+          <Form.Check
+            type="switch"
+            checked={props.animate}
+            onChange={() => {
+              props.setAnimate(!props.animate);
+            }}
+          />
         </Col>
       </Row>
 
       <Row>
         <Col>
-        <Form.Label>Frames per Second: </Form.Label>
+          <Form.Label>Frames per Second: </Form.Label>
           <Form.Control
             value={fps}
             disabled={!props.animate || props.video}
@@ -426,7 +435,7 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
           />
         </Col>
         <Col>
-        <Form.Label>Frame Count: </Form.Label>
+          <Form.Label>Frame Count: </Form.Label>
           <Form.Control
             value={props.frameCount}
             disabled={!props.animate}
@@ -443,7 +452,6 @@ const MemeEditorCanvas = React.forwardRef((props, canvasRef) => {
       >
         Recording frames {progress}
       </Modal>
-
     </Container>
   );
 });
